@@ -1,0 +1,6 @@
+{
+  "error": {
+    "code": "CONFIRM_REQUIRED",
+    "message": "applying a quarantine requires confirm=true"
+  }
+}

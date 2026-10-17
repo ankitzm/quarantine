@@ -1,0 +1,373 @@
+{
+  "tenant": "acme",
+  "id": "plan_1bc75d3e3e18f829",
+  "seed": "acme-mem-sop-v4",
+  "agents": [
+    "analytics",
+    "billing",
+    "ops",
+    "researcher"
+  ],
+  "items": [
+    "acme-mem-cust-981"
+  ],
+  "reach": [
+    {
+      "agent": "analytics",
+      "tool": "analytics:postgres.query",
+      "credential": "postgres://analytics@db.acme.internal:5432/crm",
+      "resource": "res_a6c9a7f7cb3ed8a9",
+      "uri": "postgres://db.acme.internal:5432/crm",
+      "kind": "database",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:fetch.fetch",
+      "credential": null,
+      "resource": "res_f1a2c9ce30e9120e",
+      "uri": "net://egress",
+      "kind": "egress",
+      "sensitivity": 2
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:postgres.query",
+      "credential": "postgres://billing@db.acme.internal:5432/crm",
+      "resource": "res_a6c9a7f7cb3ed8a9",
+      "uri": "postgres://db.acme.internal:5432/crm",
+      "kind": "database",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.create_customer",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_8aff801c313c0560",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.create_customer",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_c5c434328b0accb8",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.create_refund",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_8aff801c313c0560",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.create_refund",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_c5c434328b0accb8",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.list_customers",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_8aff801c313c0560",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.list_customers",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_c5c434328b0accb8",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.retrieve_balance",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_8aff801c313c0560",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.retrieve_balance",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_c5c434328b0accb8",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:fetch.fetch",
+      "credential": null,
+      "resource": "res_f1a2c9ce30e9120e",
+      "uri": "net://egress",
+      "kind": "egress",
+      "sensitivity": 2
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:github.create_issue",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "resource": "res_fc3c4b5febb08d40",
+      "uri": "github://repos",
+      "kind": "source",
+      "sensitivity": 2
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:github.create_pull_request",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "resource": "res_fc3c4b5febb08d40",
+      "uri": "github://repos",
+      "kind": "source",
+      "sensitivity": 2
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:github.get_file_contents",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "resource": "res_fc3c4b5febb08d40",
+      "uri": "github://repos",
+      "kind": "source",
+      "sensitivity": 2
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:github.push_files",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "resource": "res_fc3c4b5febb08d40",
+      "uri": "github://repos",
+      "kind": "source",
+      "sensitivity": 2
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:slack.slack_get_channel_history",
+      "credential": "SLACK_BOT_TOKEN",
+      "resource": "res_c97d9b3d788cf42f",
+      "uri": "slack://workspace",
+      "kind": "comms",
+      "sensitivity": 2
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:slack.slack_list_channels",
+      "credential": "SLACK_BOT_TOKEN",
+      "resource": "res_c97d9b3d788cf42f",
+      "uri": "slack://workspace",
+      "kind": "comms",
+      "sensitivity": 2
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:slack.slack_post_message",
+      "credential": "SLACK_BOT_TOKEN",
+      "resource": "res_c97d9b3d788cf42f",
+      "uri": "slack://workspace",
+      "kind": "comms",
+      "sensitivity": 2
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:stripe.create_customer",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_8aff801c313c0560",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:stripe.create_customer",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_c5c434328b0accb8",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:stripe.create_refund",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_8aff801c313c0560",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:stripe.create_refund",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_c5c434328b0accb8",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:stripe.list_customers",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_8aff801c313c0560",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:stripe.list_customers",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_c5c434328b0accb8",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:stripe.retrieve_balance",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_8aff801c313c0560",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "ops",
+      "tool": "ops:stripe.retrieve_balance",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_c5c434328b0accb8",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "researcher",
+      "tool": "researcher:fetch.fetch",
+      "credential": null,
+      "resource": "res_f1a2c9ce30e9120e",
+      "uri": "net://egress",
+      "kind": "egress",
+      "sensitivity": 2
+    },
+    {
+      "agent": "researcher",
+      "tool": "researcher:github.create_issue",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "resource": "res_fc3c4b5febb08d40",
+      "uri": "github://repos",
+      "kind": "source",
+      "sensitivity": 2
+    },
+    {
+      "agent": "researcher",
+      "tool": "researcher:github.create_pull_request",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "resource": "res_fc3c4b5febb08d40",
+      "uri": "github://repos",
+      "kind": "source",
+      "sensitivity": 2
+    },
+    {
+      "agent": "researcher",
+      "tool": "researcher:github.get_file_contents",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "resource": "res_fc3c4b5febb08d40",
+      "uri": "github://repos",
+      "kind": "source",
+      "sensitivity": 2
+    },
+    {
+      "agent": "researcher",
+      "tool": "researcher:github.push_files",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "resource": "res_fc3c4b5febb08d40",
+      "uri": "github://repos",
+      "kind": "source",
+      "sensitivity": 2
+    }
+  ],
+  "maxFlow": 29,
+  "totalCost": 29,
+  "cut": [
+    {
+      "action": "revoke-tool",
+      "from": "analytics",
+      "to": "analytics:postgres.query",
+      "label": "Revoke postgres.query from analytics",
+      "cost": 4,
+      "source": "fixtures/configs/acme/analytics.mcp.json#/mcpServers/warehouse (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)"
+    },
+    {
+      "action": "revoke-tool",
+      "from": "billing",
+      "to": "billing:fetch.fetch",
+      "label": "Revoke fetch.fetch from billing",
+      "cost": 2,
+      "source": "fixtures/configs/acme/billing.mcp.json#/mcpServers/fetch (https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)"
+    },
+    {
+      "action": "revoke-tool",
+      "from": "billing",
+      "to": "billing:postgres.query",
+      "label": "Revoke postgres.query from billing",
+      "cost": 4,
+      "source": "fixtures/configs/acme/billing.mcp.json#/mcpServers/crm-db (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)"
+    },
+    {
+      "action": "revoke-tool",
+      "from": "ops",
+      "to": "ops:fetch.fetch",
+      "label": "Revoke fetch.fetch from ops",
+      "cost": 2,
+      "source": "fixtures/configs/acme/ops.mcp.json#/mcpServers/fetch (https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)"
+    },
+    {
+      "action": "revoke-tool",
+      "from": "researcher",
+      "to": "researcher:fetch.fetch",
+      "label": "Revoke fetch.fetch from researcher",
+      "cost": 2,
+      "source": "fixtures/configs/acme/researcher.mcp.json#/mcpServers/fetch (https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)"
+    },
+    {
+      "action": "rotate-credential",
+      "from": "cred_59e5d2cf063f41d5",
+      "to": "cred_59e5d2cf063f41d5",
+      "label": "Rotate GITHUB_PERSONAL_ACCESS_TOKEN",
+      "cost": 4,
+      "source": "fixtures/configs/acme/ops.mcp.json#/mcpServers/github (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/github)"
+    },
+    {
+      "action": "rotate-credential",
+      "from": "cred_624f2e1e4b26307a",
+      "to": "cred_624f2e1e4b26307a",
+      "label": "Rotate SLACK_BOT_TOKEN",
+      "cost": 3,
+      "source": "fixtures/configs/acme/ops.mcp.json#/mcpServers/slack (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/slack)"
+    },
+    {
+      "action": "rotate-credential",
+      "from": "cred_6f7426adb1fbdc54",
+      "to": "cred_6f7426adb1fbdc54",
+      "label": "Rotate STRIPE_SECRET_KEY",
+      "cost": 8,
+      "source": "fixtures/configs/acme/billing.mcp.json#/mcpServers/stripe (https://github.com/stripe/agent-toolkit/tree/main/modelcontextprotocol)"
+    }
+  ],
+  "appliedAt": null
+}

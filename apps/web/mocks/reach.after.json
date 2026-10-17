@@ -1,0 +1,12 @@
+{
+  "tenant": "acme",
+  "seed": "acme-mem-sop-v4",
+  "agents": [
+    "analytics",
+    "billing",
+    "ops",
+    "researcher"
+  ],
+  "paths": [],
+  "resources": []
+}

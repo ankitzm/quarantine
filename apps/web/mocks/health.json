@@ -1,0 +1,17 @@
+{
+  "status": "ok",
+  "engine": {
+    "reachable": true
+  },
+  "tenants": [
+    {
+      "tenant": "acme",
+      "isReady": true
+    },
+    {
+      "tenant": "globex",
+      "isReady": true
+    }
+  ],
+  "latencyMs": 1
+}

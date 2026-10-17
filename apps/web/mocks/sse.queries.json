@@ -1,0 +1,947 @@
+[
+  {
+    "seq": 136,
+    "at": 1792270459262,
+    "graph": "tenant_acme",
+    "name": "meta.read",
+    "mode": "read",
+    "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
+    "params": {},
+    "ms": 0.42,
+    "rows": 1
+  },
+  {
+    "seq": 137,
+    "at": 1792270459262,
+    "graph": "tenant_globex",
+    "name": "meta.read",
+    "mode": "read",
+    "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
+    "params": {},
+    "ms": 0.42,
+    "rows": 1
+  },
+  {
+    "seq": 138,
+    "at": 1792270459264,
+    "graph": "mocks_acme",
+    "name": "meta.read",
+    "mode": "read",
+    "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
+    "params": {},
+    "ms": 0.47,
+    "rows": 1
+  },
+  {
+    "seq": 139,
+    "at": 1792270459264,
+    "graph": "mocks_acme",
+    "name": "trace.seed",
+    "mode": "read",
+    "cypher": "MATCH (e:Episode)-[w:WROTE]->(m:MemoryItem {id: $id})\n           RETURN m.id AS id, m.valid_from AS at, e.id AS episode, e.agent AS agent\n           ORDER BY w.t LIMIT 1",
+    "params": {
+      "id": "acme-mem-sop-v4"
+    },
+    "ms": 0.44,
+    "rows": 1
+  },
+  {
+    "seq": 140,
+    "at": 1792270459265,
+    "graph": "mocks_acme",
+    "name": "trace.seed",
+    "mode": "read",
+    "cypher": "MATCH (e:Episode)-[w:WROTE]->(m:MemoryItem {id: $id})\n           RETURN m.id AS id, m.valid_from AS at, e.id AS episode, e.agent AS agent\n           ORDER BY w.t LIMIT 1",
+    "params": {
+      "id": "acme-mem-sop-v4"
+    },
+    "ms": 0.6,
+    "rows": 1
+  },
+  {
+    "seq": 141,
+    "at": 1792270459265,
+    "graph": "mocks_acme",
+    "name": "trace.wrote",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 1792231320000
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 1792231320000
+        }
+      ]
+    },
+    "ms": 0.44,
+    "rows": 1
+  },
+  {
+    "seq": 142,
+    "at": 1792270459265,
+    "graph": "mocks_acme",
+    "name": "trace.read",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 1792231320000
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 1792231320000
+        }
+      ]
+    },
+    "ms": 0.55,
+    "rows": 1
+  },
+  {
+    "seq": 143,
+    "at": 1792270459265,
+    "graph": "mocks_acme",
+    "name": "trace.handoff",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 1792231320000
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 1792231320000
+        }
+      ]
+    },
+    "ms": 0.64,
+    "rows": 1
+  },
+  {
+    "seq": 144,
+    "at": 1792270459265,
+    "graph": "mocks_acme",
+    "name": "trace.derived",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 1792231320000
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 1792231320000
+        }
+      ]
+    },
+    "ms": 0.84,
+    "rows": 1
+  },
+  {
+    "seq": 145,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.wrote",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 0.98,
+    "rows": 1
+  },
+  {
+    "seq": 146,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.read",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 0.98,
+    "rows": 1
+  },
+  {
+    "seq": 147,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.handoff",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 0.97,
+    "rows": 2
+  },
+  {
+    "seq": 148,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.derived",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 1,
+    "rows": 1
+  },
+  {
+    "seq": 149,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.naive.sameKey",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (m:MemoryItem {id: inf.id}), (o:MemoryItem)\n           WHERE o.ns = m.ns AND o.key = m.key AND o.id <> m.id\n           RETURN o.id AS id, o.valid_from AS at, m.id AS via, 'SAME_KEY' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-sop-v4",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 1.13,
+    "rows": 1
+  },
+  {
+    "seq": 150,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.wrote",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-billing-1",
+          "at": 1792231330000
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 1792231360000
+        }
+      ]
+    },
+    "ms": 0.49,
+    "rows": 1
+  },
+  {
+    "seq": 151,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.read",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-billing-1",
+          "at": 1792231330000
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 1792231360000
+        }
+      ]
+    },
+    "ms": 0.47,
+    "rows": 1
+  },
+  {
+    "seq": 152,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.handoff",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-billing-1",
+          "at": 1792231330000
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 1792231360000
+        }
+      ]
+    },
+    "ms": 0.56,
+    "rows": 1
+  },
+  {
+    "seq": 153,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.derived",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-billing-1",
+          "at": 1792231330000
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 1792231360000
+        }
+      ]
+    },
+    "ms": 0.61,
+    "rows": 0
+  },
+  {
+    "seq": 154,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.wrote",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-1",
+          "at": 0
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 0
+        },
+        {
+          "id": "acme-mem-sop-v3",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 0.42,
+    "rows": 1
+  },
+  {
+    "seq": 155,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.read",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-1",
+          "at": 0
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 0
+        },
+        {
+          "id": "acme-mem-sop-v3",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 0.47,
+    "rows": 2
+  },
+  {
+    "seq": 156,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.handoff",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-1",
+          "at": 0
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 0
+        },
+        {
+          "id": "acme-mem-sop-v3",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 0.55,
+    "rows": 1
+  },
+  {
+    "seq": 157,
+    "at": 1792270459266,
+    "graph": "mocks_acme",
+    "name": "trace.derived",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-1",
+          "at": 0
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 0
+        },
+        {
+          "id": "acme-mem-sop-v3",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 0.6,
+    "rows": 0
+  },
+  {
+    "seq": 158,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.naive.sameKey",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (m:MemoryItem {id: inf.id}), (o:MemoryItem)\n           WHERE o.ns = m.ns AND o.key = m.key AND o.id <> m.id\n           RETURN o.id AS id, o.valid_from AS at, m.id AS via, 'SAME_KEY' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-1",
+          "at": 0
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 0
+        }
+      ],
+      "items": [
+        {
+          "id": "acme-mem-cust-981",
+          "at": 0
+        },
+        {
+          "id": "acme-mem-sop-v3",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 0.73,
+    "rows": 2
+  },
+  {
+    "seq": 159,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.wrote",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 1792317620000
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 1792231370000
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.67,
+    "rows": 0
+  },
+  {
+    "seq": 160,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.read",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 1792317620000
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 1792231370000
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.66,
+    "rows": 0
+  },
+  {
+    "seq": 161,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.handoff",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 1792317620000
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 1792231370000
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.69,
+    "rows": 0
+  },
+  {
+    "seq": 162,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.derived",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 1792317620000
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 1792231370000
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.68,
+    "rows": 0
+  },
+  {
+    "seq": 163,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.wrote",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 0
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 0
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.33,
+    "rows": 0
+  },
+  {
+    "seq": 164,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.read",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 0
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 0
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.41,
+    "rows": 0
+  },
+  {
+    "seq": 165,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.handoff",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 0
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 0
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.52,
+    "rows": 0
+  },
+  {
+    "seq": 166,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.derived",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 0
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 0
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.55,
+    "rows": 0
+  },
+  {
+    "seq": 167,
+    "at": 1792270459267,
+    "graph": "mocks_acme",
+    "name": "trace.naive.sameKey",
+    "mode": "read",
+    "cypher": "UNWIND $items AS inf\n           MATCH (m:MemoryItem {id: inf.id}), (o:MemoryItem)\n           WHERE o.ns = m.ns AND o.key = m.key AND o.id <> m.id\n           RETURN o.id AS id, o.valid_from AS at, m.id AS via, 'SAME_KEY' AS edge",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-analytics-2",
+          "at": 0
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 0
+        }
+      ],
+      "items": []
+    },
+    "ms": 0.63,
+    "rows": 0
+  },
+  {
+    "seq": 168,
+    "at": 1792270459268,
+    "graph": "mocks_acme",
+    "name": "trace.episodes",
+    "mode": "read",
+    "cypher": "UNWIND $ids AS id\n           MATCH (e:Episode {id: id})\n           RETURN e.id AS id, e.agent AS agent, e.session AS session, e.t AS t",
+    "params": {
+      "ids": [
+        "acme-researcher-1",
+        "acme-billing-1",
+        "acme-analytics-2",
+        "acme-ops-1"
+      ]
+    },
+    "ms": 0.61,
+    "rows": 4
+  },
+  {
+    "seq": 169,
+    "at": 1792270459268,
+    "graph": "mocks_acme",
+    "name": "trace.items",
+    "mode": "read",
+    "cypher": "UNWIND $ids AS id\n           MATCH (m:MemoryItem {id: id})\n           RETURN m.id AS id, m.ns AS ns, m.key AS key, m.kind AS kind, m.text AS text,\n                  m.valid_from AS validFrom, m.valid_to AS validTo",
+    "params": {
+      "ids": [
+        "acme-mem-sop-v4",
+        "acme-mem-cust-981"
+      ]
+    },
+    "ms": 0.77,
+    "rows": 2
+  },
+  {
+    "seq": 170,
+    "at": 1792270459268,
+    "graph": "mocks_acme",
+    "name": "trace.decisions",
+    "mode": "read",
+    "cypher": "MATCH (e:Episode)-[:DECIDED]->(d:Decision)\n           OPTIONAL MATCH (d)-[:BASED_ON]->(m:MemoryItem)\n           WITH e, d, collect(m.id) AS cited\n           WITH e, d, [c IN cited WHERE c IN $itemIds] AS basedOn,\n                [inf IN $episodes WHERE inf.id = e.id AND d.t >= inf.at] AS hit\n           WHERE size(basedOn) > 0 OR size(hit) > 0\n           RETURN d.id AS id, d.t AS t, d.text AS text, e.id AS episode, e.agent AS agent,\n                  size(hit) > 0 AS byAgent, basedOn\n           ORDER BY d.t",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 1792231320000
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 1792231330000
+        },
+        {
+          "id": "acme-analytics-2",
+          "at": 1792317620000
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 1792231370000
+        }
+      ],
+      "itemIds": [
+        "acme-mem-sop-v4",
+        "acme-mem-cust-981"
+      ]
+    },
+    "ms": 1.06,
+    "rows": 3
+  },
+  {
+    "seq": 171,
+    "at": 1792270459268,
+    "graph": "mocks_acme",
+    "name": "trace.toolCalls",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[:CALLED]->(c:ToolCall)\n           WHERE c.t >= inf.at\n           RETURN c.id AS id, c.t AS t, c.tool AS tool, c.args AS args, c.outcome AS outcome,\n                  e.id AS episode, e.agent AS agent\n           ORDER BY c.t",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 1792231320000
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 1792231330000
+        },
+        {
+          "id": "acme-analytics-2",
+          "at": 1792317620000
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 1792231370000
+        }
+      ]
+    },
+    "ms": 1.25,
+    "rows": 2
+  },
+  {
+    "seq": 172,
+    "at": 1792270459268,
+    "graph": "mocks_acme",
+    "name": "trace.episodes",
+    "mode": "read",
+    "cypher": "UNWIND $ids AS id\n           MATCH (e:Episode {id: id})\n           RETURN e.id AS id, e.agent AS agent, e.session AS session, e.t AS t",
+    "params": {
+      "ids": [
+        "acme-researcher-1",
+        "acme-billing-1",
+        "acme-analytics-1",
+        "acme-analytics-2",
+        "acme-ops-1"
+      ]
+    },
+    "ms": 1.01,
+    "rows": 5
+  },
+  {
+    "seq": 173,
+    "at": 1792270459268,
+    "graph": "mocks_acme",
+    "name": "trace.items",
+    "mode": "read",
+    "cypher": "UNWIND $ids AS id\n           MATCH (m:MemoryItem {id: id})\n           RETURN m.id AS id, m.ns AS ns, m.key AS key, m.kind AS kind, m.text AS text,\n                  m.valid_from AS validFrom, m.valid_to AS validTo",
+    "params": {
+      "ids": [
+        "acme-mem-sop-v4",
+        "acme-mem-cust-981",
+        "acme-mem-sop-v3"
+      ]
+    },
+    "ms": 1.01,
+    "rows": 3
+  },
+  {
+    "seq": 174,
+    "at": 1792270459269,
+    "graph": "mocks_acme",
+    "name": "trace.decisions",
+    "mode": "read",
+    "cypher": "MATCH (e:Episode)-[:DECIDED]->(d:Decision)\n           OPTIONAL MATCH (d)-[:BASED_ON]->(m:MemoryItem)\n           WITH e, d, collect(m.id) AS cited\n           WITH e, d, [c IN cited WHERE c IN $itemIds] AS basedOn,\n                [inf IN $episodes WHERE inf.id = e.id AND d.t >= inf.at] AS hit\n           WHERE size(basedOn) > 0 OR size(hit) > 0\n           RETURN d.id AS id, d.t AS t, d.text AS text, e.id AS episode, e.agent AS agent,\n                  size(hit) > 0 AS byAgent, basedOn\n           ORDER BY d.t",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 0
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 0
+        },
+        {
+          "id": "acme-analytics-1",
+          "at": 0
+        },
+        {
+          "id": "acme-analytics-2",
+          "at": 0
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 0
+        }
+      ],
+      "itemIds": [
+        "acme-mem-sop-v4",
+        "acme-mem-cust-981",
+        "acme-mem-sop-v3"
+      ]
+    },
+    "ms": 1.18,
+    "rows": 4
+  },
+  {
+    "seq": 175,
+    "at": 1792270459269,
+    "graph": "mocks_acme",
+    "name": "trace.toolCalls",
+    "mode": "read",
+    "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[:CALLED]->(c:ToolCall)\n           WHERE c.t >= inf.at\n           RETURN c.id AS id, c.t AS t, c.tool AS tool, c.args AS args, c.outcome AS outcome,\n                  e.id AS episode, e.agent AS agent\n           ORDER BY c.t",
+    "params": {
+      "episodes": [
+        {
+          "id": "acme-researcher-1",
+          "at": 0
+        },
+        {
+          "id": "acme-billing-1",
+          "at": 0
+        },
+        {
+          "id": "acme-analytics-1",
+          "at": 0
+        },
+        {
+          "id": "acme-analytics-2",
+          "at": 0
+        },
+        {
+          "id": "acme-ops-1",
+          "at": 0
+        }
+      ]
+    },
+    "ms": 1.27,
+    "rows": 3
+  }
+]

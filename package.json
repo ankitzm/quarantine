@@ -14,7 +14,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "smoke": "tsx scripts/smoke.ts",
-    "replay": "tsx scripts/replay.ts"
+    "replay": "tsx scripts/replay.ts",
+    "mocks": "tsx scripts/mocks.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
