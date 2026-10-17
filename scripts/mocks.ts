@@ -45,6 +45,13 @@ await write(
   api.IncidentResponse,
   await buildIncident(graph, { seed, mode: 'temporal' }),
 );
+const rounds: unknown[] = [];
+const streamed = await buildIncident(graph, {
+  seed,
+  mode: 'temporal',
+  onRound: (r) => rounds.push({ type: 'round', ...r }),
+});
+await write('sse.trace', api.TraceStreamEvent.array(), [...rounds, { type: 'done', incident: streamed }]);
 await write('incident.naive', api.IncidentResponse, await buildIncident(graph, { seed, mode: 'naive' }));
 await write('timeline', api.TimelineResponse, await buildTimeline(graph, { seed }));
 await write('reach', api.ReachResponse, await buildReach(graph, { seed }));
@@ -61,6 +68,7 @@ await write('reach.after', api.ReachResponse, await buildReach(graph, { seed }))
 await write('memory.after', api.MemoryResponse, await buildMemory(graph, { q: null }));
 await write('queries', api.QueryLogResponse, buildQueryLog({ limit: 50 }));
 await write('eval', api.EvalResponse, await buildEval());
+await write('demo.reset', api.DemoResetResponse, { tenant: 'acme', resetAt: 1_792_400_000_000 });
 await write('error.confirm-required', api.ErrorResponse, {
   error: { code: 'CONFIRM_REQUIRED', message: 'applying a quarantine requires confirm=true' },
 });
