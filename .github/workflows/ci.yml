@@ -30,6 +30,7 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm prettier --check .
+      - run: pnpm readme --check
       - run: pnpm smoke 6379
       - run: pnpm test
       - run: pnpm eval
