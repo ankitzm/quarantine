@@ -26,3 +26,5 @@ export {
   type Plan,
   type Revocation,
 } from './permissions/plan.ts';
+export * from './api/index.ts';
+export * as api from './types/api.ts';
