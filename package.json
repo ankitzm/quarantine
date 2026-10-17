@@ -19,7 +19,8 @@
     "record": "tsx scripts/record.ts",
     "mcp": "tsx scripts/mcp.ts",
     "sentinel": "tsx scripts/sentinel.ts",
-    "eval": "tsx scripts/eval.ts"
+    "eval": "tsx scripts/eval.ts",
+    "bench": "tsx scripts/bench.ts 6379 6.0.2 && tsx scripts/bench.ts 6380 4.22.1"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

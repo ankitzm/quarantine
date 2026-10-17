@@ -103,6 +103,8 @@ export class FalkorDBStore extends BaseStore {
     if (!this.actor) throw new Error('FalkorDBStore: writes need an actor; use store.as({ episodeId })');
     const { episodeId, inputIds = [] } = this.actor;
     const ns = namespace.join(SEP);
+    // ponytail: read-then-write, so two concurrent puts to one key can both supersede the same version;
+    // add a per-key lock (or a conditional MERGE) if agents start writing shared keys concurrently.
     const [current] = await run(this.graph, q.storeGet, { ns, key });
     const t = this.now();
     if (value === null) {

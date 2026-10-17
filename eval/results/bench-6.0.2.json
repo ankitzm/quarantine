@@ -1,0 +1,55 @@
+{
+  "engine": "6.0.2",
+  "port": 6379,
+  "generatedAt": 1792271851415,
+  "opsPerAgent": 60,
+  "writeShare": 0.4,
+  "connection": "one shared client",
+  "results": [
+    {
+      "agents": 8,
+      "ops": 480,
+      "throughputOpsPerSec": 1219,
+      "read": {
+        "n": 288,
+        "p50": 8.3,
+        "p95": 8.89
+      },
+      "write": {
+        "n": 192,
+        "p50": 4.1,
+        "p95": 4.52
+      }
+    },
+    {
+      "agents": 16,
+      "ops": 960,
+      "throughputOpsPerSec": 1251,
+      "read": {
+        "n": 576,
+        "p50": 16.24,
+        "p95": 17
+      },
+      "write": {
+        "n": 384,
+        "p50": 8.05,
+        "p95": 8.66
+      }
+    },
+    {
+      "agents": 32,
+      "ops": 1920,
+      "throughputOpsPerSec": 1221,
+      "read": {
+        "n": 1152,
+        "p50": 33.11,
+        "p95": 36.41
+      },
+      "write": {
+        "n": 768,
+        "p50": 16.28,
+        "p95": 18.16
+      }
+    }
+  ]
+}
