@@ -147,6 +147,12 @@ export class FalkorDBStore extends BaseStore {
     return out.slice(offset, offset + limit);
   }
 
+  /** Id of the current version of a key, without recording a read. */
+  async currentId(namespace: string[], key: string): Promise<string | null> {
+    const [row] = await run(this.graph, q.storeGet, { ns: namespace.join(SEP), key });
+    return row?.id ?? null;
+  }
+
   private async recordReads(itemIds: string[]): Promise<void> {
     if (!this.actor || !itemIds.length) return;
     const t = this.now();
