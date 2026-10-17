@@ -131,6 +131,16 @@ export const invalidateMemory = defineQuery<{
            RETURN m.ns AS ns, m.key AS key, prev.id AS previous, prev.text AS text`,
 });
 
+export const invalidateDerived = defineQuery<{ n: number }>({
+  name: 'quarantine.invalidateDerived',
+  description: 'Mark memory versions derived from the poison invalidated so stores stop serving them.',
+  mode: 'write',
+  cypher: `UNWIND $ids AS id
+           MATCH (m:MemoryItem {id: id})
+           SET m.invalidated = true, m.invalidated_by = coalesce(m.invalidated_by, $plan)
+           RETURN count(m) AS n`,
+});
+
 export const markApplied = defineQuery<{ n: number }>({
   name: 'plan.markApplied',
   description: 'Record when a plan was applied.',

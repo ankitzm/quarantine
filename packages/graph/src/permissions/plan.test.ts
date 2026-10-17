@@ -68,6 +68,8 @@ describe('applyQuarantine', () => {
     const [real] = await run(graph, sopText, { id: 'acme-mem-sop-v3' });
     expect(restored).toEqual({ id: result.restored, text: real?.text, supersedes: [SEED] });
     expect((await run(graph, sopText, { id: SEED }))[0]?.invalidated).toBe(true);
+    expect(plan.items).toEqual(['acme-mem-cust-981']);
+    expect((await run(graph, sopText, { id: 'acme-mem-cust-981' }))[0]?.invalidated).toBe(true);
 
     const before = await graphHash(graph);
     await applyQuarantine(graph, plan.id, { confirm: true, now: 1_900_000_000_000 });

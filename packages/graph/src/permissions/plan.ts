@@ -23,6 +23,8 @@ export interface Plan {
   id: string;
   seed: string;
   agents: string[];
+  /** Infected memory versions other than the seed; apply invalidates them. */
+  items: string[];
   reach: q.ReachRow[];
   maxFlow: number;
   totalCost: number;
@@ -50,8 +52,12 @@ export function reachOf(graph: string, agents: string[]): Promise<q.ReachRow[]> 
  * BFS. The plan is stored so apply acts on exactly what was reviewed.
  */
 export async function planQuarantine(graph: string, seed: string, now = Date.now()): Promise<Plan> {
-  const { agents: infected } = await trace(graph, seed, 'temporal');
-  const agents = infected.map((a) => a.id).sort();
+  const infected = await trace(graph, seed, 'temporal');
+  const agents = infected.agents.map((a) => a.id).sort();
+  const items = infected.items
+    .map((m) => m.id)
+    .filter((id) => id !== seed)
+    .sort();
   const reach = await reachOf(graph, agents);
   let maxFlow = 0;
   let cut: Revocation[] = [];
@@ -79,7 +85,7 @@ export async function planQuarantine(graph: string, seed: string, now = Date.now
     });
   }
 
-  const body = { seed, agents, reach, maxFlow, totalCost: cut.reduce((s, c) => s + c.cost, 0), cut };
+  const body = { seed, agents, items, reach, maxFlow, totalCost: cut.reduce((s, c) => s + c.cost, 0), cut };
   const plan: Plan = { id: stableId('plan', graph, JSON.stringify(body)), ...body };
   await run(graph, q.savePlan, { id: plan.id, seed, json: JSON.stringify(plan), now });
   return plan;
@@ -93,7 +99,7 @@ export async function getPlan(graph: string, id: string): Promise<Plan & { appli
 
 /**
  * Applies a stored plan: revokes every cut edge (capacity 0, revoked_at set, nothing deleted), marks the
- * poisoned memory invalidated, and restores the clean version it replaced as a new version that
+ * poisoned memory and everything derived from it invalidated, and restores the clean version it replaced as a new version that
  * SUPERSEDES the poison. Idempotent: applying the same plan again changes nothing.
  */
 export async function applyQuarantine(
@@ -113,6 +119,7 @@ export async function applyQuarantine(
   }
 
   const [poison] = await run(graph, q.invalidateMemory, { seed: plan.seed, plan: plan.id });
+  await run(graph, q.invalidateDerived, { ids: plan.items, plan: plan.id });
   let restored: string | null = null;
   if (poison?.previous && poison.text !== null) {
     restored = stableId('restore', plan.seed);
