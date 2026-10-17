@@ -33,3 +33,4 @@ export * as api from './types/api.ts';
 export { FalkorDBStore, type Actor, type StoreOptions } from './store.ts';
 export { DEMO_TTL_MS, demoGraph, ensureDemoGraph, sweepDemoGraphs } from './demo.ts';
 export { runEval, type EvalResults, type ScenarioResult } from './eval/run.ts';
+export { REGISTRY } from './queries/index.ts';
