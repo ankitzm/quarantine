@@ -46,10 +46,45 @@ export function reachOf(graph: string, agents: string[]): Promise<q.ReachRow[]> 
   return run(graph, q.reach, { agents, minSensitivity: SENSITIVE });
 }
 
+export interface Cut {
+  reach: q.ReachRow[];
+  maxFlow: number;
+  totalCost: number;
+  cut: Revocation[];
+}
+
 /**
- * The cheapest set of revocations that disconnects every infected agent from every sensitive resource.
- * Infected agents come from the temporal trace; the cut comes from algo.maxFlow plus a residual-graph
- * BFS. The plan is stored so apply acts on exactly what was reviewed.
+ * The cheapest set of revocations that disconnects every given agent from every sensitive resource:
+ * algo.maxFlow with capacity = revocation cost, then the min cut from a residual-graph BFS.
+ */
+export async function cutReach(graph: string, agents: string[]): Promise<Cut> {
+  const reach = await reachOf(graph, agents);
+  if (!reach.length) return { reach, maxFlow: 0, totalCost: 0, cut: [] };
+  const resources = [...new Set(reach.map((r) => r.resource))].sort();
+  const [edges, [flow]] = await Promise.all([
+    run(graph, q.network, { agents, minSensitivity: SENSITIVE }),
+    run(graph, q.maxFlow, { agents, resources }),
+  ]);
+  if (!flow) throw new Error('algo.maxFlow returned no result');
+  const flowByEdge = new Map(flow.edges.map((id, i) => [id, flow.flows[i] ?? 0]));
+  const cut: Revocation[] = minCut(edges, flowByEdge, flow.maxFlow).map((e) => {
+    const rotate = e.type === 'CRED_CUT';
+    const [from, to] = [idOf(e.fromKey), idOf(e.toKey)];
+    return {
+      action: rotate ? 'rotate-credential' : 'revoke-tool',
+      from,
+      to,
+      label: rotate ? `Rotate ${e.fromName}` : `Revoke ${e.toName} from ${from}`,
+      cost: e.cost,
+      source: e.source,
+    };
+  });
+  return { reach, maxFlow: flow.maxFlow, totalCost: cut.reduce((s, c) => s + c.cost, 0), cut };
+}
+
+/**
+ * A quarantine for a poisoned memory version: the agents the temporal trace infected, cut off from every
+ * sensitive resource at minimum cost. The plan is stored so apply acts on exactly what was reviewed.
  */
 export async function planQuarantine(graph: string, seed: string, now = Date.now()): Promise<Plan> {
   const infected = await trace(graph, seed, 'temporal');
@@ -58,34 +93,8 @@ export async function planQuarantine(graph: string, seed: string, now = Date.now
     .map((m) => m.id)
     .filter((id) => id !== seed)
     .sort();
-  const reach = await reachOf(graph, agents);
-  let maxFlow = 0;
-  let cut: Revocation[] = [];
-
-  if (reach.length) {
-    const resources = [...new Set(reach.map((r) => r.resource))].sort();
-    const [edges, [flow]] = await Promise.all([
-      run(graph, q.network, { agents, minSensitivity: SENSITIVE }),
-      run(graph, q.maxFlow, { agents, resources }),
-    ]);
-    if (!flow) throw new Error('algo.maxFlow returned no result');
-    maxFlow = flow.maxFlow;
-    const flowByEdge = new Map(flow.edges.map((id, i) => [id, flow.flows[i] ?? 0]));
-    cut = minCut(edges, flowByEdge, maxFlow).map((e) => {
-      const rotate = e.type === 'CRED_CUT';
-      const [from, to] = [idOf(e.fromKey), idOf(e.toKey)];
-      return {
-        action: rotate ? 'rotate-credential' : 'revoke-tool',
-        from,
-        to,
-        label: rotate ? `Rotate ${e.fromName}` : `Revoke ${e.toName} from ${from}`,
-        cost: e.cost,
-        source: e.source,
-      };
-    });
-  }
-
-  const body = { seed, agents, items, reach, maxFlow, totalCost: cut.reduce((s, c) => s + c.cost, 0), cut };
+  const { reach, maxFlow, totalCost, cut } = await cutReach(graph, agents);
+  const body = { seed, agents, items, reach, maxFlow, totalCost, cut };
   const plan: Plan = { id: stableId('plan', graph, JSON.stringify(body)), ...body };
   await run(graph, q.savePlan, { id: plan.id, seed, json: JSON.stringify(plan), now });
   return plan;

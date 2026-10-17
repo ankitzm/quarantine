@@ -19,6 +19,8 @@ export { trace, type TraceMode, type TraceResult, type TraceRound } from './trac
 export { exhaustiveMinCost, InvalidCut, minCut } from './permissions/mincut.ts';
 export {
   applyQuarantine,
+  cutReach,
+  type Cut,
   getPlan,
   planQuarantine,
   reachOf,
