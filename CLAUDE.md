@@ -22,7 +22,7 @@ chooses tools.
 
 ## Layout
 
-```
+```text
 apps/web/                 Next 16 app: route handlers, /debug page, mocks/
 packages/graph/src/
   client.ts               FalkorDB connection
@@ -72,12 +72,13 @@ Deviations from the brief:
 ## Event flow
 
 Live swarm / seed fixture / eval generator / scan -> events -> `applyEvents` -> graph.
-Event types: Session, Episode, Input, MemoryWrite, MemoryRead, Supersede, Handoff, Decision, ToolCall,
-PermissionConfig. Times are integer epoch ms; live mode injects `now()`.
+Event types (`packages/graph/src/events.ts`): Session, Episode, Input, MemoryWrite (with optional `supersedes`),
+MemoryRead, Handoff, Decision, ToolCall, PermissionConfig. Writes are applied in time order and a reference to a
+missing node fails the load. Times are integer epoch ms; live mode injects `now()`.
 
 ## Commands
 
-```
+```sh
 pnpm dev         # next dev
 pnpm typecheck   # tsc --noEmit across workspace
 pnpm lint        # eslint
