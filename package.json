@@ -15,7 +15,8 @@
     "test": "vitest run",
     "smoke": "tsx scripts/smoke.ts",
     "replay": "tsx scripts/replay.ts",
-    "mocks": "tsx scripts/mocks.ts"
+    "mocks": "tsx scripts/mocks.ts",
+    "record": "tsx scripts/record.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -29,7 +30,10 @@
     "vitest": "5.0.5"
   },
   "dependencies": {
+    "@langchain/openai": "1.6.2",
+    "@quarantine/graph": "workspace:*",
+    "@quarantine/swarm": "workspace:*",
     "falkordb": "6.8.0",
-    "@quarantine/graph": "workspace:*"
+    "zod": "4.6.7"
   }
 }
