@@ -28,3 +28,4 @@ export {
 } from './permissions/plan.ts';
 export * from './api/index.ts';
 export * as api from './types/api.ts';
+export { FalkorDBStore, type Actor, type StoreOptions } from './store.ts';
