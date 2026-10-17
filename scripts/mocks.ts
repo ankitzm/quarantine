@@ -1,6 +1,6 @@
 // Regenerate apps/web/mocks/*.json from the real builders against a scratch copy of the acme fixture.
 // Every payload is validated against the API contract before it is written.
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import {
   api,
   buildApply,
@@ -11,6 +11,7 @@ import {
   buildMemory,
   buildQueryLog,
   buildReach,
+  buildScan,
   buildTimeline,
   closeDb,
   getDb,
@@ -68,6 +69,16 @@ await write('reach.after', api.ReachResponse, await buildReach(graph, { seed }))
 await write('memory.after', api.MemoryResponse, await buildMemory(graph, { q: null }));
 await write('queries', api.QueryLogResponse, buildQueryLog({ limit: 50 }));
 await write('eval', api.EvalResponse, await buildEval());
+const config = async (agent: string) =>
+  JSON.parse(await readFile(`fixtures/configs/acme/${agent}.mcp.json`, 'utf8'));
+await write(
+  'scan',
+  api.ScanResponse,
+  await buildScan({
+    configs: { billing: await config('billing'), ops: await config('ops') },
+    compromised: ['billing'],
+  }),
+);
 await write('demo.reset', api.DemoResetResponse, { tenant: 'acme', resetAt: 1_792_400_000_000 });
 await write('error.confirm-required', api.ErrorResponse, {
   error: { code: 'CONFIRM_REQUIRED', message: 'applying a quarantine requires confirm=true' },
