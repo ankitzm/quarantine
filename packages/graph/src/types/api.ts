@@ -32,6 +32,8 @@ export const ErrorCode = z.enum([
   'SEED_NOT_FOUND', // 404
   'PLAN_NOT_FOUND', // 404
   'CONFIRM_REQUIRED', // 400
+  'PAYLOAD_TOO_LARGE', // 413
+  'RATE_LIMITED', // 429
   'INTERNAL', // 500, message never carries internals
 ]);
 export const ErrorResponse = z.object({ error: z.object({ code: ErrorCode, message: z.string() }) });
@@ -233,6 +235,27 @@ export const TraceStreamEvent = z.discriminatedUnion('type', [
 
 export const DemoResetResponse = z.object({ tenant: z.string(), resetAt: Time });
 
+/** Configs keyed by agent name, each a Claude Desktop / Cursor style `{ mcpServers: {...} }` object. */
+export const ScanRequest = z.object({
+  configs: z
+    .record(z.string().regex(/^[a-z0-9_-]{1,40}$/i), z.unknown())
+    .refine((c) => Object.keys(c).length > 0 && Object.keys(c).length <= 20, 'between 1 and 20 agents'),
+  /** Agents to treat as compromised. Defaults to all of them. */
+  compromised: z.array(z.string()).max(20).optional(),
+});
+
+export const ScanResponse = z.object({
+  agents: z.array(
+    z.object({ agent: z.string(), tools: z.number().int(), unknownServers: z.array(z.string()) }),
+  ),
+  compromised: z.array(z.string()),
+  reach: z.array(ReachPath),
+  maxFlow: z.number().int(),
+  totalCost: z.number().int(),
+  cut: z.array(Revocation),
+  notice: z.string(),
+});
+
 export const QueryLogResponse = z.object({ entries: z.array(QueryLogEntry) });
 
 export const HealthResponse = z.object({
@@ -260,3 +283,5 @@ export type QueryLogResponse = z.infer<typeof QueryLogResponse>;
 export type HealthResponse = z.infer<typeof HealthResponse>;
 export type EvalResponse = z.infer<typeof EvalResponse>;
 export type TraceStreamEvent = z.infer<typeof TraceStreamEvent>;
+export type ScanRequest = z.infer<typeof ScanRequest>;
+export type ScanResponse = z.infer<typeof ScanResponse>;
