@@ -16,6 +16,10 @@ import { z } from 'zod';
  *   POST /api/plans/:id/apply   {confirm: true}        ApplyResponse   (idempotent; safe to retry)
  *   GET  /api/memory?q=                                MemoryResponse
  *   GET  /api/queries                                  QueryLogResponse
+ *   GET  /api/queries/stream                           SSE of QueryLogEntry, this visitor's graph only
+ *   GET  /api/incidents/:seed/stream?mode=             SSE of TraceStreamEvent: one per round, then done
+ *   POST /api/demo/reset                               DemoResetResponse
+ *   POST /api/scan                                     ScanResponse
  *   GET  /api/eval                                     EvalResponse
  *
  * Errors, everywhere: `{ error: { code, message } }` with the status in ErrorCode below.
@@ -213,6 +217,22 @@ export const QueryLogEntry = z.object({
   error: z.string().optional(),
 });
 
+const Infected = z.object({ id: Id, infectedAt: Time, cause: Cause });
+
+/** Trace stream: the infection spreading round by round, for animation, then the full incident. */
+export const TraceStreamEvent = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal('round'),
+    round: z.number().int(),
+    episodes: z.array(Infected),
+    items: z.array(Infected),
+  }),
+  z.object({ type: z.literal('done'), incident: IncidentResponse }),
+  z.object({ type: z.literal('error'), error: ErrorResponse.shape.error }),
+]);
+
+export const DemoResetResponse = z.object({ tenant: z.string(), resetAt: Time });
+
 export const QueryLogResponse = z.object({ entries: z.array(QueryLogEntry) });
 
 export const HealthResponse = z.object({
@@ -239,3 +259,4 @@ export type MemoryResponse = z.infer<typeof MemoryResponse>;
 export type QueryLogResponse = z.infer<typeof QueryLogResponse>;
 export type HealthResponse = z.infer<typeof HealthResponse>;
 export type EvalResponse = z.infer<typeof EvalResponse>;
+export type TraceStreamEvent = z.infer<typeof TraceStreamEvent>;
