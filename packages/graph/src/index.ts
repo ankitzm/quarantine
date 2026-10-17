@@ -29,3 +29,4 @@ export {
 export * from './api/index.ts';
 export * as api from './types/api.ts';
 export { FalkorDBStore, type Actor, type StoreOptions } from './store.ts';
+export { DEMO_TTL_MS, demoGraph, ensureDemoGraph, sweepDemoGraphs } from './demo.ts';
