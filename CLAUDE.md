@@ -51,6 +51,7 @@ Edges: `WROTE`, `READ`, `DERIVED_FROM`, `SUPERSEDES`, `HANDED_OFF {summary}`, `D
 Memory kinds by namespace: `sop` = procedural, `customer` = semantic, `episodes` = episodic.
 
 Deviations from the brief:
+
 1. `algo.maxFlow` only filters by relationship type, so revocation sets `capacity: 0` (keeping `cost`) instead of
    deleting. Reach filters `revoked_at IS NULL`.
 2. Credentialed tools reach resources via `USES_CRED -> CRED_CUT -> GRANTS`; credential-less tools use `ACTS_ON`.
@@ -58,6 +59,15 @@ Deviations from the brief:
 3. Next 16: route handler `params` is a Promise.
 4. API tests call route handlers directly (no supertest).
 5. FalkorDB Browser (container port 3000) maps to host 3001.
+
+## Engine facts (verified by `pnpm smoke` on 6.0.2 and 4.22.1)
+
+- `roQuery` on a graph that does not exist fails with `Invalid graph operation on empty key`: map it to
+  `GraphNotReady`.
+- `algo.maxFlow` requires `capacityProperty` (no default). It returns only edges with positive flow; capacity-0
+  edges never appear.
+- Use Cypher DDL for indexes (`CREATE FULLTEXT INDEX FOR (m:MemoryItem) ON (m.text)`); 6.0 changed the arity of
+  `db.idx.fulltext.createNodeIndex`. Re-creating an index fails with `already indexed`, which schema setup ignores.
 
 ## Event flow
 
