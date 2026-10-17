@@ -1,4 +1,6 @@
-import { QuarantineError, tenantGraph } from '@quarantine/graph';
+import { ensureDemoGraph, QuarantineError } from '@quarantine/graph';
+import { cookies } from 'next/headers';
+import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
 
 export const Tenant = z
@@ -7,9 +9,35 @@ export const Tenant = z
   .default('acme');
 export const Id = z.string().min(1).max(200);
 
-/** The graph a request reads and writes. */
-export function graphFor(req: Request): string {
-  return tenantGraph(Tenant.parse(new URL(req.url).searchParams.get('tenant') ?? undefined));
+const SID = 'sid';
+const Sid = z.string().regex(/^[0-9a-f]{16}$/);
+
+/** The visitor id from the `sid` cookie, issuing one if missing or malformed. */
+export async function visitor(): Promise<string> {
+  const jar = await cookies();
+  const current = Sid.safeParse(jar.get(SID)?.value);
+  if (current.success) return current.data;
+  const sid = randomBytes(8).toString('hex');
+  jar.set(SID, sid, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 2 * 60 * 60,
+    path: '/',
+  });
+  return sid;
+}
+
+export function tenantOf(req: Request): string {
+  return Tenant.parse(new URL(req.url).searchParams.get('tenant') ?? undefined);
+}
+
+/**
+ * The graph a request reads and writes: the visitor's private copy of the tenant, made on first use, so
+ * nobody's plan or apply touches the base graphs or another visitor's state.
+ */
+export async function graphFor(req: Request): Promise<string> {
+  return ensureDemoGraph(tenantOf(req), await visitor());
 }
 
 export function query(req: Request): URLSearchParams {

@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 async function serve(req: Request): Promise<Response> {
   let graph: string;
   try {
-    graph = graphFor(req);
+    graph = await graphFor(req);
   } catch (e) {
     return handle(() => Promise.reject(e));
   }

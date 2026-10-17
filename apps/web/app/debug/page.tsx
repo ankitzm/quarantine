@@ -47,6 +47,7 @@ export default function Debug() {
   };
   const actions: [string, () => Promise<unknown>][] = [
     ['Health', () => run('/api/health')],
+    ['Reset demo graph', () => run(`/api/demo/reset?${q}`, { method: 'POST' })],
     ['Temporal trace', () => run(`/api/incidents/${s}?mode=temporal&${q}`)],
     ['Naive trace', () => run(`/api/incidents/${s}?mode=naive&${q}`)],
     ['Timeline', () => run(`/api/incidents/${s}/timeline?${q}`)],

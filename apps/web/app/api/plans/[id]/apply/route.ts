@@ -5,6 +5,6 @@ import { graphFor, handle, Id } from '@/lib/http';
 export async function POST(req: Request, ctx: RouteContext<'/api/plans/[id]/apply'>) {
   return handle(async () => {
     const { confirm } = api.ApplyRequest.parse(await req.json().catch(() => ({})));
-    return buildApply(graphFor(req), { id: Id.parse((await ctx.params).id), confirm });
+    return buildApply(await graphFor(req), { id: Id.parse((await ctx.params).id), confirm });
   });
 }
