@@ -15,8 +15,9 @@ export async function markGraphReady(graph: string, tenant: string, now = Date.n
   await run(graph, markReady, { tenant, now });
 }
 
-/** Throws {@link GraphNotReady} unless the graph exists and its load finished. */
-export async function assertReady(graph: string): Promise<void> {
+/** Throws {@link GraphNotReady} unless the graph exists and its load finished. Returns the tenant. */
+export async function assertReady(graph: string): Promise<string> {
   const [meta] = await run(graph, readMeta);
   if (!meta?.ready) throw new GraphNotReady(graph);
+  return meta.tenant ?? graph;
 }

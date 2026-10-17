@@ -15,7 +15,7 @@ describe('fixtures', () => {
       const first = await graphHash(graph);
       await loadFixture(graph, fixture, configs);
       expect(await graphHash(graph), fixture.run).toBe(first);
-      await expect(assertReady(graph)).resolves.toBeUndefined();
+      await expect(assertReady(graph)).resolves.toBe(fixture.tenant);
     }
   });
 });

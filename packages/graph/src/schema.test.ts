@@ -15,6 +15,6 @@ describe('schema', () => {
     await ensureSchema(graph);
     await expect(assertReady(graph)).rejects.toBeInstanceOf(GraphNotReady);
     await markGraphReady(graph, 'acme');
-    await expect(assertReady(graph)).resolves.toBeUndefined();
+    await expect(assertReady(graph)).resolves.toBe('acme');
   });
 });
