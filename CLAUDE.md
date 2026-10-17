@@ -44,14 +44,17 @@ scripts/                  smoke, replay, mocks, record, eval, bench
 Nodes: `Session`, `Agent`, `Episode`, `Input`, `MemoryItem {ns, key, kind, valid_from, valid_to, invalidated}`,
 `Decision`, `Tool`, `Credential`, `CredCut`, `Resource`, `Meta`.
 
-Edges: `WROTE`, `READ`, `DERIVED_FROM`, `SUPERSEDES`, `HANDED_OFF {summary}`, `DECIDED`, `BASED_ON`, `CALLED`,
-`CAN_USE`, `USES_CRED`, `CRED_CUT`, `GRANTS`, `ACTS_ON`. Permission edges carry `capacity`, `cost`, `revocable`,
-`revoked_at`.
+Edges: `RAN`, `IN_SESSION`, `RECEIVED`, `WROTE`, `READ`, `DERIVED_FROM`, `SUPERSEDES`, `HANDED_OFF {summary}`,
+`DECIDED`, `BASED_ON`, `CALLED`, `OF`, and the permission network `PERM {kind, capacity, cost, revocable,
+revoked_at, source}` with kind `CAN_USE`, `USES_CRED`, `CRED_CUT`, `GRANTS` or `ACTS_ON`.
 
 Memory kinds by namespace: `sop` = procedural, `customer` = semantic, `episodes` = episodic.
 
 Deviations from the brief:
 
+0. `algo.maxFlow` accepts exactly one relationship type, so every permission edge is `PERM` with a `kind`.
+   Tool nodes are per-agent instances (`<agent>:<server>.<tool>`); shared tool nodes would let one agent reach
+   through another agent's credential.
 1. `algo.maxFlow` only filters by relationship type, so revocation sets `capacity: 0` (keeping `cost`) instead of
    deleting. Reach filters `revoked_at IS NULL`.
 2. Credentialed tools reach resources via `USES_CRED -> CRED_CUT -> GRANTS`; credential-less tools use `ACTS_ON`.
@@ -64,7 +67,7 @@ Deviations from the brief:
 
 - `roQuery` on a graph that does not exist fails with `Invalid graph operation on empty key`: map it to
   `GraphNotReady`.
-- `algo.maxFlow` requires `capacityProperty` (no default). It returns only edges with positive flow; capacity-0
+- `algo.maxFlow` requires `capacityProperty` (no default) and exactly one relationship type. It returns only edges with positive flow; capacity-0
   edges never appear.
 - Use Cypher DDL for indexes (`CREATE FULLTEXT INDEX FOR (m:MemoryItem) ON (m.text)`); 6.0 changed the arity of
   `db.idx.fulltext.createNodeIndex`. Re-creating an index fails with `already indexed`, which schema setup ignores.
