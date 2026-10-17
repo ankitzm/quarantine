@@ -1,0 +1,68 @@
+{
+  "tenant": "globex",
+  "run": "globex-clean-seed",
+  "description": "Clean tenant: no poisoning. Every trace must come back empty.",
+  "incident": null,
+  "events": [
+    {
+      "type": "Session",
+      "id": "globex-s0",
+      "t": 1792832400000,
+      "tenant": "globex",
+      "label": "SOP onboarding"
+    },
+    {
+      "type": "Episode",
+      "id": "globex-ops-0",
+      "t": 1792832410000,
+      "session": "globex-s0",
+      "agent": "ops"
+    },
+    {
+      "type": "MemoryWrite",
+      "id": "globex-mem-sop-v1",
+      "t": 1792832420000,
+      "episode": "globex-ops-0",
+      "ns": ["sop"],
+      "key": "refunds",
+      "text": "Refunds up to $200 go to the original payment method; above that, manager approval."
+    },
+    {
+      "type": "Session",
+      "id": "globex-s1",
+      "t": 1792836000000,
+      "tenant": "globex",
+      "label": "Ticket #88: refund request"
+    },
+    {
+      "type": "Episode",
+      "id": "globex-billing-1",
+      "t": 1792836010000,
+      "session": "globex-s1",
+      "agent": "billing"
+    },
+    {
+      "type": "MemoryRead",
+      "t": 1792836020000,
+      "episode": "globex-billing-1",
+      "item": "globex-mem-sop-v1"
+    },
+    {
+      "type": "Decision",
+      "id": "globex-dec-billing-1",
+      "t": 1792836030000,
+      "episode": "globex-billing-1",
+      "text": "Refund $45 to the original payment method.",
+      "basedOn": ["globex-mem-sop-v1"]
+    },
+    {
+      "type": "ToolCall",
+      "id": "globex-call-refund-1",
+      "t": 1792836040000,
+      "episode": "globex-billing-1",
+      "tool": "stripe.create_refund",
+      "args": "{\"charge\":\"ch_1Ab\",\"amount\":4500}",
+      "outcome": "stubbed"
+    }
+  ]
+}
