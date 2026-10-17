@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "stripe": {
+      "command": "npx",
+      "args": ["-y", "@stripe/mcp", "--tools=all"],
+      "env": { "STRIPE_SECRET_KEY": "<set-in-deploy>" }
+    },
+    "crm-db": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://billing:<set-in-deploy>@db.acme.internal:5432/crm"
+      ]
+    },
+    "fetch": { "command": "uvx", "args": ["mcp-server-fetch"] }
+  }
+}

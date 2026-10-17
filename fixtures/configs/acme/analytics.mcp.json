@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "warehouse": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://analytics:<set-in-deploy>@db.acme.internal:5432/crm"
+      ]
+    },
+    "reports": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/srv/acme/reports"]
+    }
+  }
+}
