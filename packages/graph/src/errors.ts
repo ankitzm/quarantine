@@ -1,7 +1,8 @@
 /** Typed failures that cross the API boundary. `code` is stable and safe to show to clients. */
 export class QuarantineError extends Error {
   constructor(
-    readonly code: 'GRAPH_NOT_READY' | 'QUERY_TIMEOUT' | 'PLAN_NOT_FOUND' | 'CONFIRM_REQUIRED',
+    readonly code:
+      'GRAPH_NOT_READY' | 'QUERY_TIMEOUT' | 'SEED_NOT_FOUND' | 'PLAN_NOT_FOUND' | 'CONFIRM_REQUIRED',
     readonly status: number,
     message: string,
   ) {
@@ -19,6 +20,12 @@ export class GraphNotReady extends QuarantineError {
 export class QueryTimeout extends QuarantineError {
   constructor(query: string, timeoutMs: number) {
     super('QUERY_TIMEOUT', 504, `query "${query}" exceeded ${timeoutMs}ms`);
+  }
+}
+
+export class SeedNotFound extends QuarantineError {
+  constructor(item: string) {
+    super('SEED_NOT_FOUND', 404, `memory item "${item}" does not exist or has no writer`);
   }
 }
 
