@@ -1,0 +1,138 @@
+{
+  "agents": [
+    {
+      "agent": "billing",
+      "tools": 6,
+      "unknownServers": []
+    },
+    {
+      "agent": "ops",
+      "tools": 12,
+      "unknownServers": []
+    }
+  ],
+  "compromised": [
+    "billing"
+  ],
+  "reach": [
+    {
+      "agent": "billing",
+      "tool": "billing:fetch.fetch",
+      "credential": null,
+      "resource": "res_ea2da5952a7b4d76",
+      "uri": "net://egress",
+      "kind": "egress",
+      "sensitivity": 2
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:postgres.query",
+      "credential": "postgres://billing@db.acme.internal:5432/crm",
+      "resource": "res_cf3a5ae62f2cc320",
+      "uri": "postgres://db.acme.internal:5432/crm",
+      "kind": "database",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.create_customer",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_720859953809ad73",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.create_customer",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_d1b28deeef989bb4",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.create_refund",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_720859953809ad73",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.create_refund",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_d1b28deeef989bb4",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.list_customers",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_720859953809ad73",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.list_customers",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_d1b28deeef989bb4",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.retrieve_balance",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_720859953809ad73",
+      "uri": "stripe://customers",
+      "kind": "pii",
+      "sensitivity": 3
+    },
+    {
+      "agent": "billing",
+      "tool": "billing:stripe.retrieve_balance",
+      "credential": "STRIPE_SECRET_KEY",
+      "resource": "res_d1b28deeef989bb4",
+      "uri": "stripe://payments",
+      "kind": "payments",
+      "sensitivity": 3
+    }
+  ],
+  "maxFlow": 14,
+  "totalCost": 14,
+  "cut": [
+    {
+      "action": "revoke-tool",
+      "from": "billing",
+      "to": "billing:fetch.fetch",
+      "label": "Revoke fetch.fetch from billing",
+      "cost": 2,
+      "source": "upload:billing.mcp.json#/mcpServers/fetch (https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)"
+    },
+    {
+      "action": "revoke-tool",
+      "from": "billing",
+      "to": "billing:postgres.query",
+      "label": "Revoke postgres.query from billing",
+      "cost": 4,
+      "source": "upload:billing.mcp.json#/mcpServers/crm-db (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)"
+    },
+    {
+      "action": "rotate-credential",
+      "from": "cred_477228ee18a974d4",
+      "to": "cred_477228ee18a974d4",
+      "label": "Rotate STRIPE_SECRET_KEY",
+      "cost": 8,
+      "source": "upload:billing.mcp.json#/mcpServers/stripe (https://github.com/stripe/agent-toolkit/tree/main/modelcontextprotocol)"
+    }
+  ],
+  "notice": "Env values and secrets in uploaded configs are read only to derive names and are never stored; the scan graph is deleted as soon as the response is built."
+}
