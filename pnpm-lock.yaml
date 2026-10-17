@@ -11,6 +11,9 @@ importers:
       '@langchain/openai':
         specifier: 1.6.2
         version: 1.6.2(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))
+      '@modelcontextprotocol/client':
+        specifier: 2.3.1
+        version: 2.3.1
       '@modelcontextprotocol/sdk':
         specifier: 1.32.1
         version: 1.32.1(@cfworker/json-schema@4.1.1)(zod@4.6.7)
@@ -115,9 +118,18 @@ importers:
       '@langchain/langgraph-swarm':
         specifier: 1.0.4
         version: 1.0.4(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))(@langchain/langgraph@1.5.1(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(zod@4.6.7))
+      '@langchain/mcp-adapters':
+        specifier: 2.0.1
+        version: 2.0.1(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))(@langchain/langgraph@1.5.1(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(zod@4.6.7))
       '@langchain/openai':
         specifier: 1.6.2
         version: 1.6.2(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))
+      '@modelcontextprotocol/client':
+        specifier: 2.3.1
+        version: 2.3.1
+      '@modelcontextprotocol/sdk':
+        specifier: 1.32.1
+        version: 1.32.1(@cfworker/json-schema@4.1.1)(zod@4.6.7)
       '@quarantine/graph':
         specifier: workspace:*
         version: link:../graph
@@ -581,6 +593,13 @@ packages:
       '@langchain/core': ^1.1.48
       zod: ^3.25.32 || ^4.2.0
 
+  '@langchain/mcp-adapters@2.0.1':
+    resolution: {integrity: sha512-dYijIiyN5JdufWX1I8cGrhKnmtSzl50cKLPuH9196xpsEJBz9TO+Z/ZM9pcHNyKM7+OZJDJvwB+DS7cAVhyheA==}
+    engines: {node: '>=20.10.0'}
+    peerDependencies:
+      '@langchain/core': ^1.2.6
+      '@langchain/langgraph': ^1.4.18
+
   '@langchain/openai@1.6.2':
     resolution: {integrity: sha512-KaXc3zjdM2/E24FdBlsk5NTT2Dyxh46vzCS2by78ehN6G5zdx+4OfVnPvyLl8r2tv2TqQCHpEhImVXgnAZaOvg==}
     engines: {node: '>=22'}
@@ -589,6 +608,14 @@ packages:
 
   '@langchain/protocol@0.0.19':
     resolution: {integrity: sha512-9hKcRrH7cBX6gfutdfXPoft1OCchHe4FEpALoDJMl5Qu+n/YG5ynZmyu8+8cxORlPwHBoKTxggvXz+76M1yX1Q==}
+
+  '@modelcontextprotocol/client@2.3.1':
+    resolution: {integrity: sha512-mIGZXpHsjnZ6lD+gD/WCMpR5k8yVQQ8nNFH1N0Srf7AvnwTUMYD6pvTY8ng2+He5FfV7YMZLmrjL7cLa/cc3dQ==}
+    engines: {node: '>=20'}
+
+  '@modelcontextprotocol/core@2.3.1':
+    resolution: {integrity: sha512-laVmIhPGpWi7rG9q+0UigblRN0Hws/Yjlb6qLFtVqryXVLkc4h+yN8z731POD2LnAGQlFe7/tXhUm7Bi0YB91g==}
+    engines: {node: '>=20'}
 
   '@modelcontextprotocol/sdk@1.32.1':
     resolution: {integrity: sha512-2DdE+SJDtzLEEWzY1ZjY7Q+VcPhcV1KisD3zI4u0XZyktsjHum1mwbMI+JaulUBi2OZk+KJAi2uPXzxichPkdw==}
@@ -2254,6 +2281,14 @@ snapshots:
       - react
       - react-dom
 
+  '@langchain/mcp-adapters@2.0.1(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))(@langchain/langgraph@1.5.1(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(zod@4.6.7))':
+    dependencies:
+      '@langchain/core': 1.2.18(openai@7.35.0(zod@4.6.7))
+      '@langchain/langgraph': 1.5.1(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(zod@4.6.7)
+      '@modelcontextprotocol/client': 2.3.1
+      '@modelcontextprotocol/core': 2.3.1
+      zod: 4.6.7
+
   '@langchain/openai@1.6.2(@langchain/core@1.2.18(openai@7.35.0(zod@4.6.7)))':
     dependencies:
       '@langchain/core': 1.2.18(openai@7.35.0(zod@4.6.7))
@@ -2268,6 +2303,20 @@ snapshots:
       - ws
 
   '@langchain/protocol@0.0.19': {}
+
+  '@modelcontextprotocol/client@2.3.1':
+    dependencies:
+      '@modelcontextprotocol/core': 2.3.1
+      cross-spawn: 7.0.6
+      eventsource: 3.0.7
+      eventsource-parser: 3.1.1
+      jose: 6.2.12
+      pkce-challenge: 5.0.1
+      zod: 4.6.7
+
+  '@modelcontextprotocol/core@2.3.1':
+    dependencies:
+      zod: 4.6.7
 
   '@modelcontextprotocol/sdk@1.32.1(@cfworker/json-schema@4.1.1)(zod@4.6.7)':
     dependencies:

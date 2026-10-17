@@ -17,7 +17,8 @@
     "replay": "tsx scripts/replay.ts",
     "mocks": "tsx scripts/mocks.ts",
     "record": "tsx scripts/record.ts",
-    "mcp": "tsx scripts/mcp.ts"
+    "mcp": "tsx scripts/mcp.ts",
+    "sentinel": "tsx scripts/sentinel.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -32,6 +33,7 @@
   },
   "dependencies": {
     "@langchain/openai": "1.6.2",
+    "@modelcontextprotocol/client": "2.3.1",
     "@modelcontextprotocol/sdk": "1.32.1",
     "@quarantine/graph": "workspace:*",
     "@quarantine/swarm": "workspace:*",
