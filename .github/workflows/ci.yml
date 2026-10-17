@@ -8,9 +8,15 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        engine:
+          - falkordb/falkordb:6.0.2@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
+          - falkordb/falkordb:v4.22.1@sha256:b0bdcac2cbaff989e77cb0610439b7a9289e86de033ccbbd4368b66fb680ae7a
     services:
       falkordb:
-        image: falkordb/falkordb:6.0.2@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
+        image: ${{ matrix.engine }}
         ports:
           - 6379:6379
     steps:
@@ -26,3 +32,4 @@ jobs:
       - run: pnpm prettier --check .
       - run: pnpm smoke 6379
       - run: pnpm test
+      - run: pnpm eval
