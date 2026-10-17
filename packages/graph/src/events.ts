@@ -127,6 +127,7 @@ export const Event = z.discriminatedUnion('type', [
 export type Event = z.infer<typeof Event>;
 export type EventInput = z.input<typeof Event>;
 export type Grant = z.infer<typeof Grant>;
+export type Resource = z.infer<typeof Resource>;
 
 /** Deterministic id from content, so re-recording the same thing yields the same node. */
 export function stableId(prefix: string, ...parts: (string | number)[]): string {
