@@ -18,7 +18,8 @@
     "mocks": "tsx scripts/mocks.ts",
     "record": "tsx scripts/record.ts",
     "mcp": "tsx scripts/mcp.ts",
-    "sentinel": "tsx scripts/sentinel.ts"
+    "sentinel": "tsx scripts/sentinel.ts",
+    "eval": "tsx scripts/eval.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
