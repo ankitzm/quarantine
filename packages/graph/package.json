@@ -1,0 +1,15 @@
+{
+  "name": "@quarantine/graph",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "falkordb": "6.8.0",
+    "zod": "4.6.7"
+  }
+}
