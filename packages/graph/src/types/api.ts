@@ -172,7 +172,7 @@ export const PlanResponse = z.object({
   appliedAt: Time.nullable(),
 });
 
-export const ApplyRequest = z.object({ confirm: z.boolean() });
+export const ApplyRequest = z.object({ confirm: z.boolean().default(false) });
 
 export const ApplyResponse = z.object({
   tenant: z.string(),
