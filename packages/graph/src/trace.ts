@@ -43,7 +43,19 @@ const MAX_ROUNDS = 100;
  * naive: the same rules with time ignored and memory identified by (ns, key), which is what
  * "who touched the refund SOP?" looks like without bitemporal versions.
  */
-export async function trace(graph: string, seedItem: string, mode: TraceMode): Promise<TraceResult> {
+export interface TraceRound {
+  round: number;
+  /** Nodes whose infection was found or moved earlier this round. */
+  episodes: { id: string; infectedAt: number; cause: Cause }[];
+  items: { id: string; infectedAt: number; cause: Cause }[];
+}
+
+export async function trace(
+  graph: string,
+  seedItem: string,
+  mode: TraceMode,
+  onRound?: (round: TraceRound) => void,
+): Promise<TraceResult> {
   const [seed] = await run(graph, q.traceSeed, { id: seedItem });
   if (!seed) throw new SeedNotFound(seedItem);
 
@@ -55,6 +67,13 @@ export async function trace(graph: string, seedItem: string, mode: TraceMode): P
   let frontier = { episodes: [seed.episode], items: [seed.id] };
   const at = (known: Map<string, Infection>) => (id: string) => ({ id, at: time(must(known, id).at) });
   let rounds = 0;
+
+  const seedCause: Cause = { edge: 'SEED', from: null };
+  onRound?.({
+    round: 0,
+    episodes: [{ id: seed.episode, infectedAt: seed.at, cause: seedCause }],
+    items: [{ id: seed.id, infectedAt: seed.at, cause: seedCause }],
+  });
 
   while (frontier.episodes.length + frontier.items.length > 0) {
     if (++rounds > MAX_ROUNDS) throw new Error(`trace did not converge in ${MAX_ROUNDS} rounds`);
@@ -73,6 +92,13 @@ export async function trace(graph: string, seedItem: string, mode: TraceMode): P
       episodes: relax(episodes, [...toEpisodes, ...viaHandoff], mode),
       items: relax(items, [...toItems, ...viaDerived, ...viaKey], mode),
     };
+    const changed = (known: Map<string, Infection>, ids: string[]) =>
+      ids.map((id) => ({ id, infectedAt: must(known, id).at, cause: must(known, id).cause }));
+    onRound?.({
+      round: rounds,
+      episodes: changed(episodes, frontier.episodes),
+      items: changed(items, frontier.items),
+    });
   }
 
   const infectedEpisodes = [...episodes.keys()].map(at(episodes));

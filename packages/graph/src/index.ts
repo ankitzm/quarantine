@@ -15,7 +15,7 @@ export {
 } from './fixtures.ts';
 export { parseMcpConfig, toolId } from './permissions/config.ts';
 export { MANIFESTS, SENSITIVE, SENSITIVITY } from './permissions/manifests.ts';
-export { trace, type TraceMode, type TraceResult } from './trace.ts';
+export { trace, type TraceMode, type TraceResult, type TraceRound } from './trace.ts';
 export { exhaustiveMinCost, InvalidCut, minCut } from './permissions/mincut.ts';
 export {
   applyQuarantine,
