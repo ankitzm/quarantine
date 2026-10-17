@@ -1,8 +1,8 @@
 {
   "entries": [
     {
-      "seq": 290,
-      "at": 1792270459294,
+      "seq": 329,
+      "at": 1792271384060,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -20,12 +20,12 @@
         ],
         "items": []
       },
-      "ms": 0.41,
+      "ms": 0.51,
       "rows": 0
     },
     {
-      "seq": 291,
-      "at": 1792270459294,
+      "seq": 330,
+      "at": 1792271384060,
       "graph": "mocks_acme",
       "name": "trace.episodes",
       "mode": "read",
@@ -38,12 +38,12 @@
           "acme-ops-1"
         ]
       },
-      "ms": 0.31,
+      "ms": 0.25,
       "rows": 4
     },
     {
-      "seq": 292,
-      "at": 1792270459294,
+      "seq": 331,
+      "at": 1792271384060,
       "graph": "mocks_acme",
       "name": "trace.items",
       "mode": "read",
@@ -54,12 +54,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.33,
+      "ms": 0.31,
       "rows": 2
     },
     {
-      "seq": 293,
-      "at": 1792270459294,
+      "seq": 332,
+      "at": 1792271384060,
       "graph": "mocks_acme",
       "name": "trace.decisions",
       "mode": "read",
@@ -88,12 +88,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.53,
+      "ms": 0.48,
       "rows": 3
     },
     {
-      "seq": 294,
-      "at": 1792270459294,
+      "seq": 333,
+      "at": 1792271384060,
       "graph": "mocks_acme",
       "name": "trace.toolCalls",
       "mode": "read",
@@ -118,12 +118,12 @@
           }
         ]
       },
-      "ms": 0.58,
+      "ms": 0.54,
       "rows": 2
     },
     {
-      "seq": 295,
-      "at": 1792270459295,
+      "seq": 334,
+      "at": 1792271384061,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -137,12 +137,12 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.68,
+      "ms": 0.67,
       "rows": 32
     },
     {
-      "seq": 296,
-      "at": 1792270459298,
+      "seq": 335,
+      "at": 1792271384063,
       "graph": "mocks_acme",
       "name": "permissions.network",
       "mode": "read",
@@ -156,12 +156,12 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 3.45,
+      "ms": 1.43,
       "rows": 59
     },
     {
-      "seq": 297,
-      "at": 1792270459298,
+      "seq": 336,
+      "at": 1792271384065,
       "graph": "mocks_acme",
       "name": "permissions.maxFlow",
       "mode": "read",
@@ -182,12 +182,12 @@
           "res_fc3c4b5febb08d40"
         ]
       },
-      "ms": 3.44,
+      "ms": 3.5,
       "rows": 1
     },
     {
-      "seq": 298,
-      "at": 1792270459299,
+      "seq": 337,
+      "at": 1792271384066,
       "graph": "mocks_acme",
       "name": "plan.save",
       "mode": "write",
@@ -196,14 +196,14 @@
         "id": "plan_1bc75d3e3e18f829",
         "seed": "acme-mem-sop-v4",
         "json": "{\"id\":\"plan_1bc75d3e3e18f829\",\"seed\":\"acme-mem-sop-v4\",\"agents\":[\"analytics\",\"bi…(8234)",
-        "now": 1792270459292
+        "now": 1792271384058
       },
-      "ms": 0.71,
+      "ms": 0.76,
       "rows": 1
     },
     {
-      "seq": 299,
-      "at": 1792270459300,
+      "seq": 338,
+      "at": 1792271384066,
       "graph": "mocks_acme",
       "name": "plan.load",
       "mode": "read",
@@ -211,23 +211,23 @@
       "params": {
         "id": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.29,
+      "ms": 0.33,
       "rows": 1
     },
     {
-      "seq": 300,
-      "at": 1792270459301,
+      "seq": 339,
+      "at": 1792271384068,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.34,
+      "ms": 0.35,
       "rows": 1
     },
     {
-      "seq": 301,
-      "at": 1792270459302,
+      "seq": 340,
+      "at": 1792271384068,
       "graph": "mocks_acme",
       "name": "plan.load",
       "mode": "read",
@@ -235,12 +235,12 @@
       "params": {
         "id": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.28,
+      "ms": 0.33,
       "rows": 1
     },
     {
-      "seq": 302,
-      "at": 1792270459302,
+      "seq": 341,
+      "at": 1792271384069,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -251,12 +251,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.54,
+      "ms": 0.51,
       "rows": 1
     },
     {
-      "seq": 303,
-      "at": 1792270459303,
+      "seq": 342,
+      "at": 1792271384069,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -267,12 +267,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.33,
+      "ms": 0.42,
       "rows": 1
     },
     {
-      "seq": 304,
-      "at": 1792270459303,
+      "seq": 343,
+      "at": 1792271384070,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -283,12 +283,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.35,
+      "ms": 0.43,
       "rows": 1
     },
     {
-      "seq": 305,
-      "at": 1792270459304,
+      "seq": 344,
+      "at": 1792271384070,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -299,12 +299,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.36,
+      "ms": 0.37,
       "rows": 1
     },
     {
-      "seq": 306,
-      "at": 1792270459304,
+      "seq": 345,
+      "at": 1792271384071,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -319,8 +319,8 @@
       "rows": 1
     },
     {
-      "seq": 307,
-      "at": 1792270459304,
+      "seq": 346,
+      "at": 1792271384071,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -331,12 +331,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.45,
+      "ms": 0.51,
       "rows": 1
     },
     {
-      "seq": 308,
-      "at": 1792270459305,
+      "seq": 347,
+      "at": 1792271384071,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -347,12 +347,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.39,
+      "ms": 0.35,
       "rows": 1
     },
     {
-      "seq": 309,
-      "at": 1792270459305,
+      "seq": 348,
+      "at": 1792271384072,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -363,12 +363,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.36,
+      "ms": 0.41,
       "rows": 1
     },
     {
-      "seq": 310,
-      "at": 1792270459306,
+      "seq": 349,
+      "at": 1792271384072,
       "graph": "mocks_acme",
       "name": "quarantine.invalidateMemory",
       "mode": "write",
@@ -377,12 +377,12 @@
         "seed": "acme-mem-sop-v4",
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.42,
+      "ms": 0.48,
       "rows": 1
     },
     {
-      "seq": 311,
-      "at": 1792270459306,
+      "seq": 350,
+      "at": 1792271384073,
       "graph": "mocks_acme",
       "name": "quarantine.invalidateDerived",
       "mode": "write",
@@ -397,8 +397,8 @@
       "rows": 1
     },
     {
-      "seq": 312,
-      "at": 1792270459306,
+      "seq": 351,
+      "at": 1792271384073,
       "graph": "mocks_acme",
       "name": "ingest.session",
       "mode": "write",
@@ -409,12 +409,12 @@
         "tenant": "mocks_acme",
         "label": "Quarantine plan_1bc75d3e3e18f829"
       },
-      "ms": 0.37,
+      "ms": 0.38,
       "rows": 1
     },
     {
-      "seq": 313,
-      "at": 1792270459307,
+      "seq": 352,
+      "at": 1792271384074,
       "graph": "mocks_acme",
       "name": "ingest.episode",
       "mode": "write",
@@ -429,12 +429,12 @@
       "rows": 1
     },
     {
-      "seq": 314,
-      "at": 1792270459308,
+      "seq": 353,
+      "at": 1792271384074,
       "graph": "mocks_acme",
       "name": "ingest.memory.write",
       "mode": "write",
-      "cypher": "MATCH (e:Episode {id: $episode})\n           MERGE (m:MemoryItem {id: $id})\n           ON CREATE SET m.ns = $ns, m.key = $key, m.kind = $kind, m.text = $text,\n                         m.valid_from = $t, m.invalidated = false\n           MERGE (e)-[:WROTE {t: $t}]->(m)\n           RETURN count(m) AS n",
+      "cypher": "MATCH (e:Episode {id: $episode})\n           MERGE (m:MemoryItem {id: $id})\n           ON CREATE SET m.ns = $ns, m.key = $key, m.kind = $kind, m.text = $text,\n                         m.valid_from = $t, m.invalidated = false, m.value = $value\n           MERGE (e)-[:WROTE {t: $t}]->(m)\n           RETURN count(m) AS n",
       "params": {
         "id": "restore_05783a01bb98fb34",
         "t": 1792400000000,
@@ -442,14 +442,15 @@
         "ns": "sop",
         "key": "refunds",
         "kind": "procedural",
-        "text": "Refunds SOP v3. Refunds up to $500 may be issued by Billing to the original paym…(201)"
+        "text": "Refunds SOP v3. Refunds up to $500 may be issued by Billing to the original paym…(201)",
+        "value": null
       },
-      "ms": 0.52,
+      "ms": 0.56,
       "rows": 1
     },
     {
-      "seq": 315,
-      "at": 1792270459308,
+      "seq": 354,
+      "at": 1792271384075,
       "graph": "mocks_acme",
       "name": "ingest.memory.derivedFrom",
       "mode": "write",
@@ -460,12 +461,12 @@
           "acme-mem-sop-v3"
         ]
       },
-      "ms": 0.5,
+      "ms": 0.49,
       "rows": 1
     },
     {
-      "seq": 316,
-      "at": 1792270459309,
+      "seq": 355,
+      "at": 1792271384075,
       "graph": "mocks_acme",
       "name": "ingest.memory.supersedes",
       "mode": "write",
@@ -475,12 +476,12 @@
         "old": "acme-mem-sop-v4",
         "t": 1792400000000
       },
-      "ms": 0.45,
+      "ms": 0.48,
       "rows": 1
     },
     {
-      "seq": 317,
-      "at": 1792270459309,
+      "seq": 356,
+      "at": 1792271384076,
       "graph": "mocks_acme",
       "name": "plan.markApplied",
       "mode": "write",
@@ -489,12 +490,12 @@
         "id": "plan_1bc75d3e3e18f829",
         "now": 1792400000000
       },
-      "ms": 0.32,
+      "ms": 0.37,
       "rows": 1
     },
     {
-      "seq": 318,
-      "at": 1792270459309,
+      "seq": 357,
+      "at": 1792271384076,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -508,23 +509,23 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.44,
+      "ms": 0.53,
       "rows": 0
     },
     {
-      "seq": 319,
-      "at": 1792270459310,
+      "seq": 358,
+      "at": 1792271384077,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.37,
+      "ms": 0.32,
       "rows": 1
     },
     {
-      "seq": 320,
-      "at": 1792270459311,
+      "seq": 359,
+      "at": 1792271384077,
       "graph": "mocks_acme",
       "name": "trace.seed",
       "mode": "read",
@@ -532,156 +533,156 @@
       "params": {
         "id": "acme-mem-sop-v4"
       },
-      "ms": 0.34,
-      "rows": 1
-    },
-    {
-      "seq": 321,
-      "at": 1792270459311,
-      "graph": "mocks_acme",
-      "name": "trace.wrote",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-sop-v4",
-            "at": 1792231320000
-          }
-        ]
-      },
-      "ms": 0.33,
-      "rows": 1
-    },
-    {
-      "seq": 322,
-      "at": 1792270459311,
-      "graph": "mocks_acme",
-      "name": "trace.read",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-sop-v4",
-            "at": 1792231320000
-          }
-        ]
-      },
-      "ms": 0.39,
-      "rows": 1
-    },
-    {
-      "seq": 323,
-      "at": 1792270459311,
-      "graph": "mocks_acme",
-      "name": "trace.handoff",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-sop-v4",
-            "at": 1792231320000
-          }
-        ]
-      },
-      "ms": 0.46,
-      "rows": 1
-    },
-    {
-      "seq": 324,
-      "at": 1792270459311,
-      "graph": "mocks_acme",
-      "name": "trace.derived",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-sop-v4",
-            "at": 1792231320000
-          }
-        ]
-      },
-      "ms": 0.56,
-      "rows": 1
-    },
-    {
-      "seq": 325,
-      "at": 1792270459311,
-      "graph": "mocks_acme",
-      "name": "trace.wrote",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-billing-1",
-            "at": 1792231330000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-cust-981",
-            "at": 1792231360000
-          }
-        ]
-      },
-      "ms": 0.28,
-      "rows": 1
-    },
-    {
-      "seq": 326,
-      "at": 1792270459312,
-      "graph": "mocks_acme",
-      "name": "trace.read",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-billing-1",
-            "at": 1792231330000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-cust-981",
-            "at": 1792231360000
-          }
-        ]
-      },
       "ms": 0.35,
       "rows": 1
     },
     {
-      "seq": 327,
-      "at": 1792270459312,
+      "seq": 360,
+      "at": 1792271384078,
+      "graph": "mocks_acme",
+      "name": "trace.wrote",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-sop-v4",
+            "at": 1792231320000
+          }
+        ]
+      },
+      "ms": 0.4,
+      "rows": 1
+    },
+    {
+      "seq": 361,
+      "at": 1792271384078,
+      "graph": "mocks_acme",
+      "name": "trace.read",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-sop-v4",
+            "at": 1792231320000
+          }
+        ]
+      },
+      "ms": 0.42,
+      "rows": 1
+    },
+    {
+      "seq": 362,
+      "at": 1792271384078,
+      "graph": "mocks_acme",
+      "name": "trace.handoff",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-sop-v4",
+            "at": 1792231320000
+          }
+        ]
+      },
+      "ms": 0.54,
+      "rows": 1
+    },
+    {
+      "seq": 363,
+      "at": 1792271384078,
+      "graph": "mocks_acme",
+      "name": "trace.derived",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-sop-v4",
+            "at": 1792231320000
+          }
+        ]
+      },
+      "ms": 0.58,
+      "rows": 1
+    },
+    {
+      "seq": 364,
+      "at": 1792271384078,
+      "graph": "mocks_acme",
+      "name": "trace.wrote",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-billing-1",
+            "at": 1792231330000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-cust-981",
+            "at": 1792231360000
+          }
+        ]
+      },
+      "ms": 0.31,
+      "rows": 1
+    },
+    {
+      "seq": 365,
+      "at": 1792271384078,
+      "graph": "mocks_acme",
+      "name": "trace.read",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-billing-1",
+            "at": 1792231330000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-cust-981",
+            "at": 1792231360000
+          }
+        ]
+      },
+      "ms": 0.38,
+      "rows": 1
+    },
+    {
+      "seq": 366,
+      "at": 1792271384079,
       "graph": "mocks_acme",
       "name": "trace.handoff",
       "mode": "read",
@@ -700,12 +701,12 @@
           }
         ]
       },
-      "ms": 0.44,
+      "ms": 0.43,
       "rows": 1
     },
     {
-      "seq": 328,
-      "at": 1792270459312,
+      "seq": 367,
+      "at": 1792271384079,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -724,12 +725,12 @@
           }
         ]
       },
-      "ms": 0.5,
+      "ms": 0.49,
       "rows": 0
     },
     {
-      "seq": 329,
-      "at": 1792270459312,
+      "seq": 368,
+      "at": 1792271384079,
       "graph": "mocks_acme",
       "name": "trace.wrote",
       "mode": "read",
@@ -747,12 +748,12 @@
         ],
         "items": []
       },
-      "ms": 0.28,
+      "ms": 0.27,
       "rows": 0
     },
     {
-      "seq": 330,
-      "at": 1792270459312,
+      "seq": 369,
+      "at": 1792271384079,
       "graph": "mocks_acme",
       "name": "trace.read",
       "mode": "read",
@@ -770,12 +771,12 @@
         ],
         "items": []
       },
-      "ms": 0.52,
+      "ms": 0.34,
       "rows": 0
     },
     {
-      "seq": 331,
-      "at": 1792270459312,
+      "seq": 370,
+      "at": 1792271384079,
       "graph": "mocks_acme",
       "name": "trace.handoff",
       "mode": "read",
@@ -793,12 +794,12 @@
         ],
         "items": []
       },
-      "ms": 0.58,
+      "ms": 0.4,
       "rows": 0
     },
     {
-      "seq": 332,
-      "at": 1792270459312,
+      "seq": 371,
+      "at": 1792271384079,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -816,12 +817,12 @@
         ],
         "items": []
       },
-      "ms": 0.62,
+      "ms": 0.48,
       "rows": 0
     },
     {
-      "seq": 333,
-      "at": 1792270459313,
+      "seq": 372,
+      "at": 1792271384079,
       "graph": "mocks_acme",
       "name": "trace.episodes",
       "mode": "read",
@@ -834,12 +835,12 @@
           "acme-ops-1"
         ]
       },
-      "ms": 0.31,
+      "ms": 0.27,
       "rows": 4
     },
     {
-      "seq": 334,
-      "at": 1792270459313,
+      "seq": 373,
+      "at": 1792271384079,
       "graph": "mocks_acme",
       "name": "trace.items",
       "mode": "read",
@@ -850,12 +851,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.36,
+      "ms": 0.34,
       "rows": 2
     },
     {
-      "seq": 335,
-      "at": 1792270459313,
+      "seq": 374,
+      "at": 1792271384080,
       "graph": "mocks_acme",
       "name": "trace.decisions",
       "mode": "read",
@@ -884,12 +885,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.62,
+      "ms": 0.51,
       "rows": 3
     },
     {
-      "seq": 336,
-      "at": 1792270459313,
+      "seq": 375,
+      "at": 1792271384080,
       "graph": "mocks_acme",
       "name": "trace.toolCalls",
       "mode": "read",
@@ -914,12 +915,12 @@
           }
         ]
       },
-      "ms": 0.61,
+      "ms": 0.6,
       "rows": 2
     },
     {
-      "seq": 337,
-      "at": 1792270459313,
+      "seq": 376,
+      "at": 1792271384080,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -933,29 +934,29 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.44,
+      "ms": 0.49,
       "rows": 0
     },
     {
-      "seq": 338,
-      "at": 1792270459314,
+      "seq": 377,
+      "at": 1792271384081,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.25,
+      "ms": 0.28,
       "rows": 1
     },
     {
-      "seq": 339,
-      "at": 1792270459314,
+      "seq": 378,
+      "at": 1792271384081,
       "graph": "mocks_acme",
       "name": "view.memory.versions",
       "mode": "read",
       "cypher": "MATCH (e:Episode)-[:WROTE]->(m:MemoryItem)\n           OPTIONAL MATCH (m)-[:SUPERSEDES]->(prev:MemoryItem)\n           RETURN m.id AS id, m.ns AS ns, m.key AS key, m.kind AS kind, m.text AS text,\n                  m.valid_from AS validFrom, m.valid_to AS validTo, coalesce(m.invalidated, false) AS invalidated,\n                  e.id AS episode, e.agent AS agent, prev.id AS supersedes\n           ORDER BY ns, key, validFrom",
       "params": {},
-      "ms": 0.45,
+      "ms": 0.49,
       "rows": 4
     }
   ]
