@@ -34,7 +34,7 @@ export const storeList = defineQuery<StoreRow>({
   name: 'store.list',
   description: 'Current versions under a namespace prefix.',
   mode: 'read',
-  cypher: `MATCH (m:MemoryItem) WHERE (m.ns = $prefix OR m.ns STARTS WITH $prefix + '/' OR $prefix = '')
+  cypher: `MATCH (m:MemoryItem) WHERE (m.ns = $prefix OR m.ns STARTS WITH ($prefix + '/') OR $prefix = '')
              AND ${CURRENT}
            ${CREATED}
            WITH m, min(o.valid_from) AS createdAt
@@ -47,7 +47,7 @@ export const storeSearch = defineQuery<StoreRow>({
   description: 'Full-text search over current versions under a namespace prefix.',
   mode: 'read',
   cypher: `CALL db.idx.fulltext.queryNodes('MemoryItem', $query) YIELD node AS m, score
-           WHERE (m.ns = $prefix OR m.ns STARTS WITH $prefix + '/' OR $prefix = '') AND ${CURRENT}
+           WHERE (m.ns = $prefix OR m.ns STARTS WITH ($prefix + '/') OR $prefix = '') AND ${CURRENT}
            ${CREATED}
            WITH m, score, min(o.valid_from) AS createdAt
            RETURN ${FIELDS}, score
