@@ -51,6 +51,16 @@ export const MemoryWriteEvent = z.object({
   text: Text,
   derivedFrom: z.array(Id).default([]),
   supersedes: Id.optional(),
+  /** The stored value as JSON, when it is more than `text` (LangGraph store items). */
+  value: z.string().max(50_000).optional(),
+});
+
+/** A store delete: the current version stops being valid. Nothing is removed. */
+export const MemoryDeleteEvent = z.object({
+  type: z.literal('MemoryDelete'),
+  t: T,
+  episode: Id,
+  item: Id,
 });
 
 export const MemoryReadEvent = z.object({
@@ -117,6 +127,7 @@ export const Event = z.discriminatedUnion('type', [
   EpisodeEvent,
   InputEvent,
   MemoryWriteEvent,
+  MemoryDeleteEvent,
   MemoryReadEvent,
   HandoffEvent,
   DecisionEvent,

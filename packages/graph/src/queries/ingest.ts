@@ -49,7 +49,7 @@ export const writeMemory = defineQuery<N>({
   cypher: `MATCH (e:Episode {id: $episode})
            MERGE (m:MemoryItem {id: $id})
            ON CREATE SET m.ns = $ns, m.key = $key, m.kind = $kind, m.text = $text,
-                         m.valid_from = $t, m.invalidated = false
+                         m.valid_from = $t, m.invalidated = false, m.value = $value
            MERGE (e)-[:WROTE {t: $t}]->(m)
            RETURN count(m) AS n`,
 });
@@ -77,6 +77,16 @@ export const writeSupersedes = defineQuery<N>({
            MERGE (m)-[:SUPERSEDES]->(old)
            SET old.valid_to = coalesce(old.valid_to, $t)
            RETURN count(old) AS n`,
+});
+
+export const writeDelete = defineQuery<N>({
+  name: 'ingest.memory.delete',
+  description: 'Close a version without a successor (store delete).',
+  mode: 'write',
+  cypher: `MATCH (e:Episode {id: $episode}), (m:MemoryItem {id: $item})
+           SET m.valid_to = coalesce(m.valid_to, $t)
+           MERGE (e)-[d:DELETED {t: $t}]->(m)
+           RETURN count(d) AS n`,
 });
 
 export const writeRead = defineQuery<N>({

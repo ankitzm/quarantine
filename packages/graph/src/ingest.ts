@@ -57,12 +57,15 @@ async function apply(graph: string, e: Event): Promise<void> {
         key: e.key,
         kind: memoryKind(e.ns),
         text: e.text,
+        value: e.value ?? null,
       });
       if (e.derivedFrom.length)
         await write(q.writeDerivedFrom, { id: e.id, sources: e.derivedFrom }, e.derivedFrom.length);
       if (e.supersedes) await write(q.writeSupersedes, { id: e.id, old: e.supersedes, t: e.t });
       return;
     }
+    case 'MemoryDelete':
+      return write(q.writeDelete, { episode: e.episode, item: e.item, t: e.t });
     case 'MemoryRead':
       return write(q.writeRead, { episode: e.episode, item: e.item, t: e.t });
     case 'Handoff':
