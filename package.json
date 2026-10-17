@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "smoke": "tsx scripts/smoke.ts"
+    "smoke": "tsx scripts/smoke.ts",
+    "replay": "tsx scripts/replay.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -27,6 +28,7 @@
     "vitest": "5.0.5"
   },
   "dependencies": {
-    "falkordb": "6.8.0"
+    "falkordb": "6.8.0",
+    "@quarantine/graph": "workspace:*"
   }
 }
