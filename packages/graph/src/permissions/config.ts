@@ -22,10 +22,16 @@ export interface ParsedConfig {
 }
 
 /**
+ * A tool node is one agent's instance of a server tool: two agents with the same server but different
+ * credentials must not share a node, or the graph would let one reach through the other's credential.
+ */
+export const toolId = (agent: string, tool: string) => `${agent}:${tool}`;
+
+/**
  * Turns one agent's MCP config into permission grants. Env values and secret-bearing args are read only to
  * derive names (env var name, postgres user@host/db) and never leave this function.
  */
-export function parseMcpConfig(tenant: string, raw: unknown, source: string): ParsedConfig {
+export function parseMcpConfig(tenant: string, agent: string, raw: unknown, source: string): ParsedConfig {
   const config = McpConfig.parse(raw);
   const grants: Grant[] = [];
   const unknown: string[] = [];
@@ -50,7 +56,7 @@ export function parseMcpConfig(tenant: string, raw: unknown, source: string): Pa
     }));
     for (const [tool, cost] of Object.entries(manifest.tools)) {
       grants.push({
-        tool: { id: `${manifest.server}.${tool}`, name: tool, server: manifest.server },
+        tool: { id: toolId(agent, `${manifest.server}.${tool}`), name: tool, server: manifest.server },
         cost,
         source: `${source}#/mcpServers/${name} (${manifest.docs})`,
         ...(cred

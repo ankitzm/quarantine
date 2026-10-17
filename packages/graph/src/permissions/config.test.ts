@@ -32,23 +32,23 @@ const config = {
 };
 
 describe('parseMcpConfig', () => {
-  const { grants, unknown } = parseMcpConfig('t', config, 'billing.mcp.json');
+  const { grants, unknown } = parseMcpConfig('t', 'billing', config, 'billing.mcp.json');
 
   it('maps known servers to per-tool grants citing their source', () => {
-    expect(grants.map((g) => g.tool.id)).toContain('stripe.create_refund');
-    expect(grants.find((g) => g.tool.id === 'postgres.query')?.source).toMatch(
+    expect(grants.map((g) => g.tool.id)).toContain('billing:stripe.create_refund');
+    expect(grants.find((g) => g.tool.id === 'billing:postgres.query')?.source).toMatch(
       /^billing\.mcp\.json#\/mcpServers\/db \(https:\/\/github\.com\/modelcontextprotocol\//,
     );
     expect(unknown).toEqual(['mystery']);
   });
 
   it('derives credentials and resources without secrets', () => {
-    const pg = grants.find((g) => g.tool.id === 'postgres.query');
+    const pg = grants.find((g) => g.tool.id === 'billing:postgres.query');
     expect(pg?.credential?.envName).toBe('postgres://app@db.internal:5432/crm');
     expect(pg?.resources.map((r) => [r.uri, r.sensitivity])).toEqual([
       ['postgres://db.internal:5432/crm', 3],
     ]);
-    const fs = grants.find((g) => g.tool.id === 'filesystem.read_file');
+    const fs = grants.find((g) => g.tool.id === 'billing:filesystem.read_file');
     expect(fs?.credential).toBeUndefined();
     expect(fs?.resources.map((r) => [r.uri, r.kind])).toEqual([
       ['file:///srv/a', 'files'],

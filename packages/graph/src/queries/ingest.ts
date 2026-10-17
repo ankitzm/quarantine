@@ -1,5 +1,8 @@
 import { defineQuery } from './types.ts';
 
+// Permission edges are all one relationship type, PERM, with a `kind` (CAN_USE, USES_CRED, CRED_CUT, GRANTS,
+// ACTS_ON): algo.maxFlow accepts exactly one relationship type, and the cut has to run over all of them.
+//
 // Every writer MERGEs on stable ids and returns a count, so applyEvents can reject dangling references
 // instead of silently writing nothing. ON CREATE keeps replays from undoing later state (revocations,
 // valid_to), which is what makes replaying the same log twice a no-op.
@@ -119,10 +122,11 @@ export const writeBasedOn = defineQuery<N>({
 
 export const writeToolCall = defineQuery<N>({
   name: 'ingest.toolCall',
-  description: 'A tool invocation and how the sandbox handled it.',
+  description:
+    "A tool invocation and how the sandbox handled it, linked to the calling agent's tool instance.",
   mode: 'write',
   cypher: `MATCH (e:Episode {id: $episode})
-           MERGE (tl:Tool {id: $tool})
+           MERGE (tl:Tool {id: e.agent + ':' + $tool})
            MERGE (c:ToolCall {id: $id})
            ON CREATE SET c.t = $t, c.tool = $tool, c.args = $args, c.outcome = $outcome
            MERGE (e)-[:CALLED {t: $t}]->(c)
@@ -137,7 +141,7 @@ export const writeCanUse = defineQuery<N>({
   cypher: `MERGE (a:Agent {id: $agent})
            MERGE (tl:Tool {id: $tool})
            SET tl.name = $name, tl.server = $server
-           MERGE (a)-[c:CAN_USE]->(tl)
+           MERGE (a)-[c:PERM {kind: 'CAN_USE'}]->(tl)
            ON CREATE SET c.capacity = $cost, c.cost = $cost, c.revocable = true, c.source = $source
            RETURN count(c) AS n`,
 });
@@ -151,10 +155,10 @@ export const writeCredential = defineQuery<N>({
   cypher: `MATCH (tl:Tool {id: $tool})
            MERGE (cr:Credential {id: $id})
            ON CREATE SET cr.env = $envName
-           MERGE (tl)-[u:USES_CRED]->(cr)
+           MERGE (tl)-[u:PERM {kind: 'USES_CRED'}]->(cr)
            ON CREATE SET u.capacity = $inf, u.cost = 0, u.revocable = false
            MERGE (cc:CredCut {id: $id})
-           MERGE (cr)-[x:CRED_CUT]->(cc)
+           MERGE (cr)-[x:PERM {kind: 'CRED_CUT'}]->(cc)
            ON CREATE SET x.capacity = $rotateCost, x.cost = $rotateCost, x.revocable = true, x.source = $source
            RETURN count(x) AS n`,
 });
@@ -167,7 +171,7 @@ export const writeGrants = defineQuery<N>({
            UNWIND $resources AS r
            MERGE (res:Resource {id: r.id})
            ON CREATE SET res.uri = r.uri, res.kind = r.kind, res.sensitivity = r.sensitivity
-           MERGE (cc)-[g:GRANTS]->(res)
+           MERGE (cc)-[g:PERM {kind: 'GRANTS'}]->(res)
            ON CREATE SET g.capacity = $inf, g.cost = 0, g.revocable = false
            RETURN count(g) AS n`,
 });
@@ -180,7 +184,7 @@ export const writeActsOn = defineQuery<N>({
            UNWIND $resources AS r
            MERGE (res:Resource {id: r.id})
            ON CREATE SET res.uri = r.uri, res.kind = r.kind, res.sensitivity = r.sensitivity
-           MERGE (tl)-[g:ACTS_ON]->(res)
+           MERGE (tl)-[g:PERM {kind: 'ACTS_ON'}]->(res)
            ON CREATE SET g.capacity = $inf, g.cost = 0, g.revocable = false
            RETURN count(g) AS n`,
 });

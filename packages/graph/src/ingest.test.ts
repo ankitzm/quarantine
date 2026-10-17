@@ -53,14 +53,14 @@ const events: EventInput[] = [
     agent: 'billing',
     grants: [
       {
-        tool: { id: 'stripe.refund', name: 'refund', server: 'stripe' },
+        tool: { id: 'billing:stripe.refund', name: 'refund', server: 'stripe' },
         cost: 3,
         source: 'billing.mcp.json#mcpServers.stripe',
         credential: { id: 'cred.stripe', envName: 'STRIPE_KEY', rotateCost: 5 },
         resources: [{ id: 'res.payments', uri: 'stripe://payments', kind: 'payments', sensitivity: 3 }],
       },
       {
-        tool: { id: 'fetch.get', name: 'fetch', server: 'fetch' },
+        tool: { id: 'billing:fetch.get', name: 'fetch', server: 'fetch' },
         cost: 1,
         source: 'billing.mcp.json#mcpServers.fetch',
         resources: [{ id: 'res.web', uri: 'https://*', kind: 'network', sensitivity: 2 }],
@@ -92,22 +92,18 @@ describe('applyEvents', () => {
     expect(await run(graph, item, { id: 'm1' })).toEqual([{ validTo: 12, kind: 'procedural', ns: 'sop' }]);
     expect(await run(graph, item, { id: 'm2' })).toEqual([{ validTo: null, kind: 'procedural', ns: 'sop' }]);
     expect(Object.fromEntries((await run(graph, edgeTypes)).map((r) => [r.type, r.n]))).toEqual({
-      ACTS_ON: 1,
       BASED_ON: 1,
       CALLED: 1,
-      CAN_USE: 2,
-      CRED_CUT: 1,
       DECIDED: 1,
       DERIVED_FROM: 1,
-      GRANTS: 1,
       HANDED_OFF: 1,
       IN_SESSION: 3,
       OF: 1,
+      PERM: 6,
       RAN: 3,
       READ: 1,
       RECEIVED: 1,
       SUPERSEDES: 1,
-      USES_CRED: 1,
       WROTE: 2,
     });
   });

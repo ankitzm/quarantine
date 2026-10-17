@@ -42,9 +42,10 @@ export async function readConfigEvents(dir: string, tenant: string, t: number): 
   const events: Event[] = [];
   for (const file of files.filter((f) => f.endsWith('.mcp.json')).sort()) {
     const path = join(dir, file);
-    const { grants, unknown } = parseMcpConfig(tenant, JSON.parse(await readFile(path, 'utf8')), path);
+    const agent = file.replace('.mcp.json', '');
+    const { grants, unknown } = parseMcpConfig(tenant, agent, JSON.parse(await readFile(path, 'utf8')), path);
     if (unknown.length) throw new Error(`${path}: no manifest for servers ${unknown.join(', ')}`);
-    events.push({ type: 'PermissionConfig', t, agent: file.replace('.mcp.json', ''), grants });
+    events.push({ type: 'PermissionConfig', t, agent, grants });
   }
   return events;
 }
