@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./mcp": "./src/mcp.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -11,6 +12,7 @@
   "dependencies": {
     "@langchain/core": "1.2.18",
     "@langchain/langgraph-checkpoint": "1.2.0",
+    "@modelcontextprotocol/sdk": "1.32.1",
     "falkordb": "6.8.0",
     "zod": "4.6.7"
   }
