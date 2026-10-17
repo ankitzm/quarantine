@@ -1,8 +1,6 @@
 import { buildEval } from '@quarantine/graph';
-import { handle } from '@/lib/http';
+import results from '../../../../../eval/results/latest.json';
 
-export const dynamic = 'force-dynamic';
-
-export async function GET() {
-  return handle(() => buildEval());
+export function GET() {
+  return Response.json(buildEval(results));
 }

@@ -1,4 +1,3 @@
-import { readFile } from 'node:fs/promises';
 import { getDb } from '../client.ts';
 import { readMeta } from '../queries/schema.ts';
 import { queryLog, run } from '../run.ts';
@@ -29,13 +28,9 @@ export function buildQueryLog({ limit }: { limit: number }): QueryLogResponse {
   return { entries: queryLog(limit) };
 }
 
-/** Latest `pnpm eval` output, or pending until it has run. */
-export async function buildEval(path = 'eval/results/latest.json'): Promise<EvalResponse> {
-  try {
-    const results: unknown = JSON.parse(await readFile(path, 'utf8'));
-    const generatedAt = (results as { generatedAt?: number }).generatedAt ?? null;
-    return { status: 'complete', generatedAt, results };
-  } catch {
-    return { status: 'pending', generatedAt: null, results: null };
-  }
+/** Latest `pnpm eval` output (eval/results/latest.json), or pending until it has run. */
+export function buildEval(results: unknown): EvalResponse {
+  if (!results || typeof results !== 'object') return { status: 'pending', generatedAt: null, results: null };
+  const generatedAt = (results as { generatedAt?: unknown }).generatedAt;
+  return { status: 'complete', generatedAt: typeof generatedAt === 'number' ? generatedAt : null, results };
 }

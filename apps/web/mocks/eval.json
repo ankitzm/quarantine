@@ -1,5 +1,1015 @@
 {
-  "status": "pending",
-  "generatedAt": null,
-  "results": null
+  "status": "complete",
+  "generatedAt": 1792271710158,
+  "results": {
+    "generatedAt": 1792271710158,
+    "scenarios": [
+      {
+        "seed": 1,
+        "events": 93,
+        "agents": 7,
+        "temporal": {
+          "episodes": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 3,
+            "fp": 13,
+            "fn": 0,
+            "precision": 0.1875,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 0,
+            "fp": 10,
+            "fn": 0,
+            "precision": 0,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 13,
+        "cut": {
+          "cost": 18,
+          "maxFlow": 18,
+          "optimum": 18,
+          "revocations": 4
+        },
+        "reachBefore": 18,
+        "reachAfter": 0
+      },
+      {
+        "seed": 2,
+        "events": 93,
+        "agents": 7,
+        "temporal": {
+          "episodes": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 4,
+            "fp": 10,
+            "fn": 0,
+            "precision": 0.2857142857142857,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 1,
+            "fp": 12,
+            "fn": 0,
+            "precision": 0.07692307692307693,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 10,
+        "cut": {
+          "cost": 21,
+          "maxFlow": 21,
+          "optimum": 21,
+          "revocations": 4
+        },
+        "reachBefore": 43,
+        "reachAfter": 0
+      },
+      {
+        "seed": 3,
+        "events": 100,
+        "agents": 7,
+        "temporal": {
+          "episodes": {
+            "tp": 17,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 17,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.9444444444444444,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 9,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.9,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 1,
+        "cut": {
+          "cost": 29,
+          "maxFlow": 29,
+          "optimum": 29,
+          "revocations": 8
+        },
+        "reachBefore": 37,
+        "reachAfter": 0
+      },
+      {
+        "seed": 4,
+        "events": 65,
+        "agents": 8,
+        "temporal": {
+          "episodes": {
+            "tp": 10,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 8,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 10,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 8,
+            "fp": 2,
+            "fn": 0,
+            "precision": 0.8,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 0,
+        "cut": {
+          "cost": 23,
+          "maxFlow": 23,
+          "optimum": 23,
+          "revocations": 5
+        },
+        "reachBefore": 59,
+        "reachAfter": 0
+      },
+      {
+        "seed": 5,
+        "events": 63,
+        "agents": 7,
+        "temporal": {
+          "episodes": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 4,
+            "fp": 4,
+            "fn": 0,
+            "precision": 0.5,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 3,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0.5,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 4,
+        "cut": {
+          "cost": 21,
+          "maxFlow": 21,
+          "optimum": 21,
+          "revocations": 4
+        },
+        "reachBefore": 21,
+        "reachAfter": 0
+      },
+      {
+        "seed": 6,
+        "events": 105,
+        "agents": 6,
+        "temporal": {
+          "episodes": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 8,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 12,
+            "fp": 4,
+            "fn": 0,
+            "precision": 0.75,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 8,
+            "fp": 2,
+            "fn": 0,
+            "precision": 0.8,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 4,
+        "cut": {
+          "cost": 25,
+          "maxFlow": 25,
+          "optimum": 25,
+          "revocations": 7
+        },
+        "reachBefore": 50,
+        "reachAfter": 0
+      },
+      {
+        "seed": 7,
+        "events": 139,
+        "agents": 4,
+        "temporal": {
+          "episodes": {
+            "tp": 8,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 8,
+            "fp": 15,
+            "fn": 0,
+            "precision": 0.34782608695652173,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 3,
+            "fp": 8,
+            "fn": 0,
+            "precision": 0.2727272727272727,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 15,
+        "cut": {
+          "cost": 25,
+          "maxFlow": 25,
+          "optimum": 25,
+          "revocations": 6
+        },
+        "reachBefore": 34,
+        "reachAfter": 0
+      },
+      {
+        "seed": 8,
+        "events": 97,
+        "agents": 4,
+        "temporal": {
+          "episodes": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 6,
+            "fp": 9,
+            "fn": 0,
+            "precision": 0.4,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 6,
+            "fp": 5,
+            "fn": 0,
+            "precision": 0.5454545454545454,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 9,
+        "cut": {
+          "cost": 21,
+          "maxFlow": 21,
+          "optimum": 21,
+          "revocations": 5
+        },
+        "reachBefore": 35,
+        "reachAfter": 0
+      },
+      {
+        "seed": 9,
+        "events": 57,
+        "agents": 4,
+        "temporal": {
+          "episodes": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 4,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0.5714285714285714,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 2,
+            "fp": 6,
+            "fn": 0,
+            "precision": 0.25,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 3,
+        "cut": {
+          "cost": 16,
+          "maxFlow": 16,
+          "optimum": 16,
+          "revocations": 3
+        },
+        "reachBefore": 13,
+        "reachAfter": 0
+      },
+      {
+        "seed": 10,
+        "events": 107,
+        "agents": 6,
+        "temporal": {
+          "episodes": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 3,
+            "fp": 17,
+            "fn": 0,
+            "precision": 0.15,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 1,
+            "fp": 8,
+            "fn": 0,
+            "precision": 0.1111111111111111,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 17,
+        "cut": {
+          "cost": 20,
+          "maxFlow": 20,
+          "optimum": 20,
+          "revocations": 4
+        },
+        "reachBefore": 27,
+        "reachAfter": 0
+      },
+      {
+        "seed": 11,
+        "events": 130,
+        "agents": 6,
+        "temporal": {
+          "episodes": {
+            "tp": 18,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 10,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 18,
+            "fp": 8,
+            "fn": 0,
+            "precision": 0.6923076923076923,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 10,
+            "fp": 4,
+            "fn": 0,
+            "precision": 0.7142857142857143,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 8,
+        "cut": {
+          "cost": 25,
+          "maxFlow": 25,
+          "optimum": 25,
+          "revocations": 6
+        },
+        "reachBefore": 58,
+        "reachAfter": 0
+      },
+      {
+        "seed": 12,
+        "events": 124,
+        "agents": 5,
+        "temporal": {
+          "episodes": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 4,
+            "fp": 16,
+            "fn": 0,
+            "precision": 0.2,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 1,
+            "fp": 13,
+            "fn": 0,
+            "precision": 0.07142857142857142,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 16,
+        "cut": {
+          "cost": 23,
+          "maxFlow": 23,
+          "optimum": 23,
+          "revocations": 6
+        },
+        "reachBefore": 33,
+        "reachAfter": 0
+      },
+      {
+        "seed": 13,
+        "events": 67,
+        "agents": 6,
+        "temporal": {
+          "episodes": {
+            "tp": 7,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 7,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0.7,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.75,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 3,
+        "cut": {
+          "cost": 23,
+          "maxFlow": 23,
+          "optimum": 23,
+          "revocations": 5
+        },
+        "reachBefore": 21,
+        "reachAfter": 0
+      },
+      {
+        "seed": 14,
+        "events": 111,
+        "agents": 6,
+        "temporal": {
+          "episodes": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 9,
+            "fp": 9,
+            "fn": 0,
+            "precision": 0.5,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 5,
+            "fp": 7,
+            "fn": 0,
+            "precision": 0.4166666666666667,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 9,
+        "cut": {
+          "cost": 29,
+          "maxFlow": 29,
+          "optimum": 29,
+          "revocations": 8
+        },
+        "reachBefore": 52,
+        "reachAfter": 0
+      },
+      {
+        "seed": 15,
+        "events": 90,
+        "agents": 5,
+        "temporal": {
+          "episodes": {
+            "tp": 10,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 10,
+            "fp": 5,
+            "fn": 0,
+            "precision": 0.6666666666666666,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 5,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0.625,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 5,
+        "cut": {
+          "cost": 31,
+          "maxFlow": 31,
+          "optimum": 31,
+          "revocations": 9
+        },
+        "reachBefore": 29,
+        "reachAfter": 0
+      },
+      {
+        "seed": 16,
+        "events": 133,
+        "agents": 7,
+        "temporal": {
+          "episodes": {
+            "tp": 8,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 8,
+            "fp": 5,
+            "fn": 0,
+            "precision": 0.6153846153846154,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 5,
+            "fp": 4,
+            "fn": 0,
+            "precision": 0.5555555555555556,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 5,
+        "cut": {
+          "cost": 23,
+          "maxFlow": 23,
+          "optimum": 23,
+          "revocations": 5
+        },
+        "reachBefore": 36,
+        "reachAfter": 0
+      },
+      {
+        "seed": 17,
+        "events": 95,
+        "agents": 7,
+        "temporal": {
+          "episodes": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 5,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0.625,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 0,
+        "cut": {
+          "cost": 25,
+          "maxFlow": 25,
+          "optimum": 25,
+          "revocations": 7
+        },
+        "reachBefore": 58,
+        "reachAfter": 0
+      },
+      {
+        "seed": 18,
+        "events": 100,
+        "agents": 5,
+        "temporal": {
+          "episodes": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 12,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0.8,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 9,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0.75,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 3,
+        "cut": {
+          "cost": 21,
+          "maxFlow": 21,
+          "optimum": 21,
+          "revocations": 5
+        },
+        "reachBefore": 50,
+        "reachAfter": 0
+      },
+      {
+        "seed": 19,
+        "events": 92,
+        "agents": 4,
+        "temporal": {
+          "episodes": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 6,
+            "fp": 11,
+            "fn": 0,
+            "precision": 0.35294117647058826,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 1,
+            "fp": 5,
+            "fn": 0,
+            "precision": 0.16666666666666666,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 11,
+        "cut": {
+          "cost": 21,
+          "maxFlow": 21,
+          "optimum": 21,
+          "revocations": 5
+        },
+        "reachBefore": 23,
+        "reachAfter": 0
+      },
+      {
+        "seed": 20,
+        "events": 119,
+        "agents": 7,
+        "temporal": {
+          "episodes": {
+            "tp": 17,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 11,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          }
+        },
+        "naive": {
+          "episodes": {
+            "tp": 17,
+            "fp": 4,
+            "fn": 0,
+            "precision": 0.8095238095238095,
+            "recall": 1
+          },
+          "decisions": {
+            "tp": 11,
+            "fp": 2,
+            "fn": 0,
+            "precision": 0.8461538461538461,
+            "recall": 1
+          }
+        },
+        "falseInfectionsAvoided": 4,
+        "cut": {
+          "cost": 29,
+          "maxFlow": 29,
+          "optimum": 29,
+          "revocations": 8
+        },
+        "reachBefore": 47,
+        "reachAfter": 0
+      }
+    ],
+    "summary": {
+      "scenarios": 20,
+      "temporal": {
+        "precision": 1,
+        "recall": 1
+      },
+      "naive": {
+        "precision": 0.554140127388535,
+        "recall": 1
+      },
+      "falseInfectionsAvoided": 140,
+      "cutsOptimal": 20,
+      "reachAfterQuarantineZero": 20,
+      "latencyMs": {
+        "permissions.maxFlow": {
+          "n": 20,
+          "p50": 3.36,
+          "p95": 4.22
+        },
+        "permissions.network": {
+          "n": 40,
+          "p50": 1.14,
+          "p95": 1.62
+        },
+        "permissions.reach": {
+          "n": 40,
+          "p50": 0.64,
+          "p95": 1.11
+        },
+        "plan.load": {
+          "n": 20,
+          "p50": 0.33,
+          "p95": 0.91
+        },
+        "trace.decisions": {
+          "n": 60,
+          "p50": 0.96,
+          "p95": 1.44
+        },
+        "trace.derived": {
+          "n": 385,
+          "p50": 0.7,
+          "p95": 1.16
+        },
+        "trace.episodes": {
+          "n": 60,
+          "p50": 0.45,
+          "p95": 1.13
+        },
+        "trace.handoff": {
+          "n": 385,
+          "p50": 0.62,
+          "p95": 1.08
+        },
+        "trace.items": {
+          "n": 60,
+          "p50": 0.6,
+          "p95": 1.22
+        },
+        "trace.naive.sameKey": {
+          "n": 141,
+          "p50": 0.9,
+          "p95": 1.47
+        },
+        "trace.read": {
+          "n": 385,
+          "p50": 0.52,
+          "p95": 1.02
+        },
+        "trace.seed": {
+          "n": 60,
+          "p50": 0.43,
+          "p95": 0.68
+        },
+        "trace.toolCalls": {
+          "n": 60,
+          "p50": 1.12,
+          "p95": 1.56
+        },
+        "trace.wrote": {
+          "n": 385,
+          "p50": 0.41,
+          "p95": 0.95
+        }
+      }
+    }
+  }
 }

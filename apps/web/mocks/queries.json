@@ -2,7 +2,7 @@
   "entries": [
     {
       "seq": 329,
-      "at": 1792271555069,
+      "at": 1792271758544,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -25,7 +25,7 @@
     },
     {
       "seq": 330,
-      "at": 1792271555069,
+      "at": 1792271758545,
       "graph": "mocks_acme",
       "name": "trace.episodes",
       "mode": "read",
@@ -38,12 +38,12 @@
           "acme-ops-1"
         ]
       },
-      "ms": 0.27,
+      "ms": 0.31,
       "rows": 4
     },
     {
       "seq": 331,
-      "at": 1792271555069,
+      "at": 1792271758545,
       "graph": "mocks_acme",
       "name": "trace.items",
       "mode": "read",
@@ -54,12 +54,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.35,
+      "ms": 0.38,
       "rows": 2
     },
     {
       "seq": 332,
-      "at": 1792271555069,
+      "at": 1792271758545,
       "graph": "mocks_acme",
       "name": "trace.decisions",
       "mode": "read",
@@ -88,12 +88,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.5,
+      "ms": 0.63,
       "rows": 3
     },
     {
       "seq": 333,
-      "at": 1792271555069,
+      "at": 1792271758545,
       "graph": "mocks_acme",
       "name": "trace.toolCalls",
       "mode": "read",
@@ -118,12 +118,12 @@
           }
         ]
       },
-      "ms": 0.6,
+      "ms": 0.69,
       "rows": 2
     },
     {
       "seq": 334,
-      "at": 1792271555070,
+      "at": 1792271758546,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -137,12 +137,12 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.61,
+      "ms": 0.73,
       "rows": 32
     },
     {
       "seq": 335,
-      "at": 1792271555072,
+      "at": 1792271758547,
       "graph": "mocks_acme",
       "name": "permissions.network",
       "mode": "read",
@@ -156,12 +156,12 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 1.43,
+      "ms": 1.45,
       "rows": 59
     },
     {
       "seq": 336,
-      "at": 1792271555073,
+      "at": 1792271758549,
       "graph": "mocks_acme",
       "name": "permissions.maxFlow",
       "mode": "read",
@@ -182,12 +182,12 @@
           "res_fc3c4b5febb08d40"
         ]
       },
-      "ms": 3.01,
+      "ms": 3.41,
       "rows": 1
     },
     {
       "seq": 337,
-      "at": 1792271555074,
+      "at": 1792271758550,
       "graph": "mocks_acme",
       "name": "plan.save",
       "mode": "write",
@@ -196,14 +196,14 @@
         "id": "plan_1bc75d3e3e18f829",
         "seed": "acme-mem-sop-v4",
         "json": "{\"id\":\"plan_1bc75d3e3e18f829\",\"seed\":\"acme-mem-sop-v4\",\"agents\":[\"analytics\",\"bi…(8234)",
-        "now": 1792271555067
+        "now": 1792271758542
       },
       "ms": 0.73,
       "rows": 1
     },
     {
       "seq": 338,
-      "at": 1792271555075,
+      "at": 1792271758551,
       "graph": "mocks_acme",
       "name": "plan.load",
       "mode": "read",
@@ -211,23 +211,23 @@
       "params": {
         "id": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.36,
+      "ms": 0.32,
       "rows": 1
     },
     {
       "seq": 339,
-      "at": 1792271555076,
+      "at": 1792271758553,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.3,
+      "ms": 0.32,
       "rows": 1
     },
     {
       "seq": 340,
-      "at": 1792271555077,
+      "at": 1792271758553,
       "graph": "mocks_acme",
       "name": "plan.load",
       "mode": "read",
@@ -235,12 +235,12 @@
       "params": {
         "id": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.24,
+      "ms": 0.35,
       "rows": 1
     },
     {
       "seq": 341,
-      "at": 1792271555077,
+      "at": 1792271758554,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -256,7 +256,7 @@
     },
     {
       "seq": 342,
-      "at": 1792271555078,
+      "at": 1792271758554,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -267,12 +267,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.35,
+      "ms": 0.4,
       "rows": 1
     },
     {
       "seq": 343,
-      "at": 1792271555078,
+      "at": 1792271758554,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -283,12 +283,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.3,
+      "ms": 0.32,
       "rows": 1
     },
     {
       "seq": 344,
-      "at": 1792271555078,
+      "at": 1792271758555,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -299,12 +299,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.29,
+      "ms": 0.41,
       "rows": 1
     },
     {
       "seq": 345,
-      "at": 1792271555079,
+      "at": 1792271758555,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -315,12 +315,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.37,
+      "ms": 0.38,
       "rows": 1
     },
     {
       "seq": 346,
-      "at": 1792271555079,
+      "at": 1792271758556,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -331,12 +331,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.47,
+      "ms": 0.4,
       "rows": 1
     },
     {
       "seq": 347,
-      "at": 1792271555079,
+      "at": 1792271758556,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -347,12 +347,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.33,
+      "ms": 0.39,
       "rows": 1
     },
     {
       "seq": 348,
-      "at": 1792271555080,
+      "at": 1792271758556,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -363,12 +363,12 @@
         "now": 1792400000000,
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.3,
+      "ms": 0.34,
       "rows": 1
     },
     {
       "seq": 349,
-      "at": 1792271555080,
+      "at": 1792271758557,
       "graph": "mocks_acme",
       "name": "quarantine.invalidateMemory",
       "mode": "write",
@@ -377,12 +377,12 @@
         "seed": "acme-mem-sop-v4",
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.39,
+      "ms": 0.47,
       "rows": 1
     },
     {
       "seq": 350,
-      "at": 1792271555081,
+      "at": 1792271758557,
       "graph": "mocks_acme",
       "name": "quarantine.invalidateDerived",
       "mode": "write",
@@ -393,12 +393,12 @@
         ],
         "plan": "plan_1bc75d3e3e18f829"
       },
-      "ms": 0.36,
+      "ms": 0.38,
       "rows": 1
     },
     {
       "seq": 351,
-      "at": 1792271555081,
+      "at": 1792271758558,
       "graph": "mocks_acme",
       "name": "ingest.session",
       "mode": "write",
@@ -409,12 +409,12 @@
         "tenant": "mocks_acme",
         "label": "Quarantine plan_1bc75d3e3e18f829"
       },
-      "ms": 0.37,
+      "ms": 0.36,
       "rows": 1
     },
     {
       "seq": 352,
-      "at": 1792271555082,
+      "at": 1792271758558,
       "graph": "mocks_acme",
       "name": "ingest.episode",
       "mode": "write",
@@ -425,12 +425,12 @@
         "session": "qsession_ce6ed81fdec03dc6",
         "agent": "quarantine"
       },
-      "ms": 0.54,
+      "ms": 0.6,
       "rows": 1
     },
     {
       "seq": 353,
-      "at": 1792271555082,
+      "at": 1792271758559,
       "graph": "mocks_acme",
       "name": "ingest.memory.write",
       "mode": "write",
@@ -445,12 +445,12 @@
         "text": "Refunds SOP v3. Refunds up to $500 may be issued by Billing to the original paym…(201)",
         "value": null
       },
-      "ms": 0.48,
+      "ms": 0.54,
       "rows": 1
     },
     {
       "seq": 354,
-      "at": 1792271555083,
+      "at": 1792271758559,
       "graph": "mocks_acme",
       "name": "ingest.memory.derivedFrom",
       "mode": "write",
@@ -461,12 +461,12 @@
           "acme-mem-sop-v3"
         ]
       },
-      "ms": 0.46,
+      "ms": 0.51,
       "rows": 1
     },
     {
       "seq": 355,
-      "at": 1792271555083,
+      "at": 1792271758560,
       "graph": "mocks_acme",
       "name": "ingest.memory.supersedes",
       "mode": "write",
@@ -476,12 +476,12 @@
         "old": "acme-mem-sop-v4",
         "t": 1792400000000
       },
-      "ms": 0.45,
+      "ms": 0.47,
       "rows": 1
     },
     {
       "seq": 356,
-      "at": 1792271555083,
+      "at": 1792271758560,
       "graph": "mocks_acme",
       "name": "plan.markApplied",
       "mode": "write",
@@ -490,12 +490,12 @@
         "id": "plan_1bc75d3e3e18f829",
         "now": 1792400000000
       },
-      "ms": 0.35,
+      "ms": 0.34,
       "rows": 1
     },
     {
       "seq": 357,
-      "at": 1792271555084,
+      "at": 1792271758561,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -509,23 +509,23 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.55,
+      "ms": 0.48,
       "rows": 0
     },
     {
       "seq": 358,
-      "at": 1792271555085,
+      "at": 1792271758562,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.3,
+      "ms": 0.29,
       "rows": 1
     },
     {
       "seq": 359,
-      "at": 1792271555085,
+      "at": 1792271758562,
       "graph": "mocks_acme",
       "name": "trace.seed",
       "mode": "read",
@@ -533,12 +533,12 @@
       "params": {
         "id": "acme-mem-sop-v4"
       },
-      "ms": 0.29,
+      "ms": 0.26,
       "rows": 1
     },
     {
       "seq": 360,
-      "at": 1792271555085,
+      "at": 1792271758562,
       "graph": "mocks_acme",
       "name": "trace.wrote",
       "mode": "read",
@@ -557,12 +557,12 @@
           }
         ]
       },
-      "ms": 0.28,
+      "ms": 0.34,
       "rows": 1
     },
     {
       "seq": 361,
-      "at": 1792271555086,
+      "at": 1792271758562,
       "graph": "mocks_acme",
       "name": "trace.read",
       "mode": "read",
@@ -581,12 +581,12 @@
           }
         ]
       },
-      "ms": 0.36,
+      "ms": 0.43,
       "rows": 1
     },
     {
       "seq": 362,
-      "at": 1792271555086,
+      "at": 1792271758562,
       "graph": "mocks_acme",
       "name": "trace.handoff",
       "mode": "read",
@@ -605,12 +605,12 @@
           }
         ]
       },
-      "ms": 0.44,
+      "ms": 0.51,
       "rows": 1
     },
     {
       "seq": 363,
-      "at": 1792271555086,
+      "at": 1792271758562,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -629,12 +629,12 @@
           }
         ]
       },
-      "ms": 0.52,
+      "ms": 0.56,
       "rows": 1
     },
     {
       "seq": 364,
-      "at": 1792271555086,
+      "at": 1792271758563,
       "graph": "mocks_acme",
       "name": "trace.wrote",
       "mode": "read",
@@ -658,7 +658,7 @@
     },
     {
       "seq": 365,
-      "at": 1792271555086,
+      "at": 1792271758563,
       "graph": "mocks_acme",
       "name": "trace.read",
       "mode": "read",
@@ -677,12 +677,12 @@
           }
         ]
       },
-      "ms": 0.36,
+      "ms": 0.39,
       "rows": 1
     },
     {
       "seq": 366,
-      "at": 1792271555086,
+      "at": 1792271758563,
       "graph": "mocks_acme",
       "name": "trace.handoff",
       "mode": "read",
@@ -701,12 +701,12 @@
           }
         ]
       },
-      "ms": 0.43,
+      "ms": 0.45,
       "rows": 1
     },
     {
       "seq": 367,
-      "at": 1792271555086,
+      "at": 1792271758563,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -725,12 +725,12 @@
           }
         ]
       },
-      "ms": 0.49,
+      "ms": 0.51,
       "rows": 0
     },
     {
       "seq": 368,
-      "at": 1792271555086,
+      "at": 1792271758563,
       "graph": "mocks_acme",
       "name": "trace.wrote",
       "mode": "read",
@@ -748,12 +748,12 @@
         ],
         "items": []
       },
-      "ms": 0.28,
+      "ms": 0.31,
       "rows": 0
     },
     {
       "seq": 369,
-      "at": 1792271555087,
+      "at": 1792271758563,
       "graph": "mocks_acme",
       "name": "trace.read",
       "mode": "read",
@@ -771,12 +771,12 @@
         ],
         "items": []
       },
-      "ms": 0.31,
+      "ms": 0.4,
       "rows": 0
     },
     {
       "seq": 370,
-      "at": 1792271555087,
+      "at": 1792271758563,
       "graph": "mocks_acme",
       "name": "trace.handoff",
       "mode": "read",
@@ -794,12 +794,12 @@
         ],
         "items": []
       },
-      "ms": 0.38,
+      "ms": 0.45,
       "rows": 0
     },
     {
       "seq": 371,
-      "at": 1792271555087,
+      "at": 1792271758564,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -817,12 +817,12 @@
         ],
         "items": []
       },
-      "ms": 0.43,
+      "ms": 0.53,
       "rows": 0
     },
     {
       "seq": 372,
-      "at": 1792271555087,
+      "at": 1792271758564,
       "graph": "mocks_acme",
       "name": "trace.episodes",
       "mode": "read",
@@ -840,7 +840,7 @@
     },
     {
       "seq": 373,
-      "at": 1792271555087,
+      "at": 1792271758564,
       "graph": "mocks_acme",
       "name": "trace.items",
       "mode": "read",
@@ -851,12 +851,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.32,
+      "ms": 0.33,
       "rows": 2
     },
     {
       "seq": 374,
-      "at": 1792271555087,
+      "at": 1792271758564,
       "graph": "mocks_acme",
       "name": "trace.decisions",
       "mode": "read",
@@ -885,12 +885,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.5,
+      "ms": 0.49,
       "rows": 3
     },
     {
       "seq": 375,
-      "at": 1792271555087,
+      "at": 1792271758564,
       "graph": "mocks_acme",
       "name": "trace.toolCalls",
       "mode": "read",
@@ -915,12 +915,12 @@
           }
         ]
       },
-      "ms": 0.58,
+      "ms": 0.57,
       "rows": 2
     },
     {
       "seq": 376,
-      "at": 1792271555088,
+      "at": 1792271758565,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -934,29 +934,29 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.43,
+      "ms": 0.42,
       "rows": 0
     },
     {
       "seq": 377,
-      "at": 1792271555088,
+      "at": 1792271758565,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.27,
+      "ms": 0.26,
       "rows": 1
     },
     {
       "seq": 378,
-      "at": 1792271555089,
+      "at": 1792271758566,
       "graph": "mocks_acme",
       "name": "view.memory.versions",
       "mode": "read",
       "cypher": "MATCH (e:Episode)-[:WROTE]->(m:MemoryItem)\n           OPTIONAL MATCH (m)-[:SUPERSEDES]->(prev:MemoryItem)\n           RETURN m.id AS id, m.ns AS ns, m.key AS key, m.kind AS kind, m.text AS text,\n                  m.valid_from AS validFrom, m.valid_to AS validTo, coalesce(m.invalidated, false) AS invalidated,\n                  e.id AS episode, e.agent AS agent, prev.id AS supersedes\n           ORDER BY ns, key, validFrom",
       "params": {},
-      "ms": 0.52,
+      "ms": 0.49,
       "rows": 4
     }
   ]

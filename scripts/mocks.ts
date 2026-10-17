@@ -68,7 +68,11 @@ await write(
 await write('reach.after', api.ReachResponse, await buildReach(graph, { seed }));
 await write('memory.after', api.MemoryResponse, await buildMemory(graph, { q: null }));
 await write('queries', api.QueryLogResponse, buildQueryLog({ limit: 50 }));
-await write('eval', api.EvalResponse, await buildEval());
+await write(
+  'eval',
+  api.EvalResponse,
+  buildEval(JSON.parse(await readFile('eval/results/latest.json', 'utf8'))),
+);
 const config = async (agent: string) =>
   JSON.parse(await readFile(`fixtures/configs/acme/${agent}.mcp.json`, 'utf8'));
 await write(
