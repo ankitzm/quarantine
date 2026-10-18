@@ -24,8 +24,10 @@ export async function buildHealth(): Promise<HealthResponse> {
   }
 }
 
-export function buildQueryLog({ limit }: { limit: number }): QueryLogResponse {
-  return { entries: queryLog(limit) };
+/** Most recent statements, oldest first; only those against `graph` when given. */
+export function buildQueryLog({ limit, graph }: { limit: number; graph?: string }): QueryLogResponse {
+  const entries = graph ? queryLog().filter((e) => e.graph === graph) : queryLog();
+  return { entries: entries.slice(-limit) };
 }
 
 /** Latest `pnpm eval` output (eval/results/latest.json), or pending until it has run. */

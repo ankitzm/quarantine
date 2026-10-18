@@ -20,6 +20,7 @@ const { GET: memory } = await import('./memory/route');
 const { POST: reset } = await import('./demo/reset/route');
 const { POST: scan } = await import('./scan/route');
 const { POST: mcp } = await import('./mcp/route');
+const { GET: queries } = await import('./queries/route');
 
 const tenant = `t${randomUUID().slice(0, 6)}`;
 scratchGraph(`tenant_${tenant}`);
@@ -120,6 +121,12 @@ describe('API routes', () => {
       statuses.push((await scan(req)).status);
     }
     expect(statuses).toEqual([422, 422, 422, 422, 422, 429]);
+  });
+
+  it("returns only the caller's own queries", async () => {
+    const { body } = await json(await queries(new Request(url('/api/queries?limit=200'))));
+    const graphs = new Set(api.QueryLogResponse.parse(body).entries.map((e) => e.graph));
+    expect([...graphs]).toEqual([`demo_${tenant}_${jar.get('sid')}`]);
   });
 
   it('serves MCP over HTTP', async () => {
