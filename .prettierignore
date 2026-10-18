@@ -3,3 +3,4 @@ apps/web/mocks/
 fixtures/runs/live/
 **/next-env.d.ts
 eval/results/
+**/.playwright-cli/
