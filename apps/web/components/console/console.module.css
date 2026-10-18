@@ -1,0 +1,513 @@
+.page {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+/* Top bar: wordmark, tenant, one quiet action */
+.bar,
+.footer {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+}
+
+.bar {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-4) clamp(var(--space-4), 4vw, 56px);
+}
+
+.wordmark {
+  font: 700 18px var(--font-display);
+  font-stretch: 75%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tenant {
+  color: var(--faint);
+}
+
+.barSpacer {
+  flex: 1;
+}
+
+.main {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: var(--space-5) clamp(var(--space-4), 4vw, 56px) var(--space-6);
+}
+
+/* The case sentence */
+.case {
+  max-width: 920px;
+  margin-bottom: var(--space-6);
+}
+
+.sentence {
+  font-size: clamp(28px, 3.4vw, 42px);
+  line-height: 1.08;
+  font-stretch: 78%;
+  font-weight: 650;
+}
+
+.sentence :global(.mono) {
+  font-size: 0.82em;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.key {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.stain {
+  font-style: normal;
+  color: var(--stain);
+}
+
+.caseMeta {
+  margin-top: var(--space-3);
+  color: var(--graphite);
+  font-size: 13px;
+}
+
+/* Steps: a real sequence, so numbered */
+.steps ol {
+  display: flex;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: var(--space-2);
+  align-items: baseline;
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+  margin-right: var(--space-5);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--graphite);
+  text-align: left;
+  cursor: pointer;
+  transition: color 150ms var(--ease-out);
+}
+
+.step:hover {
+  color: var(--ink);
+}
+
+.step[aria-selected='true'] {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.stepNo {
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.stepLabel {
+  font: 650 18px var(--font-display);
+  font-stretch: 82%;
+}
+
+.stepHint {
+  grid-column: 2;
+  font-size: 12.5px;
+  color: var(--faint);
+}
+
+.stage {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-top: 0;
+  padding: var(--space-5);
+}
+
+.stageFoot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-5);
+}
+
+.view {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.lede {
+  max-width: 72ch;
+  font-size: 15px;
+}
+
+.h2 {
+  font-size: 18px;
+  font-stretch: 82%;
+}
+
+/* Buttons */
+.primary,
+.secondary,
+.quiet,
+.link {
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition:
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+.primary {
+  padding: 10px 16px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--sheet);
+  font-weight: 500;
+}
+
+.primary:hover {
+  background: #2c3833;
+}
+
+.primary:active,
+.secondary:active {
+  transform: scale(0.97);
+}
+
+.primary:disabled,
+.secondary:disabled,
+.quiet:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.secondary {
+  padding: 10px 16px;
+  border: 1px solid var(--rule-strong);
+  background: var(--sheet);
+}
+
+.secondary:hover {
+  border-color: var(--graphite);
+}
+
+.quiet,
+.link {
+  border: 0;
+  background: none;
+  padding: var(--space-1) 0;
+  color: var(--graphite);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 3px;
+}
+
+.quiet:hover,
+.link:hover {
+  color: var(--ink);
+}
+
+/* Contain */
+.containGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.planCol {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.planList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.planRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.planLabel {
+  font-weight: 500;
+}
+
+.planCost {
+  color: var(--graphite);
+}
+
+.planSource {
+  grid-column: 1 / -1;
+  font: 400 11.5px var(--font-mono);
+  color: var(--faint);
+  overflow-wrap: anywhere;
+}
+
+.planTotal {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.done {
+  color: var(--restore);
+}
+
+.diff {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rule);
+}
+
+.versions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+.versions figure {
+  margin: 0;
+}
+
+.versions figcaption {
+  margin-bottom: var(--space-2);
+  color: var(--graphite);
+  font-size: 13px;
+}
+
+.versions blockquote {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.versions mark {
+  background: none;
+  color: var(--stain);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.invalid {
+  color: var(--graphite);
+}
+
+/* Confirm dialog */
+.dialog {
+  width: min(520px, calc(100vw - 32px));
+  padding: var(--space-5);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  color: var(--ink);
+}
+
+.dialog::backdrop {
+  background: rgb(23 32 29 / 0.32);
+}
+
+.dialog[open] {
+  animation: rise 180ms var(--ease-out);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+}
+
+.effects {
+  margin: var(--space-4) 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.error {
+  color: var(--stain);
+  margin-bottom: var(--space-3);
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* Query log sheet */
+.sheet {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(480px, 100vw);
+  overflow-y: auto;
+  padding: var(--space-5);
+  background: var(--sheet);
+  border-left: 1px solid var(--rule-strong);
+  outline: none;
+  animation: slide 200ms var(--ease-out);
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+}
+
+.sheetHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.sheetNote,
+.sheetEmpty {
+  color: var(--graphite);
+  margin-block: var(--space-2) var(--space-4);
+}
+
+.queryList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.queryList li {
+  border-bottom: 1px solid var(--rule);
+}
+
+.queryList summary {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  cursor: pointer;
+  font-size: 12.5px;
+}
+
+.qMode {
+  color: var(--faint);
+}
+
+.qName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qStat {
+  color: var(--faint);
+}
+
+.cypher {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-3);
+  background: var(--sheet-sunk);
+  font: 12px/1.5 var(--font-mono);
+  white-space: pre-wrap;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  align-items: baseline;
+  padding: var(--space-4) clamp(var(--space-4), 4vw, 56px) var(--space-5);
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.footer p {
+  margin-right: auto;
+}
+
+/* Loading and errors */
+.loading {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.skelTitle,
+.skelLine,
+.skelStage {
+  background: linear-gradient(90deg, var(--rule) 0%, var(--sheet-sunk) 50%, var(--rule) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: var(--radius);
+}
+
+.skelTitle {
+  height: 40px;
+  width: min(560px, 80%);
+}
+
+.skelLine {
+  height: 14px;
+  width: 260px;
+}
+
+.skelStage {
+  height: 360px;
+  margin-top: var(--space-5);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.notice {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  max-width: 56ch;
+}
+
+.noticeTitle {
+  font-size: 28px;
+}
+
+@media (max-width: 1040px) {
+  .containGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .stepHint {
+    display: none;
+  }
+
+  .step {
+    margin-right: var(--space-2);
+  }
+
+  .stage {
+    padding: var(--space-4);
+  }
+}

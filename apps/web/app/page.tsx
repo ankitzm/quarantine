@@ -1,10 +1,8 @@
+import { Console } from '@/components/console/Console';
+
+/** The acme incident: a partner page poisons the refunds SOP. */
+const SEED = 'acme-mem-sop-v4';
+
 export default function Home() {
-  return (
-    <main>
-      <h1>Quarantine</h1>
-      <p>
-        <a href="/debug">Debug console</a>
-      </p>
-    </main>
-  );
+  return <Console seed={SEED} />;
 }

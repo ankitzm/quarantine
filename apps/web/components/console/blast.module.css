@@ -1,0 +1,87 @@
+.scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding-block: var(--space-2);
+}
+
+.chart {
+  display: block;
+}
+
+.colLabel {
+  font: 600 12px var(--font-display);
+  font-stretch: 85%;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  fill: var(--faint);
+}
+
+.edge_live,
+.edge_dim,
+.edge_severed {
+  fill: none;
+  transition:
+    stroke 200ms var(--ease-out),
+    opacity 200ms var(--ease-out);
+}
+
+.edge_live {
+  stroke: var(--rule-strong);
+  stroke-width: 1.25;
+}
+
+.edge_dim {
+  stroke: var(--rule);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.edge_severed {
+  stroke: var(--rule);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.node {
+  outline: none;
+  cursor: default;
+  transition: opacity 200ms var(--ease-out);
+}
+
+.node rect:first-of-type {
+  fill: var(--sheet);
+  stroke: var(--rule-strong);
+}
+
+.node:focus-visible rect:first-of-type {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.infected rect:first-of-type {
+  stroke: var(--stain);
+  stroke-width: 1.5;
+}
+
+.infected .label {
+  fill: var(--stain);
+}
+
+.dim {
+  opacity: 0.38;
+}
+
+.label {
+  font: 500 12.5px var(--font-mono);
+  fill: var(--ink);
+}
+
+.sub {
+  font: 400 11px var(--font-sans);
+  fill: var(--faint);
+}
+
+.tape {
+  stroke: var(--ink);
+  stroke-width: 0.75;
+}

@@ -1,0 +1,214 @@
+.root {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--graphite);
+  cursor: pointer;
+}
+
+.check input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+
+.quiet {
+  border: 0;
+  background: none;
+  padding: var(--space-1) 0;
+  color: var(--graphite);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 3px;
+}
+
+.quiet:hover {
+  color: var(--ink);
+}
+
+.compareNote {
+  max-width: 68ch;
+  color: var(--graphite);
+}
+
+.scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border-block: 1px solid var(--rule);
+  padding-block: var(--space-2);
+}
+
+.chart {
+  display: block;
+  font-family: var(--font-sans);
+}
+
+.laneLabel,
+.laneLabelInfected {
+  font: 600 13px var(--font-display);
+  font-stretch: 85%;
+  fill: var(--graphite);
+}
+
+.laneLabelInfected {
+  fill: var(--stain);
+}
+
+.laneRule {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.break {
+  stroke: var(--rule-strong);
+  stroke-dasharray: 2 4;
+}
+
+.axis {
+  font: 400 11px var(--font-mono);
+  fill: var(--faint);
+}
+
+/* Links between memory and lanes, and handoffs between lanes */
+.link_clean,
+.link_infected,
+.link_ghost {
+  fill: none;
+  stroke-width: 1;
+}
+
+.link_clean {
+  stroke: var(--rule-strong);
+}
+
+.link_infected {
+  stroke: var(--stain);
+  stroke-width: 1.5;
+}
+
+.link_ghost {
+  stroke: var(--graphite);
+  stroke-dasharray: 3 3;
+}
+
+.arrow {
+  fill: var(--graphite);
+}
+
+.arrowInfected {
+  fill: var(--stain);
+}
+
+/* Marks */
+.mark {
+  cursor: pointer;
+  outline: none;
+}
+
+.mark > :not(.hit) {
+  transition:
+    fill 240ms var(--ease-out),
+    stroke 240ms var(--ease-out);
+}
+
+.hit {
+  fill: transparent;
+}
+
+.mark_clean > :not(.hit) {
+  fill: var(--sheet);
+  stroke: var(--graphite);
+  stroke-width: 1.25;
+}
+
+.mark_infected > :not(.hit) {
+  fill: var(--stain);
+  stroke: var(--stain);
+  stroke-width: 1.25;
+}
+
+.mark_ghost > :not(.hit) {
+  fill: var(--sheet);
+  stroke: var(--graphite);
+  stroke-width: 1.25;
+  stroke-dasharray: 2 2;
+}
+
+.selected .hit,
+.mark:focus-visible .hit {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+/* Memory chips */
+.chip rect {
+  fill: var(--sheet);
+  stroke: var(--rule-strong);
+  transition:
+    fill 240ms var(--ease-out),
+    stroke 240ms var(--ease-out);
+}
+
+.chip text {
+  font: 500 11.5px var(--font-mono);
+  fill: var(--graphite);
+}
+
+.chip_infected rect {
+  fill: var(--stain);
+  stroke: var(--stain);
+}
+
+.chip_infected text {
+  fill: var(--sheet);
+}
+
+.chip_restored rect {
+  fill: var(--restore-wash);
+  stroke: var(--restore);
+}
+
+.chip_restored text {
+  fill: var(--restore);
+}
+
+.chip_ghost rect {
+  stroke: var(--graphite);
+  stroke-dasharray: 3 2;
+}
+
+.struck {
+  text-decoration: line-through;
+}
+
+.inspector {
+  min-height: 3em;
+  color: var(--ink);
+}
+
+.detail {
+  color: var(--graphite);
+}
+
+.cause {
+  color: var(--stain);
+}
+
+.ghostNote {
+  color: var(--graphite);
+}
