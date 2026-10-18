@@ -201,9 +201,8 @@ Layout: `packages/graph` (model, queries, trace, permissions, store, API builder
 `packages/swarm` (LangGraph swarm, recorder, sandbox, Sentinel), `apps/web` (Next 16 routes and `/debug`),
 `fixtures/` (event logs, MCP configs, the poisoned page), `scripts/`.
 
-Deploy (Railway): a `web` service from this repo's `Dockerfile` and a `falkordb` service from the pinned image
-with a volume and `FALKORDB_PASSWORD`; set `FALKORDB_HOST`, `FALKORDB_PORT` and `FALKORDB_PASSWORD` on `web`. On
-boot the web service loads any tenant graph that is not ready, then serves.
+Deploy: see [docs/deploy-railway.md](docs/deploy-railway.md) (two Railway services, private networking, password
+auth, volume, `REPLAY_FORCE=1` to reload changed fixtures).
 
 ## AI use
 
