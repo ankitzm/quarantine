@@ -607,6 +607,13 @@ RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge
 
 ### permissions
 
+**`plan.appliedFor`** (read): The plan already applied for a seed, if any.
+
+```cypher
+MATCH (p:Plan {seed: $seed}) WHERE p.applied_at IS NOT NULL
+RETURN p.id AS id ORDER BY p.applied_at LIMIT 1
+```
+
 **`quarantine.invalidateDerived`** (write): Mark memory versions derived from the poison invalidated so stores stop serving them.
 
 ```cypher
