@@ -114,6 +114,7 @@
       "from": "billing",
       "to": "billing:fetch.fetch",
       "label": "Revoke fetch.fetch from billing",
+      "credential": null,
       "cost": 2,
       "source": "upload:billing.mcp.json#/mcpServers/fetch (https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)"
     },
@@ -122,6 +123,7 @@
       "from": "billing",
       "to": "billing:postgres.query",
       "label": "Revoke postgres.query from billing",
+      "credential": null,
       "cost": 4,
       "source": "upload:billing.mcp.json#/mcpServers/crm-db (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)"
     },
@@ -130,6 +132,7 @@
       "from": "cred_477228ee18a974d4",
       "to": "cred_477228ee18a974d4",
       "label": "Rotate STRIPE_SECRET_KEY",
+      "credential": "STRIPE_SECRET_KEY",
       "cost": 8,
       "source": "upload:billing.mcp.json#/mcpServers/stripe (https://github.com/stripe/agent-toolkit/tree/main/modelcontextprotocol)"
     }

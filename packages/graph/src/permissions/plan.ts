@@ -14,6 +14,8 @@ export interface Revocation {
   /** Tool id for revoke-tool, CredCut id for rotate-credential. */
   to: string;
   label: string;
+  /** Env var or connection name of the rotated credential; null for tool revocations. */
+  credential: string | null;
   cost: number;
   /** Config file and docs the permission came from. */
   source: string | null;
@@ -75,6 +77,7 @@ export async function cutReach(graph: string, agents: string[]): Promise<Cut> {
       from,
       to,
       label: rotate ? `Rotate ${e.fromName}` : `Revoke ${e.toName} from ${from}`,
+      credential: rotate ? e.fromName : null,
       cost: e.cost,
       source: e.source,
     };

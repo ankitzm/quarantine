@@ -1,6 +1,6 @@
 {
   "tenant": "acme",
-  "id": "plan_1bc75d3e3e18f829",
+  "id": "plan_f7c3d7abffef5c48",
   "seed": "acme-mem-sop-v4",
   "agents": [
     "analytics",
@@ -309,6 +309,7 @@
       "from": "analytics",
       "to": "analytics:postgres.query",
       "label": "Revoke postgres.query from analytics",
+      "credential": null,
       "cost": 4,
       "source": "fixtures/configs/acme/analytics.mcp.json#/mcpServers/warehouse (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)"
     },
@@ -317,6 +318,7 @@
       "from": "billing",
       "to": "billing:fetch.fetch",
       "label": "Revoke fetch.fetch from billing",
+      "credential": null,
       "cost": 2,
       "source": "fixtures/configs/acme/billing.mcp.json#/mcpServers/fetch (https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)"
     },
@@ -325,6 +327,7 @@
       "from": "billing",
       "to": "billing:postgres.query",
       "label": "Revoke postgres.query from billing",
+      "credential": null,
       "cost": 4,
       "source": "fixtures/configs/acme/billing.mcp.json#/mcpServers/crm-db (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)"
     },
@@ -333,6 +336,7 @@
       "from": "ops",
       "to": "ops:fetch.fetch",
       "label": "Revoke fetch.fetch from ops",
+      "credential": null,
       "cost": 2,
       "source": "fixtures/configs/acme/ops.mcp.json#/mcpServers/fetch (https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)"
     },
@@ -341,6 +345,7 @@
       "from": "researcher",
       "to": "researcher:fetch.fetch",
       "label": "Revoke fetch.fetch from researcher",
+      "credential": null,
       "cost": 2,
       "source": "fixtures/configs/acme/researcher.mcp.json#/mcpServers/fetch (https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)"
     },
@@ -349,6 +354,7 @@
       "from": "cred_59e5d2cf063f41d5",
       "to": "cred_59e5d2cf063f41d5",
       "label": "Rotate GITHUB_PERSONAL_ACCESS_TOKEN",
+      "credential": "GITHUB_PERSONAL_ACCESS_TOKEN",
       "cost": 4,
       "source": "fixtures/configs/acme/ops.mcp.json#/mcpServers/github (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/github)"
     },
@@ -357,6 +363,7 @@
       "from": "cred_624f2e1e4b26307a",
       "to": "cred_624f2e1e4b26307a",
       "label": "Rotate SLACK_BOT_TOKEN",
+      "credential": "SLACK_BOT_TOKEN",
       "cost": 3,
       "source": "fixtures/configs/acme/ops.mcp.json#/mcpServers/slack (https://github.com/modelcontextprotocol/servers-archived/tree/main/src/slack)"
     },
@@ -365,6 +372,7 @@
       "from": "cred_6f7426adb1fbdc54",
       "to": "cred_6f7426adb1fbdc54",
       "label": "Rotate STRIPE_SECRET_KEY",
+      "credential": "STRIPE_SECRET_KEY",
       "cost": 8,
       "source": "fixtures/configs/acme/billing.mcp.json#/mcpServers/stripe (https://github.com/stripe/agent-toolkit/tree/main/modelcontextprotocol)"
     }

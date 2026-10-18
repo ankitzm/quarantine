@@ -57,7 +57,7 @@
           "validTo": null,
           "isInvalidated": false,
           "writer": {
-            "episode": "qepisode_ce6ed81fdec03dc6",
+            "episode": "qepisode_f09764e63cef950b",
             "agent": "quarantine"
           },
           "supersedes": "acme-mem-sop-v4"

@@ -2,7 +2,7 @@
   "entries": [
     {
       "seq": 328,
-      "at": 1792302146270,
+      "at": 1792308674860,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -20,12 +20,12 @@
         ],
         "items": []
       },
-      "ms": 0.45,
+      "ms": 0.49,
       "rows": 0
     },
     {
       "seq": 329,
-      "at": 1792302146271,
+      "at": 1792308674860,
       "graph": "mocks_acme",
       "name": "trace.episodes",
       "mode": "read",
@@ -38,12 +38,12 @@
           "acme-ops-1"
         ]
       },
-      "ms": 0.25,
+      "ms": 0.28,
       "rows": 4
     },
     {
       "seq": 330,
-      "at": 1792302146271,
+      "at": 1792308674860,
       "graph": "mocks_acme",
       "name": "trace.items",
       "mode": "read",
@@ -54,12 +54,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.33,
+      "ms": 0.37,
       "rows": 2
     },
     {
       "seq": 331,
-      "at": 1792302146271,
+      "at": 1792308674861,
       "graph": "mocks_acme",
       "name": "trace.decisions",
       "mode": "read",
@@ -88,12 +88,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.46,
+      "ms": 0.48,
       "rows": 3
     },
     {
       "seq": 332,
-      "at": 1792302146271,
+      "at": 1792308674861,
       "graph": "mocks_acme",
       "name": "trace.toolCalls",
       "mode": "read",
@@ -118,12 +118,12 @@
           }
         ]
       },
-      "ms": 0.5,
+      "ms": 0.61,
       "rows": 2
     },
     {
       "seq": 333,
-      "at": 1792302146272,
+      "at": 1792308674861,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -137,12 +137,12 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.71,
+      "ms": 0.39,
       "rows": 32
     },
     {
       "seq": 334,
-      "at": 1792302146273,
+      "at": 1792308674862,
       "graph": "mocks_acme",
       "name": "permissions.network",
       "mode": "read",
@@ -156,12 +156,12 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 1.34,
+      "ms": 0.83,
       "rows": 59
     },
     {
       "seq": 335,
-      "at": 1792302146277,
+      "at": 1792308674863,
       "graph": "mocks_acme",
       "name": "permissions.maxFlow",
       "mode": "read",
@@ -182,65 +182,65 @@
           "res_fc3c4b5febb08d40"
         ]
       },
-      "ms": 5.57,
+      "ms": 1.69,
       "rows": 1
     },
     {
       "seq": 336,
-      "at": 1792302146279,
+      "at": 1792308674864,
       "graph": "mocks_acme",
       "name": "plan.save",
       "mode": "write",
       "cypher": "MERGE (p:Plan {id: $id})\n           ON CREATE SET p.seed = $seed, p.json = $json, p.created_at = $now\n           RETURN count(p) AS n",
       "params": {
-        "id": "plan_1bc75d3e3e18f829",
+        "id": "plan_f7c3d7abffef5c48",
         "seed": "acme-mem-sop-v4",
-        "json": "{\"id\":\"plan_1bc75d3e3e18f829\",\"seed\":\"acme-mem-sop-v4\",\"agents\":[\"analytics\",\"bi…(8234)",
-        "now": 1792302146269
+        "json": "{\"id\":\"plan_f7c3d7abffef5c48\",\"seed\":\"acme-mem-sop-v4\",\"agents\":[\"analytics\",\"bi…(8432)",
+        "now": 1792308674858
       },
-      "ms": 1.07,
+      "ms": 0.71,
       "rows": 1
     },
     {
       "seq": 337,
-      "at": 1792302146279,
+      "at": 1792308674864,
       "graph": "mocks_acme",
       "name": "plan.load",
       "mode": "read",
       "cypher": "MATCH (p:Plan {id: $id}) RETURN p.json AS json, p.applied_at AS appliedAt",
       "params": {
-        "id": "plan_1bc75d3e3e18f829"
+        "id": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.31,
+      "ms": 0.22,
       "rows": 1
     },
     {
       "seq": 338,
-      "at": 1792302146281,
+      "at": 1792308674865,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.29,
+      "ms": 0.2,
       "rows": 1
     },
     {
       "seq": 339,
-      "at": 1792302146282,
+      "at": 1792308674866,
       "graph": "mocks_acme",
       "name": "plan.load",
       "mode": "read",
       "cypher": "MATCH (p:Plan {id: $id}) RETURN p.json AS json, p.applied_at AS appliedAt",
       "params": {
-        "id": "plan_1bc75d3e3e18f829"
+        "id": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.27,
+      "ms": 0.17,
       "rows": 1
     },
     {
       "seq": 340,
-      "at": 1792302146282,
+      "at": 1792308674866,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -249,14 +249,14 @@
         "from": "analytics",
         "to": "analytics:postgres.query",
         "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.61,
+      "ms": 0.31,
       "rows": 1
     },
     {
       "seq": 341,
-      "at": 1792302146283,
+      "at": 1792308674866,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -265,14 +265,14 @@
         "from": "billing",
         "to": "billing:fetch.fetch",
         "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.5,
+      "ms": 0.35,
       "rows": 1
     },
     {
       "seq": 342,
-      "at": 1792302146283,
+      "at": 1792308674866,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -281,14 +281,14 @@
         "from": "billing",
         "to": "billing:postgres.query",
         "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.5,
+      "ms": 0.22,
       "rows": 1
     },
     {
       "seq": 343,
-      "at": 1792302146284,
+      "at": 1792308674867,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -297,14 +297,14 @@
         "from": "ops",
         "to": "ops:fetch.fetch",
         "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.76,
+      "ms": 0.23,
       "rows": 1
     },
     {
       "seq": 344,
-      "at": 1792302146284,
+      "at": 1792308674867,
       "graph": "mocks_acme",
       "name": "quarantine.revokeTool",
       "mode": "write",
@@ -313,14 +313,14 @@
         "from": "researcher",
         "to": "researcher:fetch.fetch",
         "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.43,
+      "ms": 0.24,
       "rows": 1
     },
     {
       "seq": 345,
-      "at": 1792302146285,
+      "at": 1792308674867,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -329,14 +329,14 @@
         "from": "cred_59e5d2cf063f41d5",
         "to": "cred_59e5d2cf063f41d5",
         "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.53,
+      "ms": 0.26,
       "rows": 1
     },
     {
       "seq": 346,
-      "at": 1792302146285,
+      "at": 1792308674868,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -345,14 +345,14 @@
         "from": "cred_624f2e1e4b26307a",
         "to": "cred_624f2e1e4b26307a",
         "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.39,
+      "ms": 0.36,
       "rows": 1
     },
     {
       "seq": 347,
-      "at": 1792302146286,
+      "at": 1792308674868,
       "graph": "mocks_acme",
       "name": "quarantine.rotateCredential",
       "mode": "write",
@@ -361,28 +361,28 @@
         "from": "cred_6f7426adb1fbdc54",
         "to": "cred_6f7426adb1fbdc54",
         "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.44,
+      "ms": 0.29,
       "rows": 1
     },
     {
       "seq": 348,
-      "at": 1792302146286,
+      "at": 1792308674868,
       "graph": "mocks_acme",
       "name": "quarantine.invalidateMemory",
       "mode": "write",
       "cypher": "MATCH (m:MemoryItem {id: $seed})\n           SET m.invalidated = true, m.invalidated_by = coalesce(m.invalidated_by, $plan)\n           WITH m\n           OPTIONAL MATCH (m)-[:SUPERSEDES]->(prev:MemoryItem)\n           RETURN m.ns AS ns, m.key AS key, prev.id AS previous, prev.text AS text",
       "params": {
         "seed": "acme-mem-sop-v4",
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.52,
+      "ms": 0.31,
       "rows": 1
     },
     {
       "seq": 349,
-      "at": 1792302146287,
+      "at": 1792308674868,
       "graph": "mocks_acme",
       "name": "quarantine.invalidateDerived",
       "mode": "write",
@@ -391,46 +391,46 @@
         "ids": [
           "acme-mem-cust-981"
         ],
-        "plan": "plan_1bc75d3e3e18f829"
+        "plan": "plan_f7c3d7abffef5c48"
       },
-      "ms": 0.41,
+      "ms": 0.21,
       "rows": 1
     },
     {
       "seq": 350,
-      "at": 1792302146287,
+      "at": 1792308674869,
       "graph": "mocks_acme",
       "name": "ingest.session",
       "mode": "write",
       "cypher": "MERGE (s:Session {id: $id})\n           ON CREATE SET s.t = $t, s.tenant = $tenant, s.label = $label\n           RETURN count(s) AS n",
       "params": {
-        "id": "qsession_ce6ed81fdec03dc6",
+        "id": "qsession_f09764e63cef950b",
         "t": 1792400000000,
         "tenant": "mocks_acme",
-        "label": "Quarantine plan_1bc75d3e3e18f829"
+        "label": "Quarantine plan_f7c3d7abffef5c48"
       },
-      "ms": 0.36,
+      "ms": 0.27,
       "rows": 1
     },
     {
       "seq": 351,
-      "at": 1792302146288,
+      "at": 1792308674869,
       "graph": "mocks_acme",
       "name": "ingest.episode",
       "mode": "write",
       "cypher": "MATCH (s:Session {id: $session})\n           MERGE (a:Agent {id: $agent})\n           MERGE (e:Episode {id: $id})\n           ON CREATE SET e.t = $t, e.agent = $agent, e.session = $session\n           MERGE (a)-[:RAN]->(e)\n           MERGE (e)-[:IN_SESSION]->(s)\n           RETURN count(e) AS n",
       "params": {
-        "id": "qepisode_ce6ed81fdec03dc6",
+        "id": "qepisode_f09764e63cef950b",
         "t": 1792400000000,
-        "session": "qsession_ce6ed81fdec03dc6",
+        "session": "qsession_f09764e63cef950b",
         "agent": "quarantine"
       },
-      "ms": 0.66,
+      "ms": 0.33,
       "rows": 1
     },
     {
       "seq": 352,
-      "at": 1792302146289,
+      "at": 1792308674869,
       "graph": "mocks_acme",
       "name": "ingest.memory.write",
       "mode": "write",
@@ -438,19 +438,19 @@
       "params": {
         "id": "restore_05783a01bb98fb34",
         "t": 1792400000000,
-        "episode": "qepisode_ce6ed81fdec03dc6",
+        "episode": "qepisode_f09764e63cef950b",
         "ns": "sop",
         "key": "refunds",
         "kind": "procedural",
         "text": "Refunds SOP v3. Refunds up to $500 may be issued by Billing to the original paym…(201)",
         "value": null
       },
-      "ms": 0.57,
+      "ms": 0.37,
       "rows": 1
     },
     {
       "seq": 353,
-      "at": 1792302146289,
+      "at": 1792308674870,
       "graph": "mocks_acme",
       "name": "ingest.memory.derivedFrom",
       "mode": "write",
@@ -461,12 +461,12 @@
           "acme-mem-sop-v3"
         ]
       },
-      "ms": 0.49,
+      "ms": 0.24,
       "rows": 1
     },
     {
       "seq": 354,
-      "at": 1792302146289,
+      "at": 1792308674870,
       "graph": "mocks_acme",
       "name": "ingest.memory.supersedes",
       "mode": "write",
@@ -476,26 +476,26 @@
         "old": "acme-mem-sop-v4",
         "t": 1792400000000
       },
-      "ms": 0.48,
+      "ms": 0.26,
       "rows": 1
     },
     {
       "seq": 355,
-      "at": 1792302146290,
+      "at": 1792308674870,
       "graph": "mocks_acme",
       "name": "plan.markApplied",
       "mode": "write",
       "cypher": "MATCH (p:Plan {id: $id})\n           SET p.applied_at = coalesce(p.applied_at, $now)\n           RETURN count(p) AS n",
       "params": {
-        "id": "plan_1bc75d3e3e18f829",
+        "id": "plan_f7c3d7abffef5c48",
         "now": 1792400000000
       },
-      "ms": 0.36,
+      "ms": 0.21,
       "rows": 1
     },
     {
       "seq": 356,
-      "at": 1792302146290,
+      "at": 1792308674871,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -509,23 +509,23 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.55,
+      "ms": 0.32,
       "rows": 0
     },
     {
       "seq": 357,
-      "at": 1792302146291,
+      "at": 1792308674871,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.28,
+      "ms": 0.18,
       "rows": 1
     },
     {
       "seq": 358,
-      "at": 1792302146292,
+      "at": 1792308674871,
       "graph": "mocks_acme",
       "name": "trace.seed",
       "mode": "read",
@@ -533,12 +533,12 @@
       "params": {
         "id": "acme-mem-sop-v4"
       },
-      "ms": 0.34,
+      "ms": 0.22,
       "rows": 1
     },
     {
       "seq": 359,
-      "at": 1792302146292,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.wrote",
       "mode": "read",
@@ -557,12 +557,12 @@
           }
         ]
       },
-      "ms": 0.32,
+      "ms": 0.21,
       "rows": 1
     },
     {
       "seq": 360,
-      "at": 1792302146292,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.read",
       "mode": "read",
@@ -581,12 +581,12 @@
           }
         ]
       },
-      "ms": 0.38,
+      "ms": 0.27,
       "rows": 1
     },
     {
       "seq": 361,
-      "at": 1792302146292,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.handoff",
       "mode": "read",
@@ -605,12 +605,12 @@
           }
         ]
       },
-      "ms": 0.42,
+      "ms": 0.31,
       "rows": 1
     },
     {
       "seq": 362,
-      "at": 1792302146292,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -629,12 +629,12 @@
           }
         ]
       },
-      "ms": 0.53,
+      "ms": 0.37,
       "rows": 1
     },
     {
       "seq": 363,
-      "at": 1792302146293,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.wrote",
       "mode": "read",
@@ -653,12 +653,12 @@
           }
         ]
       },
-      "ms": 0.33,
+      "ms": 0.18,
       "rows": 1
     },
     {
       "seq": 364,
-      "at": 1792302146293,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.read",
       "mode": "read",
@@ -677,12 +677,12 @@
           }
         ]
       },
-      "ms": 0.38,
+      "ms": 0.22,
       "rows": 1
     },
     {
       "seq": 365,
-      "at": 1792302146293,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.handoff",
       "mode": "read",
@@ -701,12 +701,12 @@
           }
         ]
       },
-      "ms": 0.44,
+      "ms": 0.26,
       "rows": 1
     },
     {
       "seq": 366,
-      "at": 1792302146293,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -724,36 +724,36 @@
             "at": 1792231360000
           }
         ]
-      },
-      "ms": 0.44,
-      "rows": 0
-    },
-    {
-      "seq": 367,
-      "at": 1792302146293,
-      "graph": "mocks_acme",
-      "name": "trace.wrote",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-analytics-2",
-            "at": 1792317620000
-          },
-          {
-            "id": "acme-ops-1",
-            "at": 1792231370000
-          }
-        ],
-        "items": []
       },
       "ms": 0.29,
       "rows": 0
     },
     {
+      "seq": 367,
+      "at": 1792308674872,
+      "graph": "mocks_acme",
+      "name": "trace.wrote",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-analytics-2",
+            "at": 1792317620000
+          },
+          {
+            "id": "acme-ops-1",
+            "at": 1792231370000
+          }
+        ],
+        "items": []
+      },
+      "ms": 0.18,
+      "rows": 0
+    },
+    {
       "seq": 368,
-      "at": 1792302146293,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.read",
       "mode": "read",
@@ -771,12 +771,12 @@
         ],
         "items": []
       },
-      "ms": 0.37,
+      "ms": 0.26,
       "rows": 0
     },
     {
       "seq": 369,
-      "at": 1792302146293,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.handoff",
       "mode": "read",
@@ -794,12 +794,12 @@
         ],
         "items": []
       },
-      "ms": 0.39,
+      "ms": 0.26,
       "rows": 0
     },
     {
       "seq": 370,
-      "at": 1792302146293,
+      "at": 1792308674872,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -817,12 +817,12 @@
         ],
         "items": []
       },
-      "ms": 0.46,
+      "ms": 0.3,
       "rows": 0
     },
     {
       "seq": 371,
-      "at": 1792302146294,
+      "at": 1792308674873,
       "graph": "mocks_acme",
       "name": "trace.episodes",
       "mode": "read",
@@ -835,12 +835,12 @@
           "acme-ops-1"
         ]
       },
-      "ms": 0.34,
+      "ms": 0.17,
       "rows": 4
     },
     {
       "seq": 372,
-      "at": 1792302146294,
+      "at": 1792308674873,
       "graph": "mocks_acme",
       "name": "trace.items",
       "mode": "read",
@@ -851,12 +851,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.37,
+      "ms": 0.2,
       "rows": 2
     },
     {
       "seq": 373,
-      "at": 1792302146294,
+      "at": 1792308674873,
       "graph": "mocks_acme",
       "name": "trace.decisions",
       "mode": "read",
@@ -885,12 +885,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.61,
+      "ms": 0.7,
       "rows": 3
     },
     {
       "seq": 374,
-      "at": 1792302146294,
+      "at": 1792308674873,
       "graph": "mocks_acme",
       "name": "trace.toolCalls",
       "mode": "read",
@@ -915,12 +915,12 @@
           }
         ]
       },
-      "ms": 0.75,
+      "ms": 0.74,
       "rows": 2
     },
     {
       "seq": 375,
-      "at": 1792302146295,
+      "at": 1792308674873,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -934,29 +934,29 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.47,
+      "ms": 0.24,
       "rows": 0
     },
     {
       "seq": 376,
-      "at": 1792302146295,
+      "at": 1792308674874,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.28,
+      "ms": 0.15,
       "rows": 1
     },
     {
       "seq": 377,
-      "at": 1792302146296,
+      "at": 1792308674874,
       "graph": "mocks_acme",
       "name": "view.memory.versions",
       "mode": "read",
       "cypher": "MATCH (e:Episode)-[:WROTE]->(m:MemoryItem)\n           OPTIONAL MATCH (m)-[:SUPERSEDES]->(prev:MemoryItem)\n           RETURN m.id AS id, m.ns AS ns, m.key AS key, m.kind AS kind, m.text AS text,\n                  m.valid_from AS validFrom, m.valid_to AS validTo, coalesce(m.invalidated, false) AS invalidated,\n                  e.id AS episode, e.agent AS agent, prev.id AS supersedes\n           ORDER BY ns, key, validFrom",
       "params": {},
-      "ms": 0.53,
+      "ms": 0.27,
       "rows": 4
     }
   ]

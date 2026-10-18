@@ -160,6 +160,8 @@ export const Revocation = z.object({
   from: Id,
   to: Id,
   label: z.string(),
+  /** Env var or connection name of the rotated credential; null for tool revocations. */
+  credential: z.string().nullable(),
   cost: z.number().int(),
   source: z.string().nullable(),
 });
