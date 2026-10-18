@@ -5,7 +5,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./mcp": "./src/mcp.ts",
-    "./testing": "./src/testing.ts"
+    "./testing": "./src/testing.ts",
+    "./types": "./src/types/api.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
