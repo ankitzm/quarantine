@@ -21,8 +21,19 @@ responder has, with Cypher and graph algorithms rather than an LLM's opinion:
 Then it applies the cut (nothing is deleted), invalidates the poisoned memory and everything derived from it,
 and restores the clean SOP as a new version.
 
-- Live demo: _added at deploy_ (`/api/health`, `/debug`)
+- Live demo: _added at deploy_ (the console at `/`, raw API console at `/debug`)
 - Demo video: _added at submission_
+
+![Spread: who is infected, in time order](docs/images/console-spread.png)
+
+The console walks an investigator through three steps. **Spread** is a contact-tracing chart of every agent
+action, with the infection drawn in as the trace streams in round by round; "compare with a time-blind trace"
+dashes in what a naive trace would wrongly flag. **Reach** is the permission network the infected agents can
+still use. **Contain** puts quarantine tape on the minimum cut, lists each revocation with the config line it
+came from, and applies it behind a confirmation, after which reach counts down to zero and the clean SOP comes
+back.
+
+![Contain: the minimum cut as quarantine tape](docs/images/console-contain.png)
 
 ## Results
 

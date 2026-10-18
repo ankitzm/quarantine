@@ -26,6 +26,29 @@ things none of them have together, and the UI has to make each one visible in se
 4. **The graph decides, and you can see it.** Every number links to the Cypher that produced it, through the
    live query log. The LLM only narrates.
 
+## What we built instead of the first layout
+
+The first Stitch layout put storyline, blast radius, plan and drawer on one screen. It was accurate but
+overloaded, so the shipped console uses progressive disclosure:
+
+- **One sentence states the case** (who, what, when, how far). There are no stat cards; the numbers live in
+  the sentence.
+- **Three steps, one view at a time:** Spread, Reach, Contain. This is a real sequence, so the steps are
+  numbered. The open step is kept in `?step=`.
+- **Spread:** a contact-tracing chart with lanes ordered by infection, memory versions on top, and labels only
+  on hover, tap or focus. Ghosts appear only when "Compare with a time-blind trace" is ticked.
+- **Reach:** the permission network in four columns, ordered by barycentre to keep crossings low. Hover a node
+  to follow its paths.
+- **Contain:** quarantine tape on the cut, the revocations with their config sources, then a confirmation
+  dialog. After apply, reach counts down to 0 and the clean and poisoned versions sit side by side, with the
+  exfiltration URL marked.
+- **Queries** open in a side sheet on request, scoped to the visitor's graph.
+
+Tokens are in `apps/web/app/globals.css`. Components are in `apps/web/components/console`. Pure layout logic,
+tested against the mocks, is in `apps/web/lib/console/derive.ts`.
+
+## Original layout sketch (superseded)
+
 ## Layout: one screen, three linked panes, one clock
 
 ```text
