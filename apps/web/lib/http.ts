@@ -57,9 +57,22 @@ export async function handle(fn: () => Promise<unknown>): Promise<Response> {
       );
     }
     if (e instanceof QuarantineError) return fail(e.status, e.code, e.message);
+    if (isConnectionError(e)) return fail(503, 'ENGINE_UNAVAILABLE', 'the graph database is not reachable');
     console.error(e);
     return fail(500, 'INTERNAL', 'internal error');
   }
+}
+
+/** Socket-level failures reaching FalkorDB (refused, DNS, dropped), possibly wrapped in an AggregateError. */
+function isConnectionError(e: unknown): boolean {
+  const errors = e instanceof AggregateError ? e.errors : [e];
+  return errors.some(
+    (x) =>
+      x instanceof Error &&
+      /ECONNREFUSED|ENOTFOUND|EAI_AGAIN|ECONNRESET|ETIMEDOUT|Socket closed/i.test(
+        `${x.message} ${(x as { code?: string }).code ?? ''}`,
+      ),
+  );
 }
 
 const fail = (status: number, code: string, message: string) =>

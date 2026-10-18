@@ -34,6 +34,7 @@ export const ErrorCode = z.enum([
   'CONFIRM_REQUIRED', // 400
   'PAYLOAD_TOO_LARGE', // 413
   'RATE_LIMITED', // 429
+  'ENGINE_UNAVAILABLE', // 503, the graph database is not reachable
   'INTERNAL', // 500, message never carries internals
 ]);
 export const ErrorResponse = z.object({ error: z.object({ code: ErrorCode, message: z.string() }) });
