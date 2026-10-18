@@ -16,7 +16,7 @@ export function Reach({ data }: { data: ConsoleData }) {
           <>
             The {reach.agents.length} infected agents can still reach{' '}
             <strong>{resources} sensitive resources</strong> through {live} live paths of tool, credential and
-            resource. Hover a node to follow its paths.
+            resource. Hover or tap a node to follow its paths.
           </>
         )}
       </p>

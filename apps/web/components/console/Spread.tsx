@@ -105,6 +105,7 @@ export function Spread({
       <div
         ref={scroller}
         className={s.scroller}
+        translate="no"
         tabIndex={0}
         aria-label="Contact-tracing chart, scroll horizontally"
       >
@@ -191,6 +192,12 @@ export function Spread({
               onMouseEnter={() => setSelected(e)}
               onFocus={() => setSelected(e)}
               onClick={() => setSelected(e)}
+              onKeyDown={(ev) => {
+                if (ev.key === 'Enter' || ev.key === ' ') {
+                  ev.preventDefault();
+                  setSelected(e);
+                }
+              }}
             >
               <rect x={-12} y={-12} width={24} height={24} className={s.hit} />
               <Shape kind={e.kind} />
@@ -268,7 +275,7 @@ function Inspector({
   chip: MemoryChip | undefined;
 }) {
   if (!event) {
-    return <p className={s.inspector}>Hover or focus a mark to see what happened.</p>;
+    return <p className={s.inspector}>Hover, tap or tab to a mark to see what happened.</p>;
   }
   const ep = data.incident.trace.episodes.find((e) => e.id === event.episode);
   const cause = ep && event.t >= ep.infectedAt ? causeText(ep.cause, data) : null;

@@ -56,7 +56,12 @@ export function BlastGraph({ data, showCut }: { data: ConsoleData; showCut: bool
   const height = TOP + rows * ROW + 8;
 
   return (
-    <div className={s.scroller} tabIndex={0} aria-label="Permission network, scroll horizontally">
+    <div
+      className={s.scroller}
+      translate="no"
+      tabIndex={0}
+      aria-label="Permission network, scroll horizontally"
+    >
       <svg
         viewBox={`0 0 ${width} ${height}`}
         width="100%"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { hops } from '@/lib/console/derive';
 import { useConsole, type ConsoleData } from '@/lib/console/use-console';
 import { CaseHeader } from './CaseHeader';
@@ -19,9 +19,13 @@ type Step = (typeof STEPS)[number]['id'];
 
 export function Console({ seed }: { seed: string }) {
   const { state, round, roundOf, replay, apply, reset, retry } = useConsole(seed);
-  const [step, setStep] = useState<Step>('spread');
+  const [step, setStep] = useStepParam();
   const [showQueries, setShowQueries] = useState(false);
-  const closeQueries = useCallback(() => setShowQueries(false), []);
+  const queriesButton = useRef<HTMLButtonElement>(null);
+  const closeQueries = useCallback(() => {
+    setShowQueries(false);
+    queriesButton.current?.focus();
+  }, []);
 
   return (
     <div className={s.page}>
@@ -81,6 +85,7 @@ export function Console({ seed }: { seed: string }) {
         <button
           type="button"
           className={s.link}
+          ref={queriesButton}
           onClick={() => setShowQueries((v) => !v)}
           aria-expanded={showQueries}
         >
@@ -168,4 +173,20 @@ function Loading() {
       <span className="visually-hidden">Loading the incident</span>
     </div>
   );
+}
+
+/** The open step lives in ?step= so a link or reload lands on the same view. */
+function useStepParam(): [Step, (s: Step) => void] {
+  const [step, setStep] = useState<Step>('spread');
+  useEffect(() => {
+    const fromUrl = new URLSearchParams(window.location.search).get('step');
+    if (STEPS.some((x) => x.id === fromUrl)) setStep(fromUrl as Step);
+  }, []);
+  const set = useCallback((next: Step) => {
+    setStep(next);
+    const url = new URL(window.location.href);
+    url.searchParams.set('step', next);
+    window.history.replaceState(null, '', url);
+  }, []);
+  return [step, set];
 }

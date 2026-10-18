@@ -14,6 +14,9 @@ export function QueryLog({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     panel.current?.focus();
+    void fetch('/api/queries?limit=40')
+      .then((r) => (r.ok ? (r.json() as Promise<QueryLogResponse>) : null))
+      .then((log) => log && setEntries((prev) => [...prev, ...log.entries.toReversed()].slice(0, KEEP)));
     const source = new EventSource('/api/queries/stream');
     source.onmessage = (msg) => {
       const entry = JSON.parse(msg.data as string) as Entry;
@@ -38,10 +41,10 @@ export function QueryLog({ onClose }: { onClose: () => void }) {
         </button>
       </div>
       <p className={s.sheetNote}>
-        Every statement your session runs, as it runs. Click around the console to see them.
+        Every statement run against your copy of the graph, newest first. New ones appear as they run.
       </p>
       {entries.length === 0 ? (
-        <p className={s.sheetEmpty}>Waiting for the next query…</p>
+        <p className={s.sheetEmpty}>No queries yet. Reset the demo or apply the plan to see some run.</p>
       ) : (
         <ol className={s.queryList} aria-live="polite">
           {entries.map((e) => (

@@ -367,6 +367,7 @@
   background: var(--sheet);
   border-left: 1px solid var(--rule-strong);
   outline: none;
+  overscroll-behavior: contain;
   animation: slide 200ms var(--ease-out);
 }
 

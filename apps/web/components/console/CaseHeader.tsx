@@ -15,12 +15,19 @@ export function CaseHeader({ data, hops }: { data: ConsoleData; hops: number }) 
       {contained ? (
         <h1 className={s.sentence}>
           Contained at <span className="mono">{clock(data.plan.appliedAt ?? 0)}</span>. No infected agent can
-          reach a sensitive resource, and <span className={s.key}>{key}</span> is restored.
+          reach a sensitive resource, and{' '}
+          <span className={s.key} translate="no">
+            {key}
+          </span>{' '}
+          is restored.
         </h1>
       ) : (
         <h1 className={s.sentence}>
-          {cap(trace.seed.agent)} wrote a poisoned <span className={s.key}>{key}</span> at{' '}
-          <span className="mono">{clock(trace.seed.at)}</span>. It reached{' '}
+          {cap(trace.seed.agent)} wrote a poisoned{' '}
+          <span className={s.key} translate="no">
+            {key}
+          </span>{' '}
+          at <span className="mono">{clock(trace.seed.at)}</span>. It reached{' '}
           <em className={s.stain}>
             {agents} agent{agents === 1 ? '' : 's'}
           </em>{' '}
@@ -28,8 +35,11 @@ export function CaseHeader({ data, hops }: { data: ConsoleData; hops: number }) 
         </h1>
       )}
       <p className={s.caseMeta}>
-        Tenant {data.incident.tenant} · seed <span className="mono">{trace.seed.item}</span> ·{' '}
-        {day(trace.seed.at)}, times in UTC
+        Tenant {data.incident.tenant} · seed{' '}
+        <span className="mono" translate="no">
+          {trace.seed.item}
+        </span>{' '}
+        · {day(trace.seed.at)}, times in UTC
       </p>
     </div>
   );
