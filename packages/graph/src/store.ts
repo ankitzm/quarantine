@@ -10,6 +10,7 @@ import {
   type SearchOperation,
 } from '@langchain/langgraph-checkpoint';
 import { stableId, type EventInput } from './events.ts';
+import { fullTextQuery } from './fulltext.ts';
 import { applyEvents } from './ingest.ts';
 import * as q from './queries/store.ts';
 import { run } from './run.ts';
@@ -87,8 +88,9 @@ export class FalkorDBStore extends BaseStore {
     offset = 0,
   }: SearchOperation): Promise<SearchItem[]> {
     const prefix = namespacePrefix.join(SEP);
-    const rows = query?.trim()
-      ? await run(this.graph, q.storeSearch, { prefix, query })
+    const terms = query ? fullTextQuery(query) : null;
+    const rows = terms
+      ? await run(this.graph, q.storeSearch, { prefix, query: terms })
       : await run(this.graph, q.storeList, { prefix });
     // ponytail: filter runs in TS after fetching every match; push equality filters into Cypher if stores grow.
     const page = rows
