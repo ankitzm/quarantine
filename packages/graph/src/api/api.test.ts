@@ -32,6 +32,10 @@ describe('response builders', () => {
     const applied = contract.ApplyResponse.parse(await buildApply(graph, { id: plan.id, confirm: true }));
     expect(applied.reachAfter).toEqual([]);
     expect((await buildPlan(graph, { id: plan.id })).appliedAt).not.toBeNull();
+    // A reload after apply must see the plan that contained the incident, not an empty re-plan.
+    const again = await buildCreatePlan(graph, { seed });
+    expect(again.id).toBe(plan.id);
+    expect(again.cut).toHaveLength(plan.cut.length);
   });
 
   it('report naive false positives', async () => {

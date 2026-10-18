@@ -95,6 +95,14 @@ export const loadPlan = defineQuery<{ json: string; appliedAt: number | null }>(
   cypher: `MATCH (p:Plan {id: $id}) RETURN p.json AS json, p.applied_at AS appliedAt`,
 });
 
+export const appliedPlanFor = defineQuery<{ id: string }>({
+  name: 'plan.appliedFor',
+  description: 'The plan already applied for a seed, if any.',
+  mode: 'read',
+  cypher: `MATCH (p:Plan {seed: $seed}) WHERE p.applied_at IS NOT NULL
+           RETURN p.id AS id ORDER BY p.applied_at LIMIT 1`,
+});
+
 export const revokeCanUse = defineQuery<{ n: number }>({
   name: 'quarantine.revokeTool',
   description: "Remove an agent's access to a tool. The edge stays, with its cost, for audit.",

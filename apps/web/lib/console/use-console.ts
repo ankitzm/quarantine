@@ -56,7 +56,6 @@ export function useConsole(seed: string) {
   const [round, setRound] = useState(Infinity);
   const [roundOf, setRoundOf] = useState<Map<string, number>>(new Map());
   const timers = useRef<number[]>([]);
-  const planId = useRef<string | null>(null);
 
   const load = useCallback(async () => {
     const s = encodeURIComponent(seed);
@@ -66,12 +65,9 @@ export function useConsole(seed: string) {
         api<TimelineResponse>(`/api/incidents/${s}/timeline`),
         api<MemoryResponse>('/api/memory'),
         api<ReachResponse>(`/api/incidents/${s}/reach`),
-        // Once a plan exists, keep reading that plan: re-planning a contained graph would yield an empty one.
-        planId.current
-          ? api<PlanResponse>(`/api/plans/${encodeURIComponent(planId.current)}`)
-          : api<PlanResponse>(`/api/incidents/${s}/plans`, { method: 'POST' }),
+        // Once contained, the server returns the plan that was applied.
+        api<PlanResponse>(`/api/incidents/${s}/plans`, { method: 'POST' }),
       ]);
-      planId.current = plan.id;
       setState({ status: 'ready', data: { incident, timeline, memory, reach, plan } });
     } catch (e) {
       setState({ status: 'error', error: e instanceof ApiError ? e : new ApiError('NETWORK', String(e)) });
@@ -129,7 +125,6 @@ export function useConsole(seed: string) {
   const reset = useCallback(async () => {
     setState({ status: 'loading' });
     await api('/api/demo/reset', { method: 'POST' });
-    planId.current = null;
     await load();
     replay();
   }, [load, replay]);
