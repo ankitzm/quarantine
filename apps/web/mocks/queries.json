@@ -1,8 +1,805 @@
 {
   "entries": [
     {
+      "seq": 328,
+      "at": 1792302146270,
+      "graph": "mocks_acme",
+      "name": "trace.derived",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-analytics-2",
+            "at": 1792317620000
+          },
+          {
+            "id": "acme-ops-1",
+            "at": 1792231370000
+          }
+        ],
+        "items": []
+      },
+      "ms": 0.45,
+      "rows": 0
+    },
+    {
       "seq": 329,
-      "at": 1792271758544,
+      "at": 1792302146271,
+      "graph": "mocks_acme",
+      "name": "trace.episodes",
+      "mode": "read",
+      "cypher": "UNWIND $ids AS id\n           MATCH (e:Episode {id: id})\n           RETURN e.id AS id, e.agent AS agent, e.session AS session, e.t AS t",
+      "params": {
+        "ids": [
+          "acme-researcher-1",
+          "acme-billing-1",
+          "acme-analytics-2",
+          "acme-ops-1"
+        ]
+      },
+      "ms": 0.25,
+      "rows": 4
+    },
+    {
+      "seq": 330,
+      "at": 1792302146271,
+      "graph": "mocks_acme",
+      "name": "trace.items",
+      "mode": "read",
+      "cypher": "UNWIND $ids AS id\n           MATCH (m:MemoryItem {id: id})\n           RETURN m.id AS id, m.ns AS ns, m.key AS key, m.kind AS kind, m.text AS text,\n                  m.valid_from AS validFrom, m.valid_to AS validTo",
+      "params": {
+        "ids": [
+          "acme-mem-sop-v4",
+          "acme-mem-cust-981"
+        ]
+      },
+      "ms": 0.33,
+      "rows": 2
+    },
+    {
+      "seq": 331,
+      "at": 1792302146271,
+      "graph": "mocks_acme",
+      "name": "trace.decisions",
+      "mode": "read",
+      "cypher": "MATCH (e:Episode)-[:DECIDED]->(d:Decision)\n           OPTIONAL MATCH (d)-[:BASED_ON]->(m:MemoryItem)\n           WITH e, d, collect(m.id) AS cited\n           WITH e, d, [c IN cited WHERE c IN $itemIds] AS basedOn,\n                [inf IN $episodes WHERE inf.id = e.id AND d.t >= inf.at] AS hit\n           WHERE size(basedOn) > 0 OR size(hit) > 0\n           RETURN d.id AS id, d.t AS t, d.text AS text, e.id AS episode, e.agent AS agent,\n                  size(hit) > 0 AS byAgent, basedOn\n           ORDER BY d.t",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          },
+          {
+            "id": "acme-billing-1",
+            "at": 1792231330000
+          },
+          {
+            "id": "acme-analytics-2",
+            "at": 1792317620000
+          },
+          {
+            "id": "acme-ops-1",
+            "at": 1792231370000
+          }
+        ],
+        "itemIds": [
+          "acme-mem-sop-v4",
+          "acme-mem-cust-981"
+        ]
+      },
+      "ms": 0.46,
+      "rows": 3
+    },
+    {
+      "seq": 332,
+      "at": 1792302146271,
+      "graph": "mocks_acme",
+      "name": "trace.toolCalls",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[:CALLED]->(c:ToolCall)\n           WHERE c.t >= inf.at\n           RETURN c.id AS id, c.t AS t, c.tool AS tool, c.args AS args, c.outcome AS outcome,\n                  e.id AS episode, e.agent AS agent\n           ORDER BY c.t",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          },
+          {
+            "id": "acme-billing-1",
+            "at": 1792231330000
+          },
+          {
+            "id": "acme-analytics-2",
+            "at": 1792317620000
+          },
+          {
+            "id": "acme-ops-1",
+            "at": 1792231370000
+          }
+        ]
+      },
+      "ms": 0.5,
+      "rows": 2
+    },
+    {
+      "seq": 333,
+      "at": 1792302146272,
+      "graph": "mocks_acme",
+      "name": "permissions.reach",
+      "mode": "read",
+      "cypher": "UNWIND $agents AS aid\n           MATCH p = (a:Agent {id: aid})-[:PERM]->(t:Tool)-[:PERM*1..3]->(r:Resource)\n           WHERE r.sensitivity >= $minSensitivity AND all(e IN relationships(p) WHERE e.revoked_at IS NULL)\n           WITH a, t, r, [n IN nodes(p) WHERE n:Credential | n.env] AS creds\n           RETURN DISTINCT a.id AS agent, t.id AS tool, head(creds) AS credential, r.id AS resource,\n                  r.uri AS uri, r.kind AS kind, r.sensitivity AS sensitivity\n           ORDER BY agent, tool, resource",
+      "params": {
+        "agents": [
+          "analytics",
+          "billing",
+          "ops",
+          "researcher"
+        ],
+        "minSensitivity": 2
+      },
+      "ms": 0.71,
+      "rows": 32
+    },
+    {
+      "seq": 334,
+      "at": 1792302146273,
+      "graph": "mocks_acme",
+      "name": "permissions.network",
+      "mode": "read",
+      "cypher": "UNWIND $agents AS aid\n           MATCH p = (a:Agent {id: aid})-[:PERM]->(:Tool)-[:PERM*1..3]->(r:Resource)\n           WHERE r.sensitivity >= $minSensitivity AND all(e IN relationships(p) WHERE e.revoked_at IS NULL)\n           UNWIND relationships(p) AS e\n           WITH DISTINCT e\n           WITH e, startNode(e) AS s, endNode(e) AS t\n           RETURN id(e) AS id, e.kind AS type, id(s) AS from, id(t) AS to,\n                  labels(s)[0] + ':' + s.id AS fromKey, labels(t)[0] + ':' + t.id AS toKey,\n                  coalesce(s.env, s.id) AS fromName,\n                  coalesce(t.server + '.' + t.name, t.id) AS toName, e.capacity AS capacity, e.cost AS cost, e.revocable AS revocable, e.source AS source\n           ORDER BY id",
+      "params": {
+        "agents": [
+          "analytics",
+          "billing",
+          "ops",
+          "researcher"
+        ],
+        "minSensitivity": 2
+      },
+      "ms": 1.34,
+      "rows": 59
+    },
+    {
+      "seq": 335,
+      "at": 1792302146277,
+      "graph": "mocks_acme",
+      "name": "permissions.maxFlow",
+      "mode": "read",
+      "cypher": "MATCH (a:Agent) WHERE a.id IN $agents\n           WITH collect(a) AS sources\n           MATCH (r:Resource) WHERE r.id IN $resources\n           WITH sources, collect(r) AS targets\n           CALL algo.maxFlow({sourceNodes: sources, targetNodes: targets,\n                              relationshipTypes: ['PERM'], capacityProperty: 'capacity'})\n           YIELD edges, edgeFlows, maxFlow\n           RETURN maxFlow, [e IN edges | id(e)] AS edges, edgeFlows AS flows",
+      "params": {
+        "agents": [
+          "analytics",
+          "billing",
+          "ops",
+          "researcher"
+        ],
+        "resources": [
+          "res_8aff801c313c0560",
+          "res_a6c9a7f7cb3ed8a9",
+          "res_c5c434328b0accb8",
+          "res_c97d9b3d788cf42f",
+          "res_f1a2c9ce30e9120e",
+          "res_fc3c4b5febb08d40"
+        ]
+      },
+      "ms": 5.57,
+      "rows": 1
+    },
+    {
+      "seq": 336,
+      "at": 1792302146279,
+      "graph": "mocks_acme",
+      "name": "plan.save",
+      "mode": "write",
+      "cypher": "MERGE (p:Plan {id: $id})\n           ON CREATE SET p.seed = $seed, p.json = $json, p.created_at = $now\n           RETURN count(p) AS n",
+      "params": {
+        "id": "plan_1bc75d3e3e18f829",
+        "seed": "acme-mem-sop-v4",
+        "json": "{\"id\":\"plan_1bc75d3e3e18f829\",\"seed\":\"acme-mem-sop-v4\",\"agents\":[\"analytics\",\"bi…(8234)",
+        "now": 1792302146269
+      },
+      "ms": 1.07,
+      "rows": 1
+    },
+    {
+      "seq": 337,
+      "at": 1792302146279,
+      "graph": "mocks_acme",
+      "name": "plan.load",
+      "mode": "read",
+      "cypher": "MATCH (p:Plan {id: $id}) RETURN p.json AS json, p.applied_at AS appliedAt",
+      "params": {
+        "id": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.31,
+      "rows": 1
+    },
+    {
+      "seq": 338,
+      "at": 1792302146281,
+      "graph": "mocks_acme",
+      "name": "meta.read",
+      "mode": "read",
+      "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
+      "params": {},
+      "ms": 0.29,
+      "rows": 1
+    },
+    {
+      "seq": 339,
+      "at": 1792302146282,
+      "graph": "mocks_acme",
+      "name": "plan.load",
+      "mode": "read",
+      "cypher": "MATCH (p:Plan {id: $id}) RETURN p.json AS json, p.applied_at AS appliedAt",
+      "params": {
+        "id": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.27,
+      "rows": 1
+    },
+    {
+      "seq": 340,
+      "at": 1792302146282,
+      "graph": "mocks_acme",
+      "name": "quarantine.revokeTool",
+      "mode": "write",
+      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
+      "params": {
+        "from": "analytics",
+        "to": "analytics:postgres.query",
+        "now": 1792400000000,
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.61,
+      "rows": 1
+    },
+    {
+      "seq": 341,
+      "at": 1792302146283,
+      "graph": "mocks_acme",
+      "name": "quarantine.revokeTool",
+      "mode": "write",
+      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
+      "params": {
+        "from": "billing",
+        "to": "billing:fetch.fetch",
+        "now": 1792400000000,
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.5,
+      "rows": 1
+    },
+    {
+      "seq": 342,
+      "at": 1792302146283,
+      "graph": "mocks_acme",
+      "name": "quarantine.revokeTool",
+      "mode": "write",
+      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
+      "params": {
+        "from": "billing",
+        "to": "billing:postgres.query",
+        "now": 1792400000000,
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.5,
+      "rows": 1
+    },
+    {
+      "seq": 343,
+      "at": 1792302146284,
+      "graph": "mocks_acme",
+      "name": "quarantine.revokeTool",
+      "mode": "write",
+      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
+      "params": {
+        "from": "ops",
+        "to": "ops:fetch.fetch",
+        "now": 1792400000000,
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.76,
+      "rows": 1
+    },
+    {
+      "seq": 344,
+      "at": 1792302146284,
+      "graph": "mocks_acme",
+      "name": "quarantine.revokeTool",
+      "mode": "write",
+      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
+      "params": {
+        "from": "researcher",
+        "to": "researcher:fetch.fetch",
+        "now": 1792400000000,
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.43,
+      "rows": 1
+    },
+    {
+      "seq": 345,
+      "at": 1792302146285,
+      "graph": "mocks_acme",
+      "name": "quarantine.rotateCredential",
+      "mode": "write",
+      "cypher": "MATCH (:Credential {id: $from})-[e:PERM {kind: 'CRED_CUT'}]->(:CredCut {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
+      "params": {
+        "from": "cred_59e5d2cf063f41d5",
+        "to": "cred_59e5d2cf063f41d5",
+        "now": 1792400000000,
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.53,
+      "rows": 1
+    },
+    {
+      "seq": 346,
+      "at": 1792302146285,
+      "graph": "mocks_acme",
+      "name": "quarantine.rotateCredential",
+      "mode": "write",
+      "cypher": "MATCH (:Credential {id: $from})-[e:PERM {kind: 'CRED_CUT'}]->(:CredCut {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
+      "params": {
+        "from": "cred_624f2e1e4b26307a",
+        "to": "cred_624f2e1e4b26307a",
+        "now": 1792400000000,
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.39,
+      "rows": 1
+    },
+    {
+      "seq": 347,
+      "at": 1792302146286,
+      "graph": "mocks_acme",
+      "name": "quarantine.rotateCredential",
+      "mode": "write",
+      "cypher": "MATCH (:Credential {id: $from})-[e:PERM {kind: 'CRED_CUT'}]->(:CredCut {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
+      "params": {
+        "from": "cred_6f7426adb1fbdc54",
+        "to": "cred_6f7426adb1fbdc54",
+        "now": 1792400000000,
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.44,
+      "rows": 1
+    },
+    {
+      "seq": 348,
+      "at": 1792302146286,
+      "graph": "mocks_acme",
+      "name": "quarantine.invalidateMemory",
+      "mode": "write",
+      "cypher": "MATCH (m:MemoryItem {id: $seed})\n           SET m.invalidated = true, m.invalidated_by = coalesce(m.invalidated_by, $plan)\n           WITH m\n           OPTIONAL MATCH (m)-[:SUPERSEDES]->(prev:MemoryItem)\n           RETURN m.ns AS ns, m.key AS key, prev.id AS previous, prev.text AS text",
+      "params": {
+        "seed": "acme-mem-sop-v4",
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.52,
+      "rows": 1
+    },
+    {
+      "seq": 349,
+      "at": 1792302146287,
+      "graph": "mocks_acme",
+      "name": "quarantine.invalidateDerived",
+      "mode": "write",
+      "cypher": "UNWIND $ids AS id\n           MATCH (m:MemoryItem {id: id})\n           SET m.invalidated = true, m.invalidated_by = coalesce(m.invalidated_by, $plan)\n           RETURN count(m) AS n",
+      "params": {
+        "ids": [
+          "acme-mem-cust-981"
+        ],
+        "plan": "plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.41,
+      "rows": 1
+    },
+    {
+      "seq": 350,
+      "at": 1792302146287,
+      "graph": "mocks_acme",
+      "name": "ingest.session",
+      "mode": "write",
+      "cypher": "MERGE (s:Session {id: $id})\n           ON CREATE SET s.t = $t, s.tenant = $tenant, s.label = $label\n           RETURN count(s) AS n",
+      "params": {
+        "id": "qsession_ce6ed81fdec03dc6",
+        "t": 1792400000000,
+        "tenant": "mocks_acme",
+        "label": "Quarantine plan_1bc75d3e3e18f829"
+      },
+      "ms": 0.36,
+      "rows": 1
+    },
+    {
+      "seq": 351,
+      "at": 1792302146288,
+      "graph": "mocks_acme",
+      "name": "ingest.episode",
+      "mode": "write",
+      "cypher": "MATCH (s:Session {id: $session})\n           MERGE (a:Agent {id: $agent})\n           MERGE (e:Episode {id: $id})\n           ON CREATE SET e.t = $t, e.agent = $agent, e.session = $session\n           MERGE (a)-[:RAN]->(e)\n           MERGE (e)-[:IN_SESSION]->(s)\n           RETURN count(e) AS n",
+      "params": {
+        "id": "qepisode_ce6ed81fdec03dc6",
+        "t": 1792400000000,
+        "session": "qsession_ce6ed81fdec03dc6",
+        "agent": "quarantine"
+      },
+      "ms": 0.66,
+      "rows": 1
+    },
+    {
+      "seq": 352,
+      "at": 1792302146289,
+      "graph": "mocks_acme",
+      "name": "ingest.memory.write",
+      "mode": "write",
+      "cypher": "MATCH (e:Episode {id: $episode})\n           MERGE (m:MemoryItem {id: $id})\n           ON CREATE SET m.ns = $ns, m.key = $key, m.kind = $kind, m.text = $text,\n                         m.valid_from = $t, m.invalidated = false, m.value = $value\n           MERGE (e)-[:WROTE {t: $t}]->(m)\n           RETURN count(m) AS n",
+      "params": {
+        "id": "restore_05783a01bb98fb34",
+        "t": 1792400000000,
+        "episode": "qepisode_ce6ed81fdec03dc6",
+        "ns": "sop",
+        "key": "refunds",
+        "kind": "procedural",
+        "text": "Refunds SOP v3. Refunds up to $500 may be issued by Billing to the original paym…(201)",
+        "value": null
+      },
+      "ms": 0.57,
+      "rows": 1
+    },
+    {
+      "seq": 353,
+      "at": 1792302146289,
+      "graph": "mocks_acme",
+      "name": "ingest.memory.derivedFrom",
+      "mode": "write",
+      "cypher": "MATCH (m:MemoryItem {id: $id})\n           UNWIND $sources AS sid\n           OPTIONAL MATCH (i:Input {id: sid})\n           OPTIONAL MATCH (p:MemoryItem {id: sid})\n           WITH m, coalesce(i, p) AS src\n           WHERE src IS NOT NULL\n           MERGE (m)-[:DERIVED_FROM]->(src)\n           RETURN count(src) AS n",
+      "params": {
+        "id": "restore_05783a01bb98fb34",
+        "sources": [
+          "acme-mem-sop-v3"
+        ]
+      },
+      "ms": 0.49,
+      "rows": 1
+    },
+    {
+      "seq": 354,
+      "at": 1792302146289,
+      "graph": "mocks_acme",
+      "name": "ingest.memory.supersedes",
+      "mode": "write",
+      "cypher": "MATCH (m:MemoryItem {id: $id}), (old:MemoryItem {id: $old})\n           WHERE old.ns = m.ns AND old.key = m.key\n           MERGE (m)-[:SUPERSEDES]->(old)\n           SET old.valid_to = coalesce(old.valid_to, $t)\n           RETURN count(old) AS n",
+      "params": {
+        "id": "restore_05783a01bb98fb34",
+        "old": "acme-mem-sop-v4",
+        "t": 1792400000000
+      },
+      "ms": 0.48,
+      "rows": 1
+    },
+    {
+      "seq": 355,
+      "at": 1792302146290,
+      "graph": "mocks_acme",
+      "name": "plan.markApplied",
+      "mode": "write",
+      "cypher": "MATCH (p:Plan {id: $id})\n           SET p.applied_at = coalesce(p.applied_at, $now)\n           RETURN count(p) AS n",
+      "params": {
+        "id": "plan_1bc75d3e3e18f829",
+        "now": 1792400000000
+      },
+      "ms": 0.36,
+      "rows": 1
+    },
+    {
+      "seq": 356,
+      "at": 1792302146290,
+      "graph": "mocks_acme",
+      "name": "permissions.reach",
+      "mode": "read",
+      "cypher": "UNWIND $agents AS aid\n           MATCH p = (a:Agent {id: aid})-[:PERM]->(t:Tool)-[:PERM*1..3]->(r:Resource)\n           WHERE r.sensitivity >= $minSensitivity AND all(e IN relationships(p) WHERE e.revoked_at IS NULL)\n           WITH a, t, r, [n IN nodes(p) WHERE n:Credential | n.env] AS creds\n           RETURN DISTINCT a.id AS agent, t.id AS tool, head(creds) AS credential, r.id AS resource,\n                  r.uri AS uri, r.kind AS kind, r.sensitivity AS sensitivity\n           ORDER BY agent, tool, resource",
+      "params": {
+        "agents": [
+          "analytics",
+          "billing",
+          "ops",
+          "researcher"
+        ],
+        "minSensitivity": 2
+      },
+      "ms": 0.55,
+      "rows": 0
+    },
+    {
+      "seq": 357,
+      "at": 1792302146291,
+      "graph": "mocks_acme",
+      "name": "meta.read",
+      "mode": "read",
+      "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
+      "params": {},
+      "ms": 0.28,
+      "rows": 1
+    },
+    {
+      "seq": 358,
+      "at": 1792302146292,
+      "graph": "mocks_acme",
+      "name": "trace.seed",
+      "mode": "read",
+      "cypher": "MATCH (e:Episode)-[w:WROTE]->(m:MemoryItem {id: $id})\n           RETURN m.id AS id, m.valid_from AS at, e.id AS episode, e.agent AS agent\n           ORDER BY w.t LIMIT 1",
+      "params": {
+        "id": "acme-mem-sop-v4"
+      },
+      "ms": 0.34,
+      "rows": 1
+    },
+    {
+      "seq": 359,
+      "at": 1792302146292,
+      "graph": "mocks_acme",
+      "name": "trace.wrote",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-sop-v4",
+            "at": 1792231320000
+          }
+        ]
+      },
+      "ms": 0.32,
+      "rows": 1
+    },
+    {
+      "seq": 360,
+      "at": 1792302146292,
+      "graph": "mocks_acme",
+      "name": "trace.read",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-sop-v4",
+            "at": 1792231320000
+          }
+        ]
+      },
+      "ms": 0.38,
+      "rows": 1
+    },
+    {
+      "seq": 361,
+      "at": 1792302146292,
+      "graph": "mocks_acme",
+      "name": "trace.handoff",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-sop-v4",
+            "at": 1792231320000
+          }
+        ]
+      },
+      "ms": 0.42,
+      "rows": 1
+    },
+    {
+      "seq": 362,
+      "at": 1792302146292,
+      "graph": "mocks_acme",
+      "name": "trace.derived",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-researcher-1",
+            "at": 1792231320000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-sop-v4",
+            "at": 1792231320000
+          }
+        ]
+      },
+      "ms": 0.53,
+      "rows": 1
+    },
+    {
+      "seq": 363,
+      "at": 1792302146293,
+      "graph": "mocks_acme",
+      "name": "trace.wrote",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-billing-1",
+            "at": 1792231330000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-cust-981",
+            "at": 1792231360000
+          }
+        ]
+      },
+      "ms": 0.33,
+      "rows": 1
+    },
+    {
+      "seq": 364,
+      "at": 1792302146293,
+      "graph": "mocks_acme",
+      "name": "trace.read",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-billing-1",
+            "at": 1792231330000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-cust-981",
+            "at": 1792231360000
+          }
+        ]
+      },
+      "ms": 0.38,
+      "rows": 1
+    },
+    {
+      "seq": 365,
+      "at": 1792302146293,
+      "graph": "mocks_acme",
+      "name": "trace.handoff",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-billing-1",
+            "at": 1792231330000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-cust-981",
+            "at": 1792231360000
+          }
+        ]
+      },
+      "ms": 0.44,
+      "rows": 1
+    },
+    {
+      "seq": 366,
+      "at": 1792302146293,
+      "graph": "mocks_acme",
+      "name": "trace.derived",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-billing-1",
+            "at": 1792231330000
+          }
+        ],
+        "items": [
+          {
+            "id": "acme-mem-cust-981",
+            "at": 1792231360000
+          }
+        ]
+      },
+      "ms": 0.44,
+      "rows": 0
+    },
+    {
+      "seq": 367,
+      "at": 1792302146293,
+      "graph": "mocks_acme",
+      "name": "trace.wrote",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-analytics-2",
+            "at": 1792317620000
+          },
+          {
+            "id": "acme-ops-1",
+            "at": 1792231370000
+          }
+        ],
+        "items": []
+      },
+      "ms": 0.29,
+      "rows": 0
+    },
+    {
+      "seq": 368,
+      "at": 1792302146293,
+      "graph": "mocks_acme",
+      "name": "trace.read",
+      "mode": "read",
+      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-analytics-2",
+            "at": 1792317620000
+          },
+          {
+            "id": "acme-ops-1",
+            "at": 1792231370000
+          }
+        ],
+        "items": []
+      },
+      "ms": 0.37,
+      "rows": 0
+    },
+    {
+      "seq": 369,
+      "at": 1792302146293,
+      "graph": "mocks_acme",
+      "name": "trace.handoff",
+      "mode": "read",
+      "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
+      "params": {
+        "episodes": [
+          {
+            "id": "acme-analytics-2",
+            "at": 1792317620000
+          },
+          {
+            "id": "acme-ops-1",
+            "at": 1792231370000
+          }
+        ],
+        "items": []
+      },
+      "ms": 0.39,
+      "rows": 0
+    },
+    {
+      "seq": 370,
+      "at": 1792302146293,
       "graph": "mocks_acme",
       "name": "trace.derived",
       "mode": "read",
@@ -24,8 +821,8 @@
       "rows": 0
     },
     {
-      "seq": 330,
-      "at": 1792271758545,
+      "seq": 371,
+      "at": 1792302146294,
       "graph": "mocks_acme",
       "name": "trace.episodes",
       "mode": "read",
@@ -38,12 +835,12 @@
           "acme-ops-1"
         ]
       },
-      "ms": 0.31,
+      "ms": 0.34,
       "rows": 4
     },
     {
-      "seq": 331,
-      "at": 1792271758545,
+      "seq": 372,
+      "at": 1792302146294,
       "graph": "mocks_acme",
       "name": "trace.items",
       "mode": "read",
@@ -54,12 +851,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.38,
+      "ms": 0.37,
       "rows": 2
     },
     {
-      "seq": 332,
-      "at": 1792271758545,
+      "seq": 373,
+      "at": 1792302146294,
       "graph": "mocks_acme",
       "name": "trace.decisions",
       "mode": "read",
@@ -88,12 +885,12 @@
           "acme-mem-cust-981"
         ]
       },
-      "ms": 0.63,
+      "ms": 0.61,
       "rows": 3
     },
     {
-      "seq": 333,
-      "at": 1792271758545,
+      "seq": 374,
+      "at": 1792302146294,
       "graph": "mocks_acme",
       "name": "trace.toolCalls",
       "mode": "read",
@@ -118,12 +915,12 @@
           }
         ]
       },
-      "ms": 0.69,
+      "ms": 0.75,
       "rows": 2
     },
     {
-      "seq": 334,
-      "at": 1792271758546,
+      "seq": 375,
+      "at": 1792302146295,
       "graph": "mocks_acme",
       "name": "permissions.reach",
       "mode": "read",
@@ -137,826 +934,29 @@
         ],
         "minSensitivity": 2
       },
-      "ms": 0.73,
-      "rows": 32
-    },
-    {
-      "seq": 335,
-      "at": 1792271758547,
-      "graph": "mocks_acme",
-      "name": "permissions.network",
-      "mode": "read",
-      "cypher": "UNWIND $agents AS aid\n           MATCH p = (a:Agent {id: aid})-[:PERM]->(:Tool)-[:PERM*1..3]->(r:Resource)\n           WHERE r.sensitivity >= $minSensitivity AND all(e IN relationships(p) WHERE e.revoked_at IS NULL)\n           UNWIND relationships(p) AS e\n           WITH DISTINCT e\n           WITH e, startNode(e) AS s, endNode(e) AS t\n           RETURN id(e) AS id, e.kind AS type, id(s) AS from, id(t) AS to,\n                  labels(s)[0] + ':' + s.id AS fromKey, labels(t)[0] + ':' + t.id AS toKey,\n                  coalesce(s.env, s.id) AS fromName,\n                  coalesce(t.server + '.' + t.name, t.id) AS toName, e.capacity AS capacity, e.cost AS cost, e.revocable AS revocable, e.source AS source\n           ORDER BY id",
-      "params": {
-        "agents": [
-          "analytics",
-          "billing",
-          "ops",
-          "researcher"
-        ],
-        "minSensitivity": 2
-      },
-      "ms": 1.45,
-      "rows": 59
-    },
-    {
-      "seq": 336,
-      "at": 1792271758549,
-      "graph": "mocks_acme",
-      "name": "permissions.maxFlow",
-      "mode": "read",
-      "cypher": "MATCH (a:Agent) WHERE a.id IN $agents\n           WITH collect(a) AS sources\n           MATCH (r:Resource) WHERE r.id IN $resources\n           WITH sources, collect(r) AS targets\n           CALL algo.maxFlow({sourceNodes: sources, targetNodes: targets,\n                              relationshipTypes: ['PERM'], capacityProperty: 'capacity'})\n           YIELD edges, edgeFlows, maxFlow\n           RETURN maxFlow, [e IN edges | id(e)] AS edges, edgeFlows AS flows",
-      "params": {
-        "agents": [
-          "analytics",
-          "billing",
-          "ops",
-          "researcher"
-        ],
-        "resources": [
-          "res_8aff801c313c0560",
-          "res_a6c9a7f7cb3ed8a9",
-          "res_c5c434328b0accb8",
-          "res_c97d9b3d788cf42f",
-          "res_f1a2c9ce30e9120e",
-          "res_fc3c4b5febb08d40"
-        ]
-      },
-      "ms": 3.41,
-      "rows": 1
-    },
-    {
-      "seq": 337,
-      "at": 1792271758550,
-      "graph": "mocks_acme",
-      "name": "plan.save",
-      "mode": "write",
-      "cypher": "MERGE (p:Plan {id: $id})\n           ON CREATE SET p.seed = $seed, p.json = $json, p.created_at = $now\n           RETURN count(p) AS n",
-      "params": {
-        "id": "plan_1bc75d3e3e18f829",
-        "seed": "acme-mem-sop-v4",
-        "json": "{\"id\":\"plan_1bc75d3e3e18f829\",\"seed\":\"acme-mem-sop-v4\",\"agents\":[\"analytics\",\"bi…(8234)",
-        "now": 1792271758542
-      },
-      "ms": 0.73,
-      "rows": 1
-    },
-    {
-      "seq": 338,
-      "at": 1792271758551,
-      "graph": "mocks_acme",
-      "name": "plan.load",
-      "mode": "read",
-      "cypher": "MATCH (p:Plan {id: $id}) RETURN p.json AS json, p.applied_at AS appliedAt",
-      "params": {
-        "id": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.32,
-      "rows": 1
-    },
-    {
-      "seq": 339,
-      "at": 1792271758553,
-      "graph": "mocks_acme",
-      "name": "meta.read",
-      "mode": "read",
-      "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
-      "params": {},
-      "ms": 0.32,
-      "rows": 1
-    },
-    {
-      "seq": 340,
-      "at": 1792271758553,
-      "graph": "mocks_acme",
-      "name": "plan.load",
-      "mode": "read",
-      "cypher": "MATCH (p:Plan {id: $id}) RETURN p.json AS json, p.applied_at AS appliedAt",
-      "params": {
-        "id": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.35,
-      "rows": 1
-    },
-    {
-      "seq": 341,
-      "at": 1792271758554,
-      "graph": "mocks_acme",
-      "name": "quarantine.revokeTool",
-      "mode": "write",
-      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
-      "params": {
-        "from": "analytics",
-        "to": "analytics:postgres.query",
-        "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.49,
-      "rows": 1
-    },
-    {
-      "seq": 342,
-      "at": 1792271758554,
-      "graph": "mocks_acme",
-      "name": "quarantine.revokeTool",
-      "mode": "write",
-      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
-      "params": {
-        "from": "billing",
-        "to": "billing:fetch.fetch",
-        "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.4,
-      "rows": 1
-    },
-    {
-      "seq": 343,
-      "at": 1792271758554,
-      "graph": "mocks_acme",
-      "name": "quarantine.revokeTool",
-      "mode": "write",
-      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
-      "params": {
-        "from": "billing",
-        "to": "billing:postgres.query",
-        "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.32,
-      "rows": 1
-    },
-    {
-      "seq": 344,
-      "at": 1792271758555,
-      "graph": "mocks_acme",
-      "name": "quarantine.revokeTool",
-      "mode": "write",
-      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
-      "params": {
-        "from": "ops",
-        "to": "ops:fetch.fetch",
-        "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.41,
-      "rows": 1
-    },
-    {
-      "seq": 345,
-      "at": 1792271758555,
-      "graph": "mocks_acme",
-      "name": "quarantine.revokeTool",
-      "mode": "write",
-      "cypher": "MATCH (:Agent {id: $from})-[e:PERM {kind: 'CAN_USE'}]->(:Tool {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
-      "params": {
-        "from": "researcher",
-        "to": "researcher:fetch.fetch",
-        "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.38,
-      "rows": 1
-    },
-    {
-      "seq": 346,
-      "at": 1792271758556,
-      "graph": "mocks_acme",
-      "name": "quarantine.rotateCredential",
-      "mode": "write",
-      "cypher": "MATCH (:Credential {id: $from})-[e:PERM {kind: 'CRED_CUT'}]->(:CredCut {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
-      "params": {
-        "from": "cred_59e5d2cf063f41d5",
-        "to": "cred_59e5d2cf063f41d5",
-        "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.4,
-      "rows": 1
-    },
-    {
-      "seq": 347,
-      "at": 1792271758556,
-      "graph": "mocks_acme",
-      "name": "quarantine.rotateCredential",
-      "mode": "write",
-      "cypher": "MATCH (:Credential {id: $from})-[e:PERM {kind: 'CRED_CUT'}]->(:CredCut {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
-      "params": {
-        "from": "cred_624f2e1e4b26307a",
-        "to": "cred_624f2e1e4b26307a",
-        "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.39,
-      "rows": 1
-    },
-    {
-      "seq": 348,
-      "at": 1792271758556,
-      "graph": "mocks_acme",
-      "name": "quarantine.rotateCredential",
-      "mode": "write",
-      "cypher": "MATCH (:Credential {id: $from})-[e:PERM {kind: 'CRED_CUT'}]->(:CredCut {id: $to})\n           SET e.revoked_at = coalesce(e.revoked_at, $now), e.revoked_by = coalesce(e.revoked_by, $plan),\n               e.capacity = 0\n           RETURN count(e) AS n",
-      "params": {
-        "from": "cred_6f7426adb1fbdc54",
-        "to": "cred_6f7426adb1fbdc54",
-        "now": 1792400000000,
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.34,
-      "rows": 1
-    },
-    {
-      "seq": 349,
-      "at": 1792271758557,
-      "graph": "mocks_acme",
-      "name": "quarantine.invalidateMemory",
-      "mode": "write",
-      "cypher": "MATCH (m:MemoryItem {id: $seed})\n           SET m.invalidated = true, m.invalidated_by = coalesce(m.invalidated_by, $plan)\n           WITH m\n           OPTIONAL MATCH (m)-[:SUPERSEDES]->(prev:MemoryItem)\n           RETURN m.ns AS ns, m.key AS key, prev.id AS previous, prev.text AS text",
-      "params": {
-        "seed": "acme-mem-sop-v4",
-        "plan": "plan_1bc75d3e3e18f829"
-      },
       "ms": 0.47,
-      "rows": 1
-    },
-    {
-      "seq": 350,
-      "at": 1792271758557,
-      "graph": "mocks_acme",
-      "name": "quarantine.invalidateDerived",
-      "mode": "write",
-      "cypher": "UNWIND $ids AS id\n           MATCH (m:MemoryItem {id: id})\n           SET m.invalidated = true, m.invalidated_by = coalesce(m.invalidated_by, $plan)\n           RETURN count(m) AS n",
-      "params": {
-        "ids": [
-          "acme-mem-cust-981"
-        ],
-        "plan": "plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.38,
-      "rows": 1
-    },
-    {
-      "seq": 351,
-      "at": 1792271758558,
-      "graph": "mocks_acme",
-      "name": "ingest.session",
-      "mode": "write",
-      "cypher": "MERGE (s:Session {id: $id})\n           ON CREATE SET s.t = $t, s.tenant = $tenant, s.label = $label\n           RETURN count(s) AS n",
-      "params": {
-        "id": "qsession_ce6ed81fdec03dc6",
-        "t": 1792400000000,
-        "tenant": "mocks_acme",
-        "label": "Quarantine plan_1bc75d3e3e18f829"
-      },
-      "ms": 0.36,
-      "rows": 1
-    },
-    {
-      "seq": 352,
-      "at": 1792271758558,
-      "graph": "mocks_acme",
-      "name": "ingest.episode",
-      "mode": "write",
-      "cypher": "MATCH (s:Session {id: $session})\n           MERGE (a:Agent {id: $agent})\n           MERGE (e:Episode {id: $id})\n           ON CREATE SET e.t = $t, e.agent = $agent, e.session = $session\n           MERGE (a)-[:RAN]->(e)\n           MERGE (e)-[:IN_SESSION]->(s)\n           RETURN count(e) AS n",
-      "params": {
-        "id": "qepisode_ce6ed81fdec03dc6",
-        "t": 1792400000000,
-        "session": "qsession_ce6ed81fdec03dc6",
-        "agent": "quarantine"
-      },
-      "ms": 0.6,
-      "rows": 1
-    },
-    {
-      "seq": 353,
-      "at": 1792271758559,
-      "graph": "mocks_acme",
-      "name": "ingest.memory.write",
-      "mode": "write",
-      "cypher": "MATCH (e:Episode {id: $episode})\n           MERGE (m:MemoryItem {id: $id})\n           ON CREATE SET m.ns = $ns, m.key = $key, m.kind = $kind, m.text = $text,\n                         m.valid_from = $t, m.invalidated = false, m.value = $value\n           MERGE (e)-[:WROTE {t: $t}]->(m)\n           RETURN count(m) AS n",
-      "params": {
-        "id": "restore_05783a01bb98fb34",
-        "t": 1792400000000,
-        "episode": "qepisode_ce6ed81fdec03dc6",
-        "ns": "sop",
-        "key": "refunds",
-        "kind": "procedural",
-        "text": "Refunds SOP v3. Refunds up to $500 may be issued by Billing to the original paym…(201)",
-        "value": null
-      },
-      "ms": 0.54,
-      "rows": 1
-    },
-    {
-      "seq": 354,
-      "at": 1792271758559,
-      "graph": "mocks_acme",
-      "name": "ingest.memory.derivedFrom",
-      "mode": "write",
-      "cypher": "MATCH (m:MemoryItem {id: $id})\n           UNWIND $sources AS sid\n           OPTIONAL MATCH (i:Input {id: sid})\n           OPTIONAL MATCH (p:MemoryItem {id: sid})\n           WITH m, coalesce(i, p) AS src\n           WHERE src IS NOT NULL\n           MERGE (m)-[:DERIVED_FROM]->(src)\n           RETURN count(src) AS n",
-      "params": {
-        "id": "restore_05783a01bb98fb34",
-        "sources": [
-          "acme-mem-sop-v3"
-        ]
-      },
-      "ms": 0.51,
-      "rows": 1
-    },
-    {
-      "seq": 355,
-      "at": 1792271758560,
-      "graph": "mocks_acme",
-      "name": "ingest.memory.supersedes",
-      "mode": "write",
-      "cypher": "MATCH (m:MemoryItem {id: $id}), (old:MemoryItem {id: $old})\n           WHERE old.ns = m.ns AND old.key = m.key\n           MERGE (m)-[:SUPERSEDES]->(old)\n           SET old.valid_to = coalesce(old.valid_to, $t)\n           RETURN count(old) AS n",
-      "params": {
-        "id": "restore_05783a01bb98fb34",
-        "old": "acme-mem-sop-v4",
-        "t": 1792400000000
-      },
-      "ms": 0.47,
-      "rows": 1
-    },
-    {
-      "seq": 356,
-      "at": 1792271758560,
-      "graph": "mocks_acme",
-      "name": "plan.markApplied",
-      "mode": "write",
-      "cypher": "MATCH (p:Plan {id: $id})\n           SET p.applied_at = coalesce(p.applied_at, $now)\n           RETURN count(p) AS n",
-      "params": {
-        "id": "plan_1bc75d3e3e18f829",
-        "now": 1792400000000
-      },
-      "ms": 0.34,
-      "rows": 1
-    },
-    {
-      "seq": 357,
-      "at": 1792271758561,
-      "graph": "mocks_acme",
-      "name": "permissions.reach",
-      "mode": "read",
-      "cypher": "UNWIND $agents AS aid\n           MATCH p = (a:Agent {id: aid})-[:PERM]->(t:Tool)-[:PERM*1..3]->(r:Resource)\n           WHERE r.sensitivity >= $minSensitivity AND all(e IN relationships(p) WHERE e.revoked_at IS NULL)\n           WITH a, t, r, [n IN nodes(p) WHERE n:Credential | n.env] AS creds\n           RETURN DISTINCT a.id AS agent, t.id AS tool, head(creds) AS credential, r.id AS resource,\n                  r.uri AS uri, r.kind AS kind, r.sensitivity AS sensitivity\n           ORDER BY agent, tool, resource",
-      "params": {
-        "agents": [
-          "analytics",
-          "billing",
-          "ops",
-          "researcher"
-        ],
-        "minSensitivity": 2
-      },
-      "ms": 0.48,
       "rows": 0
     },
     {
-      "seq": 358,
-      "at": 1792271758562,
+      "seq": 376,
+      "at": 1792302146295,
       "graph": "mocks_acme",
       "name": "meta.read",
       "mode": "read",
       "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
       "params": {},
-      "ms": 0.29,
-      "rows": 1
-    },
-    {
-      "seq": 359,
-      "at": 1792271758562,
-      "graph": "mocks_acme",
-      "name": "trace.seed",
-      "mode": "read",
-      "cypher": "MATCH (e:Episode)-[w:WROTE]->(m:MemoryItem {id: $id})\n           RETURN m.id AS id, m.valid_from AS at, e.id AS episode, e.agent AS agent\n           ORDER BY w.t LIMIT 1",
-      "params": {
-        "id": "acme-mem-sop-v4"
-      },
-      "ms": 0.26,
-      "rows": 1
-    },
-    {
-      "seq": 360,
-      "at": 1792271758562,
-      "graph": "mocks_acme",
-      "name": "trace.wrote",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-sop-v4",
-            "at": 1792231320000
-          }
-        ]
-      },
-      "ms": 0.34,
-      "rows": 1
-    },
-    {
-      "seq": 361,
-      "at": 1792271758562,
-      "graph": "mocks_acme",
-      "name": "trace.read",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-sop-v4",
-            "at": 1792231320000
-          }
-        ]
-      },
-      "ms": 0.43,
-      "rows": 1
-    },
-    {
-      "seq": 362,
-      "at": 1792271758562,
-      "graph": "mocks_acme",
-      "name": "trace.handoff",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-sop-v4",
-            "at": 1792231320000
-          }
-        ]
-      },
-      "ms": 0.51,
-      "rows": 1
-    },
-    {
-      "seq": 363,
-      "at": 1792271758562,
-      "graph": "mocks_acme",
-      "name": "trace.derived",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-sop-v4",
-            "at": 1792231320000
-          }
-        ]
-      },
-      "ms": 0.56,
-      "rows": 1
-    },
-    {
-      "seq": 364,
-      "at": 1792271758563,
-      "graph": "mocks_acme",
-      "name": "trace.wrote",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-billing-1",
-            "at": 1792231330000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-cust-981",
-            "at": 1792231360000
-          }
-        ]
-      },
       "ms": 0.28,
       "rows": 1
     },
     {
-      "seq": 365,
-      "at": 1792271758563,
-      "graph": "mocks_acme",
-      "name": "trace.read",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-billing-1",
-            "at": 1792231330000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-cust-981",
-            "at": 1792231360000
-          }
-        ]
-      },
-      "ms": 0.39,
-      "rows": 1
-    },
-    {
-      "seq": 366,
-      "at": 1792271758563,
-      "graph": "mocks_acme",
-      "name": "trace.handoff",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-billing-1",
-            "at": 1792231330000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-cust-981",
-            "at": 1792231360000
-          }
-        ]
-      },
-      "ms": 0.45,
-      "rows": 1
-    },
-    {
-      "seq": 367,
-      "at": 1792271758563,
-      "graph": "mocks_acme",
-      "name": "trace.derived",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-billing-1",
-            "at": 1792231330000
-          }
-        ],
-        "items": [
-          {
-            "id": "acme-mem-cust-981",
-            "at": 1792231360000
-          }
-        ]
-      },
-      "ms": 0.51,
-      "rows": 0
-    },
-    {
-      "seq": 368,
-      "at": 1792271758563,
-      "graph": "mocks_acme",
-      "name": "trace.wrote",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[w:WROTE]->(m:MemoryItem)\n           WHERE w.t >= inf.at\n           RETURN m.id AS id, w.t AS at, e.id AS via, 'WROTE' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-analytics-2",
-            "at": 1792317620000
-          },
-          {
-            "id": "acme-ops-1",
-            "at": 1792231370000
-          }
-        ],
-        "items": []
-      },
-      "ms": 0.31,
-      "rows": 0
-    },
-    {
-      "seq": 369,
-      "at": 1792271758563,
-      "graph": "mocks_acme",
-      "name": "trace.read",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (e:Episode)-[r:READ]->(m:MemoryItem {id: inf.id})\n           WHERE r.t >= inf.at\n           RETURN e.id AS id, r.t AS at, m.id AS via, 'READ' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-analytics-2",
-            "at": 1792317620000
-          },
-          {
-            "id": "acme-ops-1",
-            "at": 1792231370000
-          }
-        ],
-        "items": []
-      },
-      "ms": 0.4,
-      "rows": 0
-    },
-    {
-      "seq": 370,
-      "at": 1792271758563,
-      "graph": "mocks_acme",
-      "name": "trace.handoff",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (a:Episode {id: inf.id})-[h:HANDED_OFF]->(b:Episode)\n           WHERE h.t >= inf.at\n           RETURN b.id AS id, h.t AS at, a.id AS via, 'HANDED_OFF' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-analytics-2",
-            "at": 1792317620000
-          },
-          {
-            "id": "acme-ops-1",
-            "at": 1792231370000
-          }
-        ],
-        "items": []
-      },
-      "ms": 0.45,
-      "rows": 0
-    },
-    {
-      "seq": 371,
-      "at": 1792271758564,
-      "graph": "mocks_acme",
-      "name": "trace.derived",
-      "mode": "read",
-      "cypher": "UNWIND $items AS inf\n           MATCH (d:MemoryItem)-[:DERIVED_FROM]->(m:MemoryItem {id: inf.id})\n           WHERE d.valid_from >= inf.at\n           RETURN d.id AS id, d.valid_from AS at, m.id AS via, 'DERIVED_FROM' AS edge",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-analytics-2",
-            "at": 1792317620000
-          },
-          {
-            "id": "acme-ops-1",
-            "at": 1792231370000
-          }
-        ],
-        "items": []
-      },
-      "ms": 0.53,
-      "rows": 0
-    },
-    {
-      "seq": 372,
-      "at": 1792271758564,
-      "graph": "mocks_acme",
-      "name": "trace.episodes",
-      "mode": "read",
-      "cypher": "UNWIND $ids AS id\n           MATCH (e:Episode {id: id})\n           RETURN e.id AS id, e.agent AS agent, e.session AS session, e.t AS t",
-      "params": {
-        "ids": [
-          "acme-researcher-1",
-          "acme-billing-1",
-          "acme-analytics-2",
-          "acme-ops-1"
-        ]
-      },
-      "ms": 0.26,
-      "rows": 4
-    },
-    {
-      "seq": 373,
-      "at": 1792271758564,
-      "graph": "mocks_acme",
-      "name": "trace.items",
-      "mode": "read",
-      "cypher": "UNWIND $ids AS id\n           MATCH (m:MemoryItem {id: id})\n           RETURN m.id AS id, m.ns AS ns, m.key AS key, m.kind AS kind, m.text AS text,\n                  m.valid_from AS validFrom, m.valid_to AS validTo",
-      "params": {
-        "ids": [
-          "acme-mem-sop-v4",
-          "acme-mem-cust-981"
-        ]
-      },
-      "ms": 0.33,
-      "rows": 2
-    },
-    {
-      "seq": 374,
-      "at": 1792271758564,
-      "graph": "mocks_acme",
-      "name": "trace.decisions",
-      "mode": "read",
-      "cypher": "MATCH (e:Episode)-[:DECIDED]->(d:Decision)\n           OPTIONAL MATCH (d)-[:BASED_ON]->(m:MemoryItem)\n           WITH e, d, collect(m.id) AS cited\n           WITH e, d, [c IN cited WHERE c IN $itemIds] AS basedOn,\n                [inf IN $episodes WHERE inf.id = e.id AND d.t >= inf.at] AS hit\n           WHERE size(basedOn) > 0 OR size(hit) > 0\n           RETURN d.id AS id, d.t AS t, d.text AS text, e.id AS episode, e.agent AS agent,\n                  size(hit) > 0 AS byAgent, basedOn\n           ORDER BY d.t",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          },
-          {
-            "id": "acme-billing-1",
-            "at": 1792231330000
-          },
-          {
-            "id": "acme-analytics-2",
-            "at": 1792317620000
-          },
-          {
-            "id": "acme-ops-1",
-            "at": 1792231370000
-          }
-        ],
-        "itemIds": [
-          "acme-mem-sop-v4",
-          "acme-mem-cust-981"
-        ]
-      },
-      "ms": 0.49,
-      "rows": 3
-    },
-    {
-      "seq": 375,
-      "at": 1792271758564,
-      "graph": "mocks_acme",
-      "name": "trace.toolCalls",
-      "mode": "read",
-      "cypher": "UNWIND $episodes AS inf\n           MATCH (e:Episode {id: inf.id})-[:CALLED]->(c:ToolCall)\n           WHERE c.t >= inf.at\n           RETURN c.id AS id, c.t AS t, c.tool AS tool, c.args AS args, c.outcome AS outcome,\n                  e.id AS episode, e.agent AS agent\n           ORDER BY c.t",
-      "params": {
-        "episodes": [
-          {
-            "id": "acme-researcher-1",
-            "at": 1792231320000
-          },
-          {
-            "id": "acme-billing-1",
-            "at": 1792231330000
-          },
-          {
-            "id": "acme-analytics-2",
-            "at": 1792317620000
-          },
-          {
-            "id": "acme-ops-1",
-            "at": 1792231370000
-          }
-        ]
-      },
-      "ms": 0.57,
-      "rows": 2
-    },
-    {
-      "seq": 376,
-      "at": 1792271758565,
-      "graph": "mocks_acme",
-      "name": "permissions.reach",
-      "mode": "read",
-      "cypher": "UNWIND $agents AS aid\n           MATCH p = (a:Agent {id: aid})-[:PERM]->(t:Tool)-[:PERM*1..3]->(r:Resource)\n           WHERE r.sensitivity >= $minSensitivity AND all(e IN relationships(p) WHERE e.revoked_at IS NULL)\n           WITH a, t, r, [n IN nodes(p) WHERE n:Credential | n.env] AS creds\n           RETURN DISTINCT a.id AS agent, t.id AS tool, head(creds) AS credential, r.id AS resource,\n                  r.uri AS uri, r.kind AS kind, r.sensitivity AS sensitivity\n           ORDER BY agent, tool, resource",
-      "params": {
-        "agents": [
-          "analytics",
-          "billing",
-          "ops",
-          "researcher"
-        ],
-        "minSensitivity": 2
-      },
-      "ms": 0.42,
-      "rows": 0
-    },
-    {
       "seq": 377,
-      "at": 1792271758565,
-      "graph": "mocks_acme",
-      "name": "meta.read",
-      "mode": "read",
-      "cypher": "OPTIONAL MATCH (m:Meta {id: 'meta'})\n           RETURN coalesce(m.ready, false) AS ready, m.tenant AS tenant, m.created_at AS createdAt",
-      "params": {},
-      "ms": 0.26,
-      "rows": 1
-    },
-    {
-      "seq": 378,
-      "at": 1792271758566,
+      "at": 1792302146296,
       "graph": "mocks_acme",
       "name": "view.memory.versions",
       "mode": "read",
       "cypher": "MATCH (e:Episode)-[:WROTE]->(m:MemoryItem)\n           OPTIONAL MATCH (m)-[:SUPERSEDES]->(prev:MemoryItem)\n           RETURN m.id AS id, m.ns AS ns, m.key AS key, m.kind AS kind, m.text AS text,\n                  m.valid_from AS validFrom, m.valid_to AS validTo, coalesce(m.invalidated, false) AS invalidated,\n                  e.id AS episode, e.agent AS agent, prev.id AS supersedes\n           ORDER BY ns, key, validFrom",
       "params": {},
-      "ms": 0.49,
+      "ms": 0.53,
       "rows": 4
     }
   ]

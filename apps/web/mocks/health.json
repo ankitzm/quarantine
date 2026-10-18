@@ -11,10 +11,6 @@
     {
       "tenant": "globex",
       "isReady": true
-    },
-    {
-      "tenant": "t32fa0c",
-      "isReady": true
     }
   ],
   "latencyMs": 1
