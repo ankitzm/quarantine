@@ -1,82 +1,84 @@
 # Quarantine
 
-**Incident response for memory-poisoned agent swarms, decided by a graph.**
+**When one poisoned memory spreads through a team of AI agents, Quarantine finds who is infected and cuts the
+damage at the lowest cost. A graph decides, not an LLM.**
 
-Graph Hacks submission for **Track 01** and **Track 02**.
+Graph Hacks submission for **Track 01** and **Track 02**. Built on FalkorDB.
 
-One poisoned web page convinces one agent to rewrite a shared SOP. Minutes later another agent refunds $4,800
-without approval because "the SOP says so", hands off to a third, and that one tries to POST card details to an
-attacker's endpoint. Every step looked legitimate on its own.
-
-Quarantine records every agent action as a graph in FalkorDB, then answers the three questions an incident
-responder has, with Cypher and graph algorithms rather than an LLM's opinion:
-
-1. **Who is infected?** A temporal trace that follows the poison forward in time, along the edges it actually
-   travelled: writes, reads of that exact version, handoffs, derived memory.
-2. **What can they still reach?** Live paths from infected agents through their MCP tools and credentials to
-   sensitive resources.
-3. **What is the cheapest way to stop it?** `algo.maxFlow` with revocation cost as capacity, then the min cut from
-   the residual graph: the minimum-cost set of tool revocations and credential rotations that takes reach to zero.
-
-Then it applies the cut (nothing is deleted), invalidates the poisoned memory and everything derived from it,
-and restores the clean SOP as a new version.
-
-- Live demo: _added at deploy_ (the console at `/`, raw API console at `/debug`)
+- Live demo: _added at deploy_ (console at `/`, raw API console at `/debug`)
 - Demo video: _added at submission_
+
+## The problem
+
+A web page tricks one agent into rewriting a shared SOP. Minutes later a second agent refunds $4,800 without
+approval because "the SOP says so". It hands off to a third, which tries to POST card details to an attacker.
+Every step looked legitimate on its own, and nobody can tell which agents and memories are tainted.
+
+## What it does
+
+```mermaid
+flowchart LR
+  A["Agents run<br/>read, write, hand off,<br/>call tools"] --> B[("Graph in FalkorDB<br/>every step recorded")]
+  B --> C["1. Who is infected?<br/>trace the poison<br/>forward in time"]
+  C --> D["2. What can they reach?<br/>tools, credentials,<br/>sensitive resources"]
+  D --> E["3. Cheapest cut<br/>min-cost revocations<br/>via max flow"]
+  E --> F["Apply, with confirmation<br/>revoke access,<br/>restore clean memory"]
+```
+
+1. **Who is infected?** Follow the poison forward in time along the edges it really travelled: writes, reads of
+   that exact version, handoffs, derived memory. An agent that read the clean SOP before the poisoning is not
+   flagged.
+2. **What can they still reach?** Live paths from infected agents through MCP tools and credentials to
+   sensitive resources.
+3. **What is the cheapest way to stop it?** `algo.maxFlow` (revocation cost as capacity) plus a min cut gives the
+   cheapest set of tool revocations and credential rotations that takes reach to zero.
+
+Then it applies the cut, marks the poison and everything derived from it invalid, and restores the clean SOP as a
+new version. Nothing is deleted.
+
+The LLM only narrates and picks tools. Infection, reach and the cut come from Cypher and deterministic code.
 
 ![Spread: who is infected, in time order](docs/images/console-spread.png)
 
-The console walks an investigator through three steps. **Spread** is a contact-tracing chart of every agent
-action, with the infection drawn in as the trace streams in round by round; "compare with a time-blind trace"
-dashes in what a naive trace would wrongly flag. **Reach** is the permission network the infected agents can
-still use. **Contain** puts quarantine tape on the minimum cut, lists each revocation with the config line it
-came from, and applies it behind a confirmation, after which reach counts down to zero and the clean SOP comes
-back.
+The console has three steps. **Spread** shows every agent action with the infection drawn in round by round.
+**Reach** shows what infected agents can still use. **Contain** shows the minimum cut, each revocation with the
+config line it came from, and applies it behind a confirmation.
 
 ![Contain: the minimum cut as quarantine tape](docs/images/console-contain.png)
 
 ## Results
 
-From `pnpm eval` (20 seeded scenarios, [eval/results/latest.json](eval/results/latest.json)). Ground truth is an
-independent reference implementation that evaluates the propagation rules directly over the event log, sharing
-no code with the Cypher trace.
+From `pnpm eval`: 20 seeded scenarios ([eval/results/latest.json](eval/results/latest.json)), scored against an
+independent reference implementation that shares no code with the Cypher trace.
 
-| Metric                                                | Result            |
-| ----------------------------------------------------- | ----------------- |
-| Temporal trace precision / recall (infected episodes) | **1.000 / 1.000** |
-| Naive (time-blind) trace precision / recall           | 0.554 / 1.000     |
-| False infections avoided by the temporal trace        | 140               |
-| Min cut cost = max flow = exhaustive optimum          | **20 / 20**       |
-| Reach to sensitive resources after quarantine is 0    | **20 / 20**       |
-| Trace query latency, p50 / p95 (per relaxation query) | ≈0.4–0.7 / ≈1 ms  |
-| `algo.maxFlow` latency, p50 / p95                     | 3.4 / 4.2 ms      |
+| Metric                                             | Result            |
+| -------------------------------------------------- | ----------------- |
+| Temporal trace precision / recall                  | **1.000 / 1.000** |
+| Naive (time-blind) trace precision / recall        | 0.554 / 1.000     |
+| False infections avoided by the temporal trace     | 140               |
+| Min cut cost equals the exhaustive optimum         | **20 / 20**       |
+| Reach to sensitive resources is 0 after quarantine | **20 / 20**       |
 
-On the acme incident the naive trace flags Analytics (it read the _real_ SOP an hour before the poisoning), a
-handoff that happened before infection, the clean SOP version and an earlier fetch. The temporal trace flags none
-of them, and the quarantine costs 29 units across 8 revocations, matching the exhaustive optimum.
+On the acme incident the naive trace wrongly flags Analytics, which read the real SOP an hour before the
+poisoning. The temporal trace flags nothing extra, and the quarantine costs 29 units across 8 revocations.
 
-**Live attack evidence**: `pnpm record --runs 10` runs the scenario end to end through a real LLM. Injection and
-propagation rates are reported in [fixtures/runs/live/summary.json](fixtures/runs/live/) with every raw
-transcript. _Pending: the live run needs an OpenRouter key; until then the canonical fixture is the handcrafted
-seed._
+Live attack runs (`pnpm record`) need an OpenRouter key; until then the canonical fixture is the handcrafted seed.
 
-**Store concurrency** (`pnpm bench`, Apple Silicon, native arm64 images, one shared client connection, 60 ops
-per agent, 40% puts / 60% full-text searches):
+## Run it
 
-| Engine | Agents | Ops/s | Read p50 / p95 (ms) | Write p50 / p95 (ms) |
-| ------ | -----: | ----: | ------------------: | -------------------: |
-| 6.0.2  |      8 |  1219 |           8.3 / 8.9 |            4.1 / 4.5 |
-| 6.0.2  |     16 |  1251 |         16.2 / 17.0 |            8.1 / 8.7 |
-| 6.0.2  |     32 |  1221 |         33.1 / 36.4 |          16.3 / 18.2 |
-| 4.22.1 |      8 |  1422 |           7.1 / 7.9 |            3.4 / 4.1 |
-| 4.22.1 |     16 |  1305 |         15.4 / 16.9 |            7.6 / 8.8 |
-| 4.22.1 |     32 |  1068 |         34.8 / 56.9 |          17.1 / 26.6 |
+Requirements: Node 24, pnpm 11, Docker.
 
-Throughput is flat and latency grows linearly with agents on both engines: the single client connection is the
-bottleneck, not the engine. We make no MVCC claim for 6.0 from this; 6.0 does hold its tail latency better at 32
-agents.
+```sh
+pnpm install
+cp .env.example .env     # API key only needed for record/sentinel
+docker compose up -d     # FalkorDB on 6379
+pnpm replay              # load fixtures
+pnpm dev                 # http://localhost:3000
+```
 
-## How it works
+Gates: `pnpm typecheck && pnpm lint && pnpm test`. Evaluation: `pnpm eval`.
+
+## How the graph is built
 
 ```mermaid
 flowchart LR
@@ -99,128 +101,27 @@ flowchart LR
   A -- RAN --> E
 ```
 
-**One write path.** Everything (the live swarm, replay, fixtures, the eval generator, config scans) produces
-events, and `applyEvents` is the only code that writes them: validated with zod, applied in time order, `MERGE`d
-on stable ids with `ON CREATE`, failing loudly on a dangling reference. Replaying a log twice yields the same
-graph hash, and a recorded live run replays to the identical graph.
-
-**One read path.** `run()` is the only way to reach the database. Every statement is registered with a name and
-description (they are listed below), reads go through `GRAPH.RO_QUERY` so a registered read cannot mutate, every
-statement has a `TIMEOUT`, and every call lands in a redacted query log that the UI streams.
-
-**Bitemporal memory.** A put never overwrites: it writes a new `MemoryItem` that `SUPERSEDES` the current one and
-closes it (`valid_to`). `FalkorDBStore` is a LangGraph `BaseStore` over this model, so the agents' own memory
-reads and writes become `READ` and `WROTE` edges on the exact version they touched, with `DERIVED_FROM`
-provenance to the inputs they had seen.
-
-**Temporal trace.** Earliest-arrival relaxation to a fixpoint. The seed is the poisoned version; its writer is
-patient zero. Each round sends the frontier through four registered queries (`trace.wrote`, `trace.read`,
-`trace.handoff`, `trace.derived`), each with its time comparison inside Cypher: an edge carries infection only if
-it happened at or after its source was infected. Every node keeps its earliest arrival and the edge that caused
-it; only improved nodes are relaxed next round. Decisions are flagged if made by an infected episode after
-infection or if they cite an infected version.
-
-**Naive baseline.** The same rules with time ignored and memory identified by `(ns, key)`, which is what "who
-touched the refund SOP?" looks like without versions. It is what the eval compares against.
-
-**Minimum-cost quarantine.** Infected agents are the sources, sensitive resources the sinks, revocation cost the
-capacity. `algo.maxFlow` gives the flow; we build the residual graph in TypeScript, BFS from the sources, and cut
-every edge leaving the reachable side. We assert the cut's cost equals the max flow and that no structural edge is
-in it, and the eval checks it against an exhaustive search. Credentials are modelled as their own edge
-(`CRED_CUT`), so rotating one shared key can be cheaper than revoking several tools.
-
-**Apply.** Revocation sets `revoked_at` and `capacity: 0` and keeps the cost for audit. The poison and everything
-derived from it are marked invalidated, so the store stops serving them at once, and the clean version is
-restored as a new version that `SUPERSEDES` the poison. Apply requires `confirm: true` and is idempotent.
-
-### Where the brief met reality
-
-Found by `pnpm smoke` and the tests, on both engines:
-
-- `algo.maxFlow` accepts **exactly one** relationship type and requires `capacityProperty`, so the permission
-  network is a single `PERM` type with a `kind`, and revocation is `capacity: 0` rather than deletion.
-- Tool nodes are **per-agent instances**. Shared tool nodes let Billing reach the CRM through Analytics' database
-  credential via a common `postgres.query` node.
-- `roQuery` on a missing graph fails with `empty key`, mapped to `GraphNotReady`.
-- 6.0 changed the arity of `db.idx.fulltext.createNodeIndex`; Cypher DDL works on both.
-- On 4.22.1, `a STARTS WITH $p + '/'` parses as `(a STARTS WITH $p) + '/'`. The benchmark caught it; CI now runs
-  the whole suite and the eval on both engines.
+Key rules: one write path (`applyEvents`, idempotent `MERGE` on stable ids), one read path (`run()` with a named,
+timed-out, logged query), memory is versioned and never overwritten, revocation sets `capacity: 0` instead of
+deleting. More in [docs/technical-notes.md](docs/technical-notes.md): internals, API and MCP tools, benchmarks,
+setup commands, and where the brief met reality.
 
 ## Safety
 
-- The LLM never sees Cypher or database credentials. It narrates and picks tools; MCP read tools are read-only and
-  `apply_quarantine` needs `confirm: true` and is withheld from the Sentinel unless an operator allows it.
-- Env values in MCP configs are read only to derive names and are never stored; a sentinel-value test checks the
-  graph and the query log. Postgres connection strings keep only `user@host/db`.
-- Agents' network access is a sandbox: only committed fixture pages are served, and every other request (including
-  the exfiltration) is stubbed and logged.
-- Public demo: each visitor gets a private `GRAPH.COPY` of the tenant (httpOnly `sid` cookie), swept after two
-  hours. `/api/scan` is capped at 64 KB and 5 requests per minute per IP, and its graph is deleted in `finally`.
+- The LLM never sees Cypher or database credentials. MCP read tools are read-only and `apply_quarantine` needs
+  `confirm: true`.
+- Env values in MCP configs are never stored, only names.
+- Agent network access is a sandbox: only fixture pages are served, everything else (including the exfiltration)
+  is stubbed and logged.
+- Public demo: each visitor gets a private copy of the graph, swept after two hours.
 
-## API and MCP
-
-Contract: [packages/graph/src/types/api.ts](packages/graph/src/types/api.ts) (zod). Errors are always
-`{ error: { code, message } }`. Validated samples of every response: [apps/web/mocks](apps/web/mocks).
-
-| Method | Path                                  | Purpose                                                 |
-| ------ | ------------------------------------- | ------------------------------------------------------- |
-| GET    | `/api/health`                         | Engine reachability and tenant load state               |
-| GET    | `/api/incidents/:seed?mode=`          | Temporal or naive trace, plus the naive false positives |
-| GET    | `/api/incidents/:seed/stream`         | SSE: the trace round by round, then the incident        |
-| GET    | `/api/incidents/:seed/timeline`       | Every action in order, marked infected or naive-only    |
-| GET    | `/api/incidents/:seed/reach`          | Live paths from infected agents to sensitive resources  |
-| POST   | `/api/incidents/:seed/plans`          | Compute and store the min-cost quarantine               |
-| GET    | `/api/plans/:id`                      | A stored plan                                           |
-| POST   | `/api/plans/:id/apply`                | Apply with `{ "confirm": true }`                        |
-| GET    | `/api/memory?q=`                      | Memory keys with every version                          |
-| GET    | `/api/queries`, `/api/queries/stream` | The Cypher log (snapshot, or SSE for your graph)        |
-| POST   | `/api/scan`                           | Reach and cut for your own MCP configs                  |
-| POST   | `/api/demo/reset`                     | Fresh copy of the demo graph                            |
-| GET    | `/api/eval`                           | Latest eval results                                     |
-| POST   | `/api/mcp`                            | MCP over Streamable HTTP (also `pnpm mcp` on stdio)     |
-
-MCP tools: `search_memory`, `trace_incident`, `incident_timeline`, `incident_reach` (read-only),
-`plan_quarantine` (idempotent), `apply_quarantine` (destructive, needs `confirm`). The **Sentinel** is a LangGraph
-agent that investigates an alert using only these tools; its calls are recorded and `pnpm sentinel --replay`
-re-executes them against the graph to check nothing drifted.
-
-## Setup
-
-Requirements: Node 24, pnpm 11, Docker (OrbStack works).
-
-```sh
-pnpm install
-cp .env.example .env              # OPENROUTER_API_KEY and LLM_MODEL only needed for record/sentinel
-docker compose up -d              # FalkorDB 6.0.2 on 6379, browser on http://localhost:3001
-pnpm replay                       # load fixtures into tenant graphs
-pnpm dev                          # http://localhost:3000/debug
-```
-
-| Command                                           | What it does                                              |
-| ------------------------------------------------- | --------------------------------------------------------- |
-| `pnpm typecheck && pnpm lint && pnpm test`        | Gates (tests need FalkorDB running)                       |
-| `pnpm smoke [ports]`                              | Engine capability matrix                                  |
-| `pnpm replay [--if-missing]`                      | Rebuild tenant graphs from `fixtures/`                    |
-| `pnpm mocks`                                      | Regenerate validated API samples for the UI               |
-| `pnpm eval`                                       | 20-scenario evaluation, writes `eval/results/latest.json` |
-| `docker compose --profile v4 up -d && pnpm bench` | Benchmark 6.0.2 and 4.22.1                                |
-| `pnpm record --runs 10`                           | Live attack runs through OpenRouter                       |
-| `pnpm sentinel [--replay]`                        | Live Sentinel investigation, or replay check              |
-| `pnpm readme`                                     | Regenerate the Cypher section below from the registry     |
-
-Layout: `packages/graph` (model, queries, trace, permissions, store, API builders, MCP server, eval),
-`packages/swarm` (LangGraph swarm, recorder, sandbox, Sentinel), `apps/web` (Next 16 routes and `/debug`),
-`fixtures/` (event logs, MCP configs, the poisoned page), `scripts/`.
-
-Deploy: see [docs/deploy-railway.md](docs/deploy-railway.md) (two Railway services, private networking, password
-auth, volume, `REPLAY_FORCE=1` to reload changed fixtures).
+Deploy: [docs/deploy-railway.md](docs/deploy-railway.md).
 
 ## AI use
 
-Built with Claude Code (Claude Opus 5.5), which wrote most of the code under the author's direction; every
-design decision, test and number here was reviewed and can be explained by the team. At runtime, LLMs (via
-OpenRouter) drive the attacked swarm and the Sentinel's narration only. Infection, reach and the cut are computed
-by Cypher, `algo.maxFlow` and deterministic TypeScript.
+Built with Claude Code, which wrote most of the code under the author's direction; every design decision, test and
+number here was reviewed and can be explained by the team. At runtime, LLMs (via OpenRouter) drive the attacked
+swarm and the Sentinel's narration only.
 
 ## Cypher
 
